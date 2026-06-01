@@ -893,7 +893,7 @@ export default function AdminDashboardPage() {
                             <td className="px-6 py-4 flex items-center gap-3">
                               {prod.imagen_url ? (
                                 <img 
-                                  src={prod.imagen_url} 
+                                  src={prod.imagen_url.startsWith("http") || prod.imagen_url.startsWith("/") ? prod.imagen_url : `/${prod.imagen_url}`} 
                                   alt={prod.nombre} 
                                   className="w-10 h-10 object-contain rounded-lg border border-slate-200 bg-slate-50"
                                   onError={(e) => {
