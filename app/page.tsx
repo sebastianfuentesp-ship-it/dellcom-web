@@ -136,6 +136,7 @@ export default async function Home() {
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex gap-8 items-center">
             <a className="text-primary font-bold border-b-2 border-primary pb-0.5 text-sm font-semibold" href="#">Inicio</a>
+            <a className="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="/productos">Catálogo</a>
             <a className="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="#servicios">Servicios</a>
             <a className="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="#nosotros">Nosotros</a>
             <a className="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="#contacto">Contacto</a>
@@ -178,23 +179,30 @@ export default async function Home() {
               </p>
               
               {/* Call to Actions */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-2">
+              <div className="flex flex-wrap gap-4 pt-2 justify-center lg:justify-start">
                 <a 
                   href="https://wa.me/51987654321?text=Hola%20Dellcom%20SAC,%20deseo%20solicitar%20una%20cotizaci%C3%B3n%20para%20un%20servicio%20tecnol%C3%B3gico."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/95 text-on-primary px-8 py-4 rounded-xl text-sm font-bold transition-all active:scale-95 shadow-lg shadow-primary/30"
+                  className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/95 text-on-primary px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all active:scale-95 shadow-lg shadow-primary/30"
                 >
-                  <span className="material-symbols-outlined text-[20px]">chat_bubble</span>
+                  <span className="material-symbols-outlined text-[18px]">chat_bubble</span>
                   Cotizar por WhatsApp
+                </a>
+                <a 
+                  href="/productos"
+                  className="flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-950 text-white px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all active:scale-95 shadow-md shadow-slate-900/10"
+                >
+                  <span className="material-symbols-outlined text-[18px]">grid_view</span>
+                  Ver Catálogo
                 </a>
                 <a 
                   href="https://anydesk.com/download"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 bg-white border border-outline-variant hover:border-primary hover:text-primary text-on-surface px-8 py-4 rounded-xl text-sm font-bold transition-all active:scale-95 shadow-sm"
+                  className="flex items-center justify-center gap-2 bg-white border border-outline-variant hover:border-primary hover:text-primary text-on-surface px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all active:scale-95 shadow-sm"
                 >
-                  <span className="material-symbols-outlined text-[20px]">desktop_windows</span>
+                  <span className="material-symbols-outlined text-[18px]">desktop_windows</span>
                   Soporte AnyDesk
                 </a>
               </div>
