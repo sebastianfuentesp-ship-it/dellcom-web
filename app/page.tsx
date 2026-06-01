@@ -156,8 +156,58 @@ async function getServices() {
   ];
 }
 
+async function getTrabajos() {
+  try {
+    const dbTrabajos = await prisma.trabajoRealizado.findMany({
+      include: { servicio: true },
+      orderBy: { fecha: "desc" },
+      take: 3,
+    });
+    if (dbTrabajos && dbTrabajos.length > 0) {
+      return dbTrabajos.map(t => ({
+        id: t.id,
+        titulo: t.titulo,
+        descripcion: t.descripcion,
+        imagen_url: t.imagen_url,
+        fecha: t.fecha,
+        servicio: t.servicio ? { nombre: t.servicio.nombre } : null
+      }));
+    }
+  } catch (error) {
+    console.warn("Prisma DB connection failed for trabajos. Using static fallback trabajos data.");
+  }
+
+  return [
+    {
+      id: 1,
+      titulo: "Mantenimiento y Reballing de Placa Servidor HP ProLiant",
+      descripcion: "Diagnóstico electrónico avanzado por cortocircuito y reballing de chip de potencia en placa de servidor HP ProLiant G10. Operatividad restablecida al 100%.",
+      imagen_url: "/img/servicios/microelectronica.jpg",
+      fecha: new Date("2026-05-10"),
+      servicio: { nombre: "Microelectrónica y Placas" }
+    },
+    {
+      id: 2,
+      titulo: "Instalación y Configuración de Cableado Estructurado Cat6",
+      descripcion: "Montaje y peinado de rack de telecomunicaciones, certificación de 48 puntos de red Gigabit y ordenamiento de switches de núcleo en oficinas corporativas.",
+      imagen_url: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80",
+      fecha: new Date("2026-05-05"),
+      servicio: { nombre: "Redes y Servidores" }
+    },
+    {
+      id: 3,
+      titulo: "Reparación y Mantenimiento de Impresora Industrial Zebra ZT411",
+      descripcion: "Calibración de sensor de etiquetas, limpieza del cabezal térmico y reemplazo de rodillo tractor. Configurada para impresión de códigos de barra a alta velocidad.",
+      imagen_url: "https://images.unsplash.com/photo-1601524909162-be87252be298?auto=format&fit=crop&w=600&q=80",
+      fecha: new Date("2026-04-28"),
+      servicio: { nombre: "Reparación de Laptops e Impresoras" }
+    }
+  ];
+}
+
 export default async function Home() {
   const servicios = await getServices();
+  const trabajos = await getTrabajos();
 
   return (
     <>
@@ -327,6 +377,79 @@ export default async function Home() {
                       </div>
                     </div>
                   </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Success Stories / Portfolio Section */}
+        <section className="py-20 px-margin-mobile md:px-margin-desktop bg-surface-container-low/50" id="portafolio">
+          <div className="max-w-container-max mx-auto">
+            <div className="scroll-reveal text-center mb-16 space-y-3">
+              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-2">
+                <span className="material-symbols-outlined text-[16px]">verified</span>
+                Casos de Éxito y Garantía IT
+              </div>
+              <h2 className="font-headline text-3xl md:text-4xl font-bold text-on-surface">Trabajos Técnicos <span className="text-primary">Realizados</span></h2>
+              <p className="text-sm md:text-base text-on-surface-variant max-w-2xl mx-auto">
+                Una muestra de nuestra experiencia en el campo: soluciones precisas en microelectrónica, redes estructuradas y soporte de hardware certificado.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+              {trabajos.map((trabajo, index) => {
+                const formattedDate = new Date(trabajo.fecha).toLocaleDateString("es-ES", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+
+                return (
+                  <article 
+                    key={trabajo.id} 
+                    className="scroll-reveal group bg-white rounded-2xl border border-outline-variant/30 overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+                    style={{ transitionDelay: `${(index % 3) * 150}ms` }}
+                  >
+                    <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+                      <img 
+                        src={trabajo.imagen_url} 
+                        alt={trabajo.titulo} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                        onError={(e) => {
+                          const target = e.currentTarget as HTMLImageElement;
+                          target.onerror = null;
+                          target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 400 200'><rect width='100%' height='100%' fill='%23f1f5f9'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='16' fill='%2394a3b8'>DELLCOM PORTAFOLIO</text></svg>";
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                      <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-sm text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                        {trabajo.servicio?.nombre || "Servicio Técnico"}
+                      </div>
+                    </div>
+                    
+                    <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                      <div>
+                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">
+                          Completado el {formattedDate}
+                        </div>
+                        <h3 className="font-headline text-base font-bold text-on-surface mb-2 group-hover:text-primary transition-colors leading-tight">
+                          {trabajo.titulo}
+                        </h3>
+                        <p className="text-xs text-on-surface-variant leading-relaxed">
+                          {trabajo.descripcion}
+                        </p>
+                      </div>
+
+                      <div className="pt-2 border-t border-slate-50 flex justify-between items-center text-[10px] font-bold tracking-wider uppercase text-emerald-600">
+                        <span className="flex items-center gap-1">
+                          <span className="material-symbols-outlined text-sm">check_circle</span>
+                          Operatividad Restablecida
+                        </span>
+                        <span className="text-slate-400">Dellcom SAC</span>
+                      </div>
+                    </div>
+                  </article>
                 );
               })}
             </div>

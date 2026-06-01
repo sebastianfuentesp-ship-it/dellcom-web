@@ -897,7 +897,9 @@ export default function AdminDashboardPage() {
                                   alt={prod.nombre} 
                                   className="w-10 h-10 object-contain rounded-lg border border-slate-200 bg-slate-50"
                                   onError={(e) => {
-                                    (e.target as HTMLImageElement).src = "/img/productos/placeholder.png";
+                                    const target = e.currentTarget as HTMLImageElement;
+                                    target.onerror = null;
+                                    target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><rect width='100%' height='100%' fill='%23f1f5f9'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='10' fill='%2394a3b8'>DELLCOM</text></svg>";
                                   }}
                                 />
                               ) : (
