@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
+import ScrollRevealObserver from "./components/ScrollRevealObserver";
 
 const serviceVisuals: Record<string, { image: string; icon: string }> = {
   "reparación": {
@@ -586,34 +587,7 @@ export default async function Home() {
         </div>
       </footer>
 
-      {/* Intersection Observer Scroll Reveal Trigger Script */}
-      <script 
-        dangerouslySetInnerHTML={{ 
-          __html: `
-            (function() {
-              const initObserver = () => {
-                const observer = new IntersectionObserver((entries) => {
-                  entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                      entry.target.classList.add("reveal-active");
-                      observer.unobserve(entry.target);
-                    }
-                  });
-                }, { threshold: 0.1 });
-                
-                document.querySelectorAll(".scroll-reveal").forEach((el) => {
-                  observer.observe(el);
-                });
-              };
-              if (document.readyState === "loading") {
-                document.addEventListener("DOMContentLoaded", initObserver);
-              } else {
-                initObserver();
-              }
-            })();
-          ` 
-        }} 
-      />
+      <ScrollRevealObserver />
     </>
   );
 }
