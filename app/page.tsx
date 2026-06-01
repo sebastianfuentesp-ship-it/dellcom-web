@@ -310,6 +310,81 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* Ubicación / Google Maps Section */}
+        <section className="py-20 px-margin-mobile md:px-margin-desktop bg-white border-b border-outline-variant/10">
+          <div className="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Map Info Card */}
+            <div className="lg:col-span-4 space-y-6">
+              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
+                <span className="material-symbols-outlined text-[16px]">location_on</span>
+                ¿Dónde encontrarnos?
+              </div>
+              <h2 className="font-headline text-3xl font-bold text-on-surface">Visítanos en Los Olivos</h2>
+              <p className="text-sm text-on-surface-variant leading-relaxed">
+                Estamos ubicados en una zona accesible de Lima Norte. Ven a nuestra sucursal para reparaciones inmediatas de laptops, impresoras, microelectrónica o para cotizar suministros Zebra y licencias corporativas.
+              </p>
+              
+              <div className="space-y-4 pt-2">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-slate-100 rounded-lg text-primary">
+                    <span className="material-symbols-outlined">map</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-on-surface">Dirección</h4>
+                    <p className="text-xs text-on-surface-variant mt-0.5">Av. Las Palmeras 1234, Los Olivos, Lima</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-slate-100 rounded-lg text-primary">
+                    <span className="material-symbols-outlined">schedule</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-on-surface">Horario de Atención</h4>
+                    <p className="text-xs text-on-surface-variant mt-0.5">Lunes a Sábado: 9:00 AM - 7:00 PM</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-slate-100 rounded-lg text-primary">
+                    <span className="material-symbols-outlined">phone_iphone</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-on-surface">Teléfono de Soporte</h4>
+                    <p className="text-xs text-on-surface-variant mt-0.5">+51 987 654 321</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <a 
+                  href="https://maps.google.com/?q=Av.+Las+Palmeras+1234,+Los+Olivos,+Lima"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/95 text-white px-6 py-3 rounded-xl text-xs font-bold transition-all active:scale-95 shadow-md shadow-primary/20"
+                >
+                  <span className="material-symbols-outlined text-[16px]">directions</span>
+                  Cómo llegar con Google Maps
+                </a>
+              </div>
+            </div>
+
+            {/* Google Maps Iframe */}
+            <div className="lg:col-span-8 w-full h-[400px] bg-slate-100 rounded-3xl overflow-hidden border border-outline-variant/30 shadow-md relative group">
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3902.9463581702816!2d-77.07542918809228!3d-11.978184588198751!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105d1bb53d077c5%3A0xa64b3ef7753e167!2sAv.%20Las%20Palmeras%2C%20Los%20Olivos%2015027!5e0!3m2!1ses!2spe!4v1717210000000!5m2!1ses!2spe" 
+                width="100%" 
+                height="100%" 
+                style={{ border: 0 }} 
+                allowFullScreen={true}
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade"
+                className="w-full h-full grayscale-[20%] group-hover:grayscale-0 transition-all duration-500"
+              ></iframe>
+            </div>
+          </div>
+        </section>
+
         {/* 
           Redesigned CTA Section (Light Theme with Crimson glowing accents for Year 2026) 
           Fixes the dark contrast mismatch and fits the clean branding theme.
