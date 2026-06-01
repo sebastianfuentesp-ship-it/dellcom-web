@@ -478,65 +478,65 @@ export default function AdminDashboardPage() {
   return (
     <div className="bg-slate-50 min-h-screen text-on-surface font-headline overflow-hidden flex">
       
-      {/* SideNavBar - Clean Deep Slate & Crimson Dark Theme */}
-      <aside className="bg-slate-900 h-screen w-64 left-0 top-0 fixed shadow-lg flex flex-col py-6 z-50 text-white">
+      {/* SideNavBar - Clean Premium Light Theme */}
+      <aside className="bg-white h-screen w-64 left-0 top-0 fixed border-r border-slate-200/80 flex flex-col py-6 z-50 shadow-sm">
         <div className="px-6 mb-8 flex items-center gap-3">
           <DellcomLogo className="w-10 h-10" />
           <div>
-            <h1 className="text-lg font-bold tracking-tight text-white">DELLCOM SAC</h1>
-            <p className="text-[10px] text-red-500 font-bold uppercase tracking-widest leading-none">Enterprise Admin</p>
+            <h1 className="text-lg font-bold tracking-tight text-on-surface">DELLCOM SAC</h1>
+            <p className="text-[10px] text-primary font-bold uppercase tracking-widest leading-none">Enterprise Admin</p>
           </div>
         </div>
         
         <nav className="flex-1 space-y-1">
           <button 
             onClick={() => { setActiveTab("licenses"); setSearchQuery(""); }}
-            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 ${
+            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
               activeTab === "licenses"
-                ? "text-white font-bold border-l-4 border-red-600 bg-red-600/10"
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+                ? "text-primary font-extrabold border-primary bg-primary/5"
+                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
             }`}
           >
-            <span className="material-symbols-outlined text-[20px]">verified_user</span>
+            <span className={`material-symbols-outlined text-[20px] ${activeTab === "licenses" ? "text-primary" : "text-slate-400"}`}>verified_user</span>
             <span className="text-sm">Gestión de Licencias</span>
           </button>
           
           <button 
             onClick={() => { setActiveTab("files"); setSearchQuery(""); }}
-            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 ${
+            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
               activeTab === "files"
-                ? "text-white font-bold border-l-4 border-red-600 bg-red-600/10"
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+                ? "text-primary font-extrabold border-primary bg-primary/5"
+                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
             }`}
           >
-            <span className="material-symbols-outlined text-[20px]">folder_open</span>
+            <span className={`material-symbols-outlined text-[20px] ${activeTab === "files" ? "text-primary" : "text-slate-400"}`}>folder_open</span>
             <span className="text-sm">Archivos y Drivers</span>
           </button>
 
           <button 
             onClick={() => { setActiveTab("products"); setSearchQuery(""); }}
-            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 ${
+            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
               activeTab === "products"
-                ? "text-white font-bold border-l-4 border-red-600 bg-red-600/10"
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+                ? "text-primary font-extrabold border-primary bg-primary/5"
+                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
             }`}
           >
-            <span className="material-symbols-outlined text-[20px]">inventory_2</span>
+            <span className={`material-symbols-outlined text-[20px] ${activeTab === "products" ? "text-primary" : "text-slate-400"}`}>inventory_2</span>
             <span className="text-sm">Catálogo de Suministros</span>
           </button>
         </nav>
 
         {/* Support & Logout links in sidebar footer */}
-        <div className="mt-auto border-t border-slate-800 pt-4 space-y-1">
-          <Link href="/" className="flex items-center gap-3 text-slate-400 hover:text-white px-6 py-3 hover:bg-slate-800 transition-colors">
-            <span className="material-symbols-outlined text-[20px]">public</span>
+        <div className="mt-auto border-t border-slate-100 pt-4 space-y-1">
+          <Link href="/" className="flex items-center gap-3 text-slate-500 hover:text-on-surface px-6 py-3 hover:bg-slate-50 transition-colors">
+            <span className="material-symbols-outlined text-[20px] text-slate-400">public</span>
             <span className="text-sm">Ver Web Pública</span>
           </Link>
           <button 
             onClick={() => signOut({ callbackUrl: "/admin/login" })}
-            className="w-full flex items-center gap-3 text-slate-400 hover:text-red-500 px-6 py-3 hover:bg-slate-800 transition-colors"
+            className="w-full flex items-center gap-3 text-slate-500 hover:text-primary px-6 py-3 hover:bg-red-50 transition-colors cursor-pointer"
           >
-            <span className="material-symbols-outlined text-[20px]">logout</span>
+            <span className="material-symbols-outlined text-[20px] text-slate-400">logout</span>
             <span className="text-sm">Cerrar Sesión</span>
           </button>
         </div>
