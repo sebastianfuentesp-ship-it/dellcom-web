@@ -16,9 +16,23 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  if (!session || !session.user?.email) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
+  const user = await prisma.usuario.findUnique({
+    where: { email: session.user.email },
+  });
+  if (!user) return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 });
 
   const body = await req.json();
-  const licencia = await prisma.licencia.create({ data: body });
+  
+  // Format dates correctly from ISO strings
+  const data = {
+    ...body,
+    id_usuario: user.id,
+    fecha_inicio: body.fecha_inicio ? new Date(body.fecha_inicio) : new Date(),
+    fecha_fin: body.fecha_fin ? new Date(body.fecha_fin) : null,
+  };
+
+  const licencia = await prisma.licencia.create({ data });
   return NextResponse.json(licencia, { status: 201 });
 }

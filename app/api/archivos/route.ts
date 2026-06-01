@@ -16,9 +16,19 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  if (!session || !session.user?.email) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
+  const user = await prisma.usuario.findUnique({
+    where: { email: session.user.email },
+  });
+  if (!user) return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 });
 
   const body = await req.json();
-  const archivo = await prisma.archivoTecnico.create({ data: body });
+  const data = {
+    ...body,
+    id_usuario: user.id,
+  };
+
+  const archivo = await prisma.archivoTecnico.create({ data });
   return NextResponse.json(archivo, { status: 201 });
 }
