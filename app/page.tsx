@@ -331,7 +331,7 @@ export default async function Home() {
                   </div>
                   <div>
                     <h4 className="font-bold text-sm text-on-surface">Dirección</h4>
-                    <p className="text-xs text-on-surface-variant mt-0.5">Av. Las Palmeras 1234, Los Olivos, Lima</p>
+                    <p className="text-xs text-on-surface-variant mt-0.5">Av. Santa Elvira, Mza. E, Lote 59, Urb. San Elías, Los Olivos, Lima</p>
                   </div>
                 </div>
 
@@ -358,7 +358,7 @@ export default async function Home() {
 
               <div className="pt-2">
                 <a 
-                  href="https://maps.google.com/?q=Av.+Las+Palmeras+1234,+Los+Olivos,+Lima"
+                  href="https://maps.google.com/?q=Av.+Santa+Elvira,+Mza.+E,+Lote+59,+Urb.+San+El%C3%ADas,+Los+Olivos,+Lima"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/95 text-white px-6 py-3 rounded-xl text-xs font-bold transition-all active:scale-95 shadow-md shadow-primary/20"
@@ -372,7 +372,7 @@ export default async function Home() {
             {/* Google Maps Iframe */}
             <div className="lg:col-span-8 w-full h-[400px] bg-slate-100 rounded-3xl overflow-hidden border border-outline-variant/30 shadow-md relative group">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3902.9463581702816!2d-77.07542918809228!3d-11.978184588198751!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105d1bb53d077c5%3A0xa64b3ef7753e167!2sAv.%20Las%20Palmeras%2C%20Los%20Olivos%2015027!5e0!3m2!1ses!2spe!4v1717210000000!5m2!1ses!2spe" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3903.1118432328766!2d-77.0756549242084!3d-11.95772378735626!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105d04c4b69dcfb%3A0xd3b34bdf88ea4eb6!2sAv.%20Santa%20Elvira%2C%20Los%20Olivos%2015306!5e0!3m2!1ses!2spe!4v1717210000000!5m2!1ses!2spe" 
                 width="100%" 
                 height="100%" 
                 style={{ border: 0 }} 
@@ -494,7 +494,7 @@ export default async function Home() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <span className="material-symbols-outlined text-primary text-[20px]">location_on</span>
-                <span className="text-sm text-on-surface-variant">Av. Las Palmeras 1234, Los Olivos, Lima.</span>
+                <span className="text-sm text-on-surface-variant">Av. Santa Elvira, Mza. E, Lote 59, Urb. San Elías, Los Olivos, Lima.</span>
               </li>
               <li className="flex items-center gap-3">
                 <span className="material-symbols-outlined text-primary text-[20px]">call</span>
