@@ -24,7 +24,7 @@ const serviceVisuals: Record<string, { image: string; icon: string }> = {
     icon: "mail"
   },
   "licencia": {
-    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80",
+    image: "/img/servicios/licencias_software.png",
     icon: "verified_user"
   }
 };
