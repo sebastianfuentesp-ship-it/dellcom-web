@@ -891,7 +891,7 @@ export default function AdminDashboardPage() {
                         filteredProductos.map((prod) => (
                           <tr key={prod.id} className="hover:bg-slate-50/50 transition-colors">
                             <td className="px-6 py-4 flex items-center gap-3">
-                              {prod.imagen_url ? (
+                              {prod.imagen_url && !prod.imagen_url.includes("placeholder.png") ? (
                                 <img 
                                   src={prod.imagen_url.startsWith("http") || prod.imagen_url.startsWith("/") ? prod.imagen_url : `/${prod.imagen_url}`} 
                                   alt={prod.nombre} 

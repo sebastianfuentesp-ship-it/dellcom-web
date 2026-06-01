@@ -93,7 +93,7 @@ function ProductImage({ src, alt, categoryName }: { src?: string; alt: string; c
 
   const iconName = getIconForCategory(categoryName);
 
-  if (error || !src) {
+  if (error || !src || src.includes("placeholder.png")) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100/60 text-slate-400 select-none p-4 min-h-[200px]">
         <span className="material-symbols-outlined text-[56px] text-slate-300 mb-2 group-hover:scale-110 group-hover:text-primary transition-all duration-300">

@@ -76,12 +76,27 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col justify-center items-center px-4 relative overflow-hidden">
-      {/* Red Glowing Auroras in the background */}
-      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-red-600/10 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-red-600/5 rounded-full blur-[150px] pointer-events-none"></div>
+    <div className="min-h-screen flex flex-col justify-center items-center px-4 relative overflow-hidden bg-slate-950">
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 filter brightness-40 contrast-125 saturate-50"
+      >
+        <source src="/vid/laptop_video.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
 
-      <div className="w-full max-w-md bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl relative z-10">
+      {/* Cinematic dark gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-950/90 to-red-950/30 z-0"></div>
+
+      {/* Red Glowing Auroras in the background */}
+      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-red-600/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-red-600/5 rounded-full blur-[150px] pointer-events-none z-0"></div>
+
+      <div className="w-full max-w-md bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl hover:border-red-600/20 transition-all duration-500 relative z-10">
         <div className="flex flex-col items-center mb-8">
           <DellcomLogo className="w-16 h-16 mb-4 hover:scale-105 transition-transform duration-300" />
           <h2 className="font-headline text-2xl font-extrabold text-white tracking-tight">Portal de Gestión Interna</h2>
