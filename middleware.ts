@@ -3,16 +3,17 @@ import { NextResponse } from "next/server";
 
 export default withAuth(
   function middleware(req) {
+    console.log("TOKEN:", req.nextauth.token);
+
     const token = req.nextauth.token;
     const path = req.nextUrl.pathname;
     const method = req.method;
 
     if (!token) {
+      console.log("NO TOKEN");
       return NextResponse.redirect(new URL("/admin/login", req.url));
     }
 
-    // Técnico y vendedor NO pueden modificar licencias ni archivos
-    // Solo pueden verlos (GET)
     const esAdmin = token.role === "admin";
     const esEscritura = ["POST", "PUT", "DELETE"].includes(method);
 
@@ -31,44 +32,9 @@ export default withAuth(
     return NextResponse.next();
   },
   {
+    secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
-      authorized: ({ token, req }) => {
-        const path = req.nextUrl.pathname;
-        const method = req.method;
-
-        // Public GET API routes that do not require authentication
-        const isPublicGetApi =
-          (path.startsWith("/api/productos") ||
-            path.startsWith("/api/servicios") ||
-            path.startsWith("/api/trabajos") ||
-            path.startsWith("/api/categorias") ||
-            path.startsWith("/api/archivos")) &&
-          method === "GET";
-
-        if (isPublicGetApi) {
-          return true;
-        }
-
-        return !!token;
-      },
+      authorized: () => true,
     },
   }
 );
-
-export const config = {
-  matcher: [
-    "/admin/dashboard/:path*",
-    "/admin/productos/:path*",
-    "/admin/servicios/:path*",
-    "/admin/trabajos/:path*",
-    "/admin/categorias/:path*",
-    "/admin/licencias/:path*",
-    "/admin/archivos/:path*",
-    "/api/productos/:path*",
-    "/api/servicios/:path*",
-    "/api/trabajos/:path*",
-    "/api/categorias/:path*",
-    "/api/licencias/:path*",
-    "/api/archivos/:path*",
-  ],
-};
