@@ -6,6 +6,106 @@ La solucion esta desarrollada utilizando Next.js con arquitectura App Router, Ta
 
 ---
 
+## Estructura Completa de Directorios del Proyecto
+
+A continuacion se presenta la estructura visual del arbol de carpetas y archivos mas importantes que conforman la aplicacion:
+
+```
+DELLCOM-WEB/
+├── .github/
+│   └── workflows/
+│       └── nextjs.yml          # Flujo de trabajo de Integracion Continua en GitHub Actions
+├── __tests__/
+│   └── api.test.ts             # Pruebas unitarias de esquemas de datos con Jest
+├── app/
+│   ├── admin/                  # Seccion administrativa (Dashboard de Gestion)
+│   │   ├── dashboard/
+│   │   │   └── page.tsx        # Interfaz de panel principal (Tablas y Modales de CRUD)
+│   │   ├── login/
+│   │   │   └── page.tsx        # Formulario de inicio de sesion con estetica glassmorphic
+│   │   └── layout.tsx          # Componente layout para inyeccion de SessionProvider de Auth
+│   ├── api/                    # Endpoints API REST de Next.js (Handlers de Servidor)
+│   │   ├── admin/              # APIs administrativas protegidas por rol de usuario
+│   │   │   ├── contacto/
+│   │   │   │   └── route.ts    # Control de lectura y eliminacion de mensajes de contacto
+│   │   │   ├── upload/
+│   │   │   │   └── route.ts    # Carga fisica de archivos (AWS S3 con local fallback)
+│   │   │   └── usuarios/
+│   │   │       └── route.ts    # CRUD administrativo de personal técnico (bcrypt hashes)
+│   │   ├── archivos/
+│   │   │   ├── [id]/
+│   │   │   │   └── route.ts    # APIs especificas para descarga/edicion de archivos
+│   │   │   └── route.ts        # Endpoint general de archivos y drivers de soporte
+│   │   ├── auth/
+│   │   │   └── [...nextauth]/
+│   │   │       └── route.ts    # Handler de enrutamiento interno para NextAuth.js
+│   │   ├── categorias/
+│   │   │   ├── [id]/
+│   │   │   │   └── route.ts    # CRUD especifico de categorias de productos
+│   │   │   └── route.ts        # Listado y creacion de categorias del catalogo
+│   │   ├── contacto/
+│   │   │   └── route.ts        # API de recepcion y persistencia de mensajes (Zod validation)
+│   │   ├── cron/
+│   │   │   └── check-licencias/
+│   │   │       └── route.ts    # Job programado para marcar vigencias de licencias vencidas
+│   │   ├── licencias/
+│   │   │   ├── [id]/
+│   │   │   │   └── route.ts    # CRUD e informes de licencias especificas de clientes
+│   │   │   └── route.ts        # Listado y registro de licencias de software vendidas
+│   │   ├── productos/
+│   │   │   ├── [id]/
+│   │   │   │   └── route.ts    # Edicion y eliminacion de productos del catalogo
+│   │   │   └── route.ts        # Listado general de productos activos y filtros
+│   │   ├── servicios/
+│   │   │   ├── [id]/
+│   │   │   │   └── route.ts    # Edicion y eliminacion de servicios mostrados
+│   │   │   └── route.ts        # Listado general de servicios de TI
+│   │   └── trabajos/
+│   │       ├── [id]/
+│   │       │   └── route.ts    # Edicion y eliminacion de trabajos de portafolio
+│   │       └── route.ts        # Galeria de trabajos tecnicos del portafolio
+│   ├── components/             # Componentes modulares y reutilizables del frontend
+│   │   ├── CleanFooter.tsx     # Pie de pagina corporativo con accesos rapidos y redes
+│   │   ├── ScrollRevealObserver.tsx # Observador de scroll para animaciones de fade-in
+│   │   └── StatusHeader.tsx    # Barra de navegacion principal con logo SVG y menu activo
+│   ├── contacto/
+│   │   └── page.tsx            # Formulario estructurado publico de consultas
+│   ├── descargas/
+│   │   └── page.tsx            # Repositorio publico de drivers y manuales
+│   ├── nosotros/
+│   │   └── page.tsx            # Trayectoria, vision, mision y valores corporativos
+│   ├── productos/
+│   │   └── page.tsx            # Catalogo virtual interactivo de repuestos y suministros
+│   ├── servicios/
+│   │   └── page.tsx            # Seccion publica de servicios en filas alternas
+│   ├── soporte/
+│   │   └── page.tsx            # Reproductor cinemático AnyDesk y guia paso a paso
+│   ├── globals.css             # Estilos globales y configuracion de Tailwind CSS v4
+│   ├── layout.tsx              # Raiz de paginas, tipografia Outfit e iconos Material
+│   └── page.tsx                # Pagina de aterrizaje principal (Inicio)
+├── lib/
+│   ├── auth.ts                 # Configuracion central de proveedores y callbacks de NextAuth
+│   └── prisma.ts               # Instancia unificada del cliente de Prisma ORM
+├── prisma/
+│   ├── schema.prisma           # Archivo de modelos de datos relacionales y conectores SQL
+│   └── seed.ts                 # Script de seed (poblado inicial de la base de datos)
+├── public/                     # Archivos estaticos
+│   ├── img/
+│   │   └── servicios/          # Imagenes locales de soporte tecnico, redes y licencias
+│   └── uploads/                # Directorio local de fallback para subida fisica de archivos
+├── scripts/
+│   └── seed.ts                 # Enlace o script ejecutor de base de datos
+├── eslint.config.mjs           # Archivo de configuracion para ESLint
+├── jest.config.js              # Archivo de configuracion para las pruebas de Jest
+├── middleware.ts               # Filtro de autenticacion y control de acceso basado en roles
+├── next-env.d.ts               # Declaraciones de tipos por defecto para Next.js
+├── next.config.ts              # Configuracion de compilacion y optimizaciones de Next.js
+├── package.json                # Dependencias, scripts de compilacion y configuracion general
+└── tsconfig.json               # Configuracion de compilacion de TypeScript
+```
+
+---
+
 ## Modulos y Funcionalidades Principales
 
 ### 1. Portal Corporativo Publico (Frontend UX Premium)
@@ -17,7 +117,7 @@ La solucion esta desarrollada utilizando Next.js con arquitectura App Router, Ta
 * **Formulario de Contacto Real (/contacto)**: Formulario estructurado con iconos vectoriales de Google Material Symbols. Valida datos en tiempo real y persiste las consultas directamente en la base de datos MySQL.
 
 ### 2. Panel Administrativo Protegido (Dashboard)
-* **Area de Login Glassmorphic**: Interfaz de acceso limpia con un overlay translucido sobre un video tecnico de fondo, focos de acento en rojo puro (#ff0000) y proteccion por token JWT.
+* **Area de Login Glassmorphic**: Interfaz de acceso limpia con un overlay translúcido sobre un video tecnico de fondo, focos de acento en rojo puro (#ff0000) y proteccion por token JWT.
 * **Modulo de Licencias de Software**: Registro detallado de cuentas de correo, contrasenas, fechas de vigencia y observaciones de licencias (Windows, Office, Antivirus) vendidas a clientes, con codigos de color de alerta segun proximidad de vencimiento (urgente, por vencer, activo).
 * **Modulo de Archivos y Drivers**: Permite subir ejecutables y manuales asignandoles etiquetas de categoria (programa, driver, excel, link).
 * **Modulo de Catalogo de Productos**: Control de stock virtual para anadir, editar, desactivar o eliminar productos del catalogo publico.
@@ -38,12 +138,30 @@ La solucion esta desarrollada utilizando Next.js con arquitectura App Router, Ta
 
 ---
 
-## Requisitos de Sistema
+## Esquema y Relaciones de Base de Datos (Prisma ORM)
 
-* Node.js version 20 o superior
-* Gestor de paquetes npm
-* Servidor MySQL (local o en la nube como Railway/PlanetScale)
-* Bucket de AWS S3 (opcional para almacenamiento en la nube)
+El esquema de datos (`prisma/schema.prisma`) define las siguientes tablas y relaciones en la base de datos MySQL:
+
+### 1. Sistema Administrativo
+* **Usuario (`Usuario`)**:
+  * Representa al personal tecnico o vendedores de la empresa.
+  * Atributos clave: `id_usuario`, `nombre`, `usuario` (unico), `email` (unico), `contrasena` (hasheada), `rol` (enum: admin, tecnico, vendedor) y `activo` (booleano).
+  * Relaciones: Tiene relacion de uno a muchos con las tablas `ArchivoTecnico` y `Licencia`.
+* **Licencia (`Licencia`)**:
+  * Almacena las suscripciones de software vendidas a clientes.
+  * Atributos clave: `id_licencia`, `software`, `correo_cuenta`, `contrasena`, `fecha_inicio`, `fecha_fin` (opcional), `nombre_cliente`, `telefono`, `estado` (enum: activo, vencido), `observaciones`.
+  * Relaciones: Relacionada de muchos a uno con `Usuario` para identificar que tecnico registro o vendio la licencia.
+* **ArchivoTecnico (`ArchivoTecnico`)**:
+  * Registra instaladores de programas y controladores cargados en la plataforma.
+  * Atributos clave: `id_archivo`, `nombre`, `tipo` (enum: programa, driver, excel, link), `url_archivo` (URL local o S3), `descripcion`, `fecha_subida`.
+  * Relaciones: Relacionada de muchos a uno con `Usuario` para identificar el autor de la subida.
+
+### 2. Sistema Web Publico
+* **Servicio (`Servicio`)**: Servicios expuestos en el catalogo corporativo. Relacionado de uno a muchos con la tabla `TrabajoRealizado`.
+* **Categoria (`Categoria`)**: Clasificacion para estructurar los suministros (ej. ribbons, tintas, discos). Relacionado de uno a muchos con `Producto`.
+* **Producto (`Producto`)**: Articulos en stock mostrados en el catalogo publico. Atributos: `id_producto`, `nombre`, `descripcion`, `precio`, `imagen_url`, `activo`. Relacionado de muchos a uno con `Categoria`.
+* **TrabajoRealizado (`TrabajoRealizado`)**: Fotos de portafolio de instalaciones y proyectos de cableado o reparaciones. Relacionado de muchos a uno con `Servicio` (opcional).
+* **MensajeContacto (`MensajeContacto`)**: Registra y persiste los correos enviados por clientes. Atributos: `id_mensaje`, `nombre`, `correo`, `telefono`, `asunto`, `mensaje`, `leido` (default: false), `fecha`.
 
 ---
 
