@@ -170,15 +170,9 @@ async function main() {
   // 5. Seed Portfolio / Trabajos Realizados
   const trabajos = [
     {
-      titulo: "Equipamiento e Inauguración de Nueva Sede - Santa Anita",
-      descripcion: "Implementación integral de nuestro laboratorio técnico de última generación en el distrito de Santa Anita. Diseñado para ofrecer diagnósticos electrónicos en tiempo real y atención al cliente premium. Contamos con áreas dedicadas a la recepción de equipos, diagnóstico guiado por microscopio y una exhibición completa de repuestos y suministros originales para asegurar una solución rápida y garantizada.||/img/portafolio/WhatsApp Image 2026-06-14 at 9.36.54 PM.jpeg,/img/portafolio/WhatsApp Image 2026-06-14 at 9.36.57 PM (2).jpeg,/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.13 PM (4).jpeg,/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.12 PM.jpeg",
-      imagen_url: "/img/portafolio/WhatsApp Image 2026-06-14 at 9.36.54 PM.jpeg",
-      id_servicio: serviciosMap["Reparación de Laptops e Impresoras"].id,
-    },
-    {
       titulo: "Reparación Electrónica de Placas Madre a Nivel Componente",
-      descripcion: "Laboratorio de microelectrónica de precisión. Reparación de cortocircuitos detectados por termografía infrarroja de alta sensibilidad, microsoldadura de puertos de carga USB-C, programación directa de Bios EEPROM mediante grabadores externos y reballing de chips integrados (GPU/Chipset) con soldadura aleada de alta resistencia.||/img/portafolio/WhatsApp Image 2026-06-14 at 9.36.54 PM (1).jpeg,/img/portafolio/WhatsApp Image 2026-06-14 at 9.36.55 PM.jpeg,/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.12 PM (3).jpeg,/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.13 PM (1).jpeg,/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.13 PM (5).jpeg",
-      imagen_url: "/img/portafolio/WhatsApp Image 2026-06-14 at 9.36.54 PM (1).jpeg",
+      descripcion: "Laboratorio de microelectrónica de precisión. Reparación de cortocircuitos detectados por termografía infrarroja de alta sensibilidad, microsoldadura de puertos de carga USB-C, programación directa de Bios EEPROM mediante grabadores externos y reballing de chips integrados (GPU/Chipset) con soldadura aleada de alta resistencia.||/img/portafolio/WhatsApp Image 2026-06-14 at 9.36.55 PM.jpeg,/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.12 PM (3).jpeg,/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.13 PM (1).jpeg,/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.13 PM (5).jpeg",
+      imagen_url: "/img/portafolio/WhatsApp Image 2026-06-14 at 9.36.55 PM.jpeg",
       id_servicio: serviciosMap["Microelectrónica y Placas"].id,
     },
     {
