@@ -49,7 +49,11 @@ export default function SmartAssistant() {
   ];
 
   const getBotResponse = (userText: string): string => {
-    const text = userText.toLowerCase();
+    // Normalizar texto para remover tildes/acentos y simplificar la búsqueda
+    const text = userText
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
 
     if (
       text.includes("ubicacion") ||
@@ -89,8 +93,7 @@ export default function SmartAssistant() {
       text.includes("celular") ||
       text.includes("contacto") ||
       text.includes("llamar") ||
-      text.includes("numero") ||
-      text.includes("tecnico")
+      text.includes("numero")
     ) {
       return "Puedes contactar directamente a nuestros técnicos a través de WhatsApp o llamada telefónica a los números de soporte oficial:\n• +51 925 981 741\n• +51 922 452 929";
     }
@@ -121,7 +124,10 @@ export default function SmartAssistant() {
       text.includes("reparacion") ||
       text.includes("mantenimiento") ||
       text.includes("placa") ||
-      text.includes("soldadura")
+      text.includes("soldadura") ||
+      text.includes("servicio") ||
+      text.includes("tecnico") ||
+      text.includes("soporte")
     ) {
       return "Somos especialistas en soporte correctivo:\n• Microelectrónica y soldadura SMD en placas de laptops y PCs.\n• Mantenimiento y calibración de impresoras térmicas e industriales Zebra.\n• Cableado de red estructurado y gabinetes rack para empresas.";
     }
@@ -186,20 +192,20 @@ export default function SmartAssistant() {
       {isOpen && (
         <div className="w-[calc(100vw-2rem)] sm:w-96 h-[500px] bg-white rounded-3xl shadow-2xl border border-slate-100 flex flex-col justify-between overflow-hidden animate-fade-in-up">
           {/* Header */}
-          <div className="bg-slate-900 px-5 py-4 flex items-center justify-between">
+          <div className="bg-white border-b border-slate-100 px-5 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary relative">
                 <span className="material-symbols-outlined text-2xl text-primary">smart_toy</span>
-                <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-slate-900 animate-pulse" />
+                <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white animate-pulse" />
               </div>
               <div>
-                <h3 className="font-headline text-sm font-bold text-white leading-none">Soporte DELLCOM</h3>
-                <span className="text-[10px] font-bold text-green-400 uppercase tracking-widest leading-none mt-1.5 block">Asistente Online</span>
+                <h3 className="font-headline text-sm font-bold text-slate-900 leading-none">Soporte DELLCOM</h3>
+                <span className="text-[10px] font-bold text-green-600 uppercase tracking-widest leading-none mt-1.5 block">Asistente Online</span>
               </div>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors cursor-pointer border-none"
+              className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer border-none"
             >
               <span className="material-symbols-outlined text-base">close</span>
             </button>
