@@ -254,26 +254,27 @@ export default function HomePortfolioBubblePreview({ trabajos = [] }: HomePortfo
                   {/* Left Arrow */}
                   <button
                     onClick={handlePrevImage}
-                    className="absolute left-4 w-9 h-9 bg-white/85 backdrop-blur-sm border border-slate-200/40 rounded-full flex items-center justify-center text-slate-700 hover:text-primary hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 bg-white/85 backdrop-blur-sm border border-slate-200/40 rounded-full flex items-center justify-center text-slate-700 hover:text-primary hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-[18px] font-bold">chevron_left</span>
                   </button>
                   {/* Right Arrow */}
                   <button
                     onClick={handleNextImage}
-                    className="absolute right-4 w-9 h-9 bg-white/85 backdrop-blur-sm border border-slate-200/40 rounded-full flex items-center justify-center text-slate-700 hover:text-primary hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 bg-white/85 backdrop-blur-sm border border-slate-200/40 rounded-full flex items-center justify-center text-slate-700 hover:text-primary hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-[18px] font-bold">chevron_right</span>
                   </button>
                   {/* Dot Indicators */}
                   <div className="absolute bottom-4 flex gap-1.5 justify-center z-10 w-full">
                     {parsedData.images.map((_, dotIdx) => (
-                      <span 
-                        key={dotIdx} 
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          dotIdx === currentImageIndex 
-                            ? "bg-primary w-5" 
-                            : "bg-white/50 w-2"
+                      <button
+                        key={dotIdx}
+                        onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(dotIdx); }}
+                        className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                          dotIdx === currentImageIndex
+                            ? "bg-primary w-5"
+                            : "bg-white/50 w-2 hover:bg-white"
                         }`}
                       />
                     ))}
