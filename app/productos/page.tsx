@@ -310,6 +310,7 @@ export default function ProductosPage() {
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProductDetails, setSelectedProductDetails] = useState<Producto | null>(null);
+  const [lightboxImgIdx, setLightboxImgIdx] = useState(0);
   const [mounted, setMounted] = useState(false);
 
   // Advanced Filters & Sorting
@@ -687,7 +688,7 @@ export default function ProductosPage() {
 
                         {/* Product Image Container with Fallbacks */}
                         <div 
-                          onClick={() => setSelectedProductDetails(prod)}
+                          onClick={() => { setSelectedProductDetails(prod); setLightboxImgIdx(0); }}
                           className="aspect-square bg-slate-50/40 p-4 flex items-center justify-center border-b border-slate-100/80 relative overflow-hidden select-none cursor-pointer group/img"
                         >
                           <ProductImage 
@@ -710,7 +711,7 @@ export default function ProductosPage() {
                               {prod.categoria?.nombre || "General"}
                             </span>
                             <h3 
-                              onClick={() => setSelectedProductDetails(prod)}
+                              onClick={() => { setSelectedProductDetails(prod); setLightboxImgIdx(0); }}
                               className="font-headline text-sm md:text-base font-bold text-on-surface line-clamp-2 hover:text-primary transition-colors leading-snug cursor-pointer"
                             >
                               {prod.nombre}
@@ -975,19 +976,51 @@ export default function ProductosPage() {
           {/* Modal Content Card */}
           <div className="relative bg-white rounded-[2rem] shadow-2xl border border-slate-100 max-w-2xl w-full overflow-hidden flex flex-col md:flex-row z-10 transform scale-100 animate-scale-up transition-all duration-300 max-h-[90vh] md:max-h-none">
             
-            {/* Left Column: Image */}
-            <div className="md:w-1/2 bg-slate-50/50 p-8 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-100 relative min-h-[250px] md:min-h-[380px]">
-              <div className="w-full h-full max-h-[380px] flex items-center justify-center">
-                <ZoomableImage 
-                  src={selectedProductDetails.imagen_url} 
-                  alt={selectedProductDetails.nombre} 
-                  categoryName={selectedProductDetails.categoria?.nombre || "General"} 
-                />
-              </div>
-              <span className="absolute top-4 left-4 inline-block px-3 py-1 rounded-full bg-white/90 backdrop-blur-[2px] border border-slate-200/50 text-[9px] text-slate-500 font-extrabold uppercase tracking-widest shadow-sm">
-                {selectedProductDetails.categoria?.nombre || "General"}
-              </span>
-            </div>
+            {/* Left Column: Image / Carousel */}
+            {(() => {
+              const imgs = (selectedProductDetails.imagen_url || "").split("||").filter(Boolean);
+              const activeIdx = Math.min(lightboxImgIdx, Math.max(imgs.length - 1, 0));
+              const hasMultiple = imgs.length > 1;
+              return (
+                <div className="md:w-1/2 bg-slate-50/50 p-8 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-100 relative min-h-[250px] md:min-h-[380px]">
+                  <div className="w-full h-full max-h-[380px] flex items-center justify-center">
+                    <ZoomableImage
+                      src={imgs[activeIdx] || selectedProductDetails.imagen_url}
+                      alt={selectedProductDetails.nombre}
+                      categoryName={selectedProductDetails.categoria?.nombre || "General"}
+                    />
+                  </div>
+                  <span className="absolute top-4 left-4 inline-block px-3 py-1 rounded-full bg-white/90 backdrop-blur-[2px] border border-slate-200/50 text-[9px] text-slate-500 font-extrabold uppercase tracking-widest shadow-sm">
+                    {selectedProductDetails.categoria?.nombre || "General"}
+                  </span>
+                  {hasMultiple && (
+                    <>
+                      <button
+                        onClick={() => setLightboxImgIdx((activeIdx - 1 + imgs.length) % imgs.length)}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 hover:bg-white border border-slate-200 shadow-sm flex items-center justify-center text-slate-500 hover:text-slate-800 transition-all cursor-pointer z-10"
+                      >
+                        <span className="material-symbols-outlined text-base leading-none">chevron_left</span>
+                      </button>
+                      <button
+                        onClick={() => setLightboxImgIdx((activeIdx + 1) % imgs.length)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 hover:bg-white border border-slate-200 shadow-sm flex items-center justify-center text-slate-500 hover:text-slate-800 transition-all cursor-pointer z-10"
+                      >
+                        <span className="material-symbols-outlined text-base leading-none">chevron_right</span>
+                      </button>
+                      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5">
+                        {imgs.map((_, i) => (
+                          <button
+                            key={i}
+                            onClick={() => setLightboxImgIdx(i)}
+                            className={`w-1.5 h-1.5 rounded-full transition-all cursor-pointer border-none p-0 ${i === activeIdx ? "bg-red-600 w-3" : "bg-slate-300 hover:bg-slate-400"}`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Right Column: Information */}
             <div className="md:w-1/2 p-8 flex flex-col justify-between overflow-y-auto no-scrollbar">

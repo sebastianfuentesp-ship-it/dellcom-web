@@ -195,7 +195,8 @@ export default function AdminDashboardPage() {
   const [formProductPrice, setFormProductPrice] = useState("");
   const [formProductDesc, setFormProductDesc] = useState("");
   const [formProductCategory, setFormProductCategory] = useState("");
-  const [formProductImageUrl, setFormProductImageUrl] = useState("");
+  const [formProductImages, setFormProductImages] = useState<string[]>([""]);
+  const [uploadingProductIdx, setUploadingProductIdx] = useState<number | null>(null);
   const [formProductActive, setFormProductActive] = useState(true);
 
   // Form states for User CRUD (Admin)
@@ -318,11 +319,20 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const handleUploadFile = async (e: React.ChangeEvent<HTMLInputElement>, target: "product" | "file" | "portfolio") => {
+  const handleUploadFile = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    target: "product" | "file" | "portfolio",
+    productIdx?: number
+  ) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setUploading(true);
+    if (target === "product" && productIdx !== undefined) {
+      setUploadingProductIdx(productIdx);
+    } else {
+      setUploading(true);
+    }
+
     const formData = new FormData();
     formData.append("file", file);
 
@@ -332,13 +342,11 @@ export default function AdminDashboardPage() {
         body: formData,
       });
 
-      if (!res.ok) {
-        throw new Error("No se pudo cargar el archivo");
-      }
+      if (!res.ok) throw new Error("No se pudo cargar el archivo");
 
       const data = await res.json();
-      if (target === "product") {
-        setFormProductImageUrl(data.url);
+      if (target === "product" && productIdx !== undefined) {
+        setFormProductImages(prev => prev.map((u, i) => i === productIdx ? data.url : u));
       } else if (target === "portfolio") {
         setFormPortfolioImgUrl(data.url);
       } else {
@@ -349,9 +357,17 @@ export default function AdminDashboardPage() {
       console.error(err);
       alert("Error al intentar subir el archivo.");
     } finally {
-      setUploading(false);
+      if (target === "product") {
+        setUploadingProductIdx(null);
+      } else {
+        setUploading(false);
+      }
     }
   };
+
+  const addProductImage = () => setFormProductImages(prev => [...prev, ""]);
+  const removeProductImage = (idx: number) => setFormProductImages(prev => prev.filter((_, i) => i !== idx));
+  const updateProductImage = (idx: number, url: string) => setFormProductImages(prev => prev.map((u, i) => i === idx ? url : u));
 
   const toggleMensajeLeido = async (id: number, currentRead: boolean) => {
     try {
@@ -626,7 +642,7 @@ export default function AdminDashboardPage() {
       precio: Number(formProductPrice),
       descripcion: formProductDesc || null,
       id_categoria: Number(formProductCategory),
-      imagen_url: formProductImageUrl || null,
+      imagen_url: formProductImages.filter(u => u.trim()).join("||") || null,
       activo: formProductActive,
     };
 
@@ -686,7 +702,8 @@ export default function AdminDashboardPage() {
     setFormProductPrice(String(prod.precio));
     setFormProductDesc(prod.descripcion || "");
     setFormProductCategory(String(prod.id_categoria));
-    setFormProductImageUrl(prod.imagen_url || "");
+    const imgs = (prod.imagen_url || "").split("||").filter(Boolean);
+    setFormProductImages(imgs.length > 0 ? imgs : [""]);
     setFormProductActive(prod.activo);
     setShowProductModal(true);
   };
@@ -697,7 +714,7 @@ export default function AdminDashboardPage() {
     setFormProductPrice("");
     setFormProductDesc("");
     setFormProductCategory("");
-    setFormProductImageUrl("");
+    setFormProductImages([""]);
     setFormProductActive(true);
     setShowProductModal(false);
   };
@@ -1447,7 +1464,7 @@ export default function AdminDashboardPage() {
                     setFormProductPrice("");
                     setFormProductDesc("");
                     setFormProductCategory(categorias[0]?.id ? String(categorias[0].id) : "");
-                    setFormProductImageUrl("");
+                    setFormProductImages([""]);
                     setFormProductActive(true);
                     setShowProductModal(true);
                   }}
@@ -2222,42 +2239,89 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Categoría</label>
-                  <select 
-                    required
-                    value={formProductCategory}
-                    onChange={(e) => setFormProductCategory(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-red-600 focus:ring-1 focus:ring-red-600 focus:outline-none rounded-xl px-4 py-3 text-sm transition-all"
-                  >
-                    <option value="">Seleccione una categoría</option>
-                    {categorias.map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.nombre}
-                      </option>
-                    ))}
-                  </select>
+              <div>
+                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Categoría</label>
+                <select
+                  required
+                  value={formProductCategory}
+                  onChange={(e) => setFormProductCategory(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 focus:border-red-600 focus:ring-1 focus:ring-red-600 focus:outline-none rounded-xl px-4 py-3 text-sm transition-all"
+                >
+                  <option value="">Seleccione una categoría</option>
+                  {categorias.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Imágenes del Producto</label>
+                  {formProductImages.length < 5 && (
+                    <button
+                      type="button"
+                      onClick={addProductImage}
+                      className="text-[10px] font-bold text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined text-sm">add_photo_alternate</span>
+                      Agregar imagen
+                    </button>
+                  )}
                 </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 font-bold">Imagen del Producto</label>
-                  <div className="flex flex-col gap-2">
-                    <input 
-                      type="text" 
-                      value={formProductImageUrl}
-                      onChange={(e) => setFormProductImageUrl(e.target.value)}
-                      placeholder="/img/productos/ribbon-cera.jpg"
-                      className="w-full bg-slate-50 border border-slate-200 focus:border-red-600 focus:ring-1 focus:ring-red-600 focus:outline-none rounded-xl px-4 py-3 text-sm transition-all font-mono text-xs"
-                    />
-                    <input 
-                      type="file" 
-                      accept="image/*"
-                      onChange={(e) => handleUploadFile(e, "product")}
-                      disabled={uploading}
-                      className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer"
-                    />
-                    {uploading && <p className="text-[10px] text-primary font-bold animate-pulse">Subiendo imagen...</p>}
-                  </div>
+                <div className="space-y-3">
+                  {formProductImages.map((imgUrl, idx) => (
+                    <div key={idx} className="border border-slate-200 rounded-xl p-3 bg-slate-50/50 space-y-2">
+                      {imgUrl.trim() && (
+                        <div className="h-28 rounded-lg overflow-hidden bg-white border border-slate-100 flex items-center justify-center">
+                          <img
+                            src={imgUrl}
+                            alt={`Vista previa ${idx + 1}`}
+                            className="max-h-full max-w-full object-contain"
+                            onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                          />
+                        </div>
+                      )}
+                      <div className="flex gap-2 items-center">
+                        <input
+                          type="text"
+                          value={imgUrl}
+                          onChange={(e) => updateProductImage(idx, e.target.value)}
+                          placeholder="URL de imagen o sube un archivo →"
+                          className="flex-1 bg-white border border-slate-200 focus:border-red-600 focus:ring-1 focus:ring-red-600 focus:outline-none rounded-xl px-3 py-2.5 text-xs transition-all font-mono"
+                        />
+                        <label
+                          htmlFor={`prod-img-file-${idx}`}
+                          className="shrink-0 px-3 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[10px] font-bold cursor-pointer flex items-center gap-1 transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-sm leading-none">upload</span>
+                          Subir
+                          <input
+                            type="file"
+                            id={`prod-img-file-${idx}`}
+                            accept="image/*"
+                            onChange={(e) => handleUploadFile(e, "product", idx)}
+                            disabled={uploadingProductIdx !== null}
+                            className="hidden"
+                          />
+                        </label>
+                        {formProductImages.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeProductImage(idx)}
+                            className="shrink-0 p-2 text-slate-400 hover:text-red-600 transition-colors rounded-lg hover:bg-red-50 cursor-pointer"
+                            title="Quitar imagen"
+                          >
+                            <span className="material-symbols-outlined text-sm leading-none">delete</span>
+                          </button>
+                        )}
+                      </div>
+                      {uploadingProductIdx === idx && (
+                        <p className="text-[10px] text-primary font-bold animate-pulse">Subiendo imagen {idx + 1}...</p>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
 

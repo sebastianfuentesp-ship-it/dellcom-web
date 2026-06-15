@@ -92,7 +92,7 @@ model Producto {
   nombre       String
   descripcion  String?   @db.Text
   precio       Decimal   @db.Decimal(10, 2)
-  imagen_url   String?
+  imagen_url   String?   @db.Text
   activo       Boolean   @default(true)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
