@@ -10,7 +10,7 @@
  */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import StatusHeader from "../components/StatusHeader";
@@ -83,7 +83,7 @@ function ProductImage({ src, alt, categoryName }: { src?: string; alt: string; c
 const fallbackCategories = [
   { id: 0, nombre: "Todos" },
   { id: 1, nombre: "Ribbons y Tintas" },
-  { id: 2, nombre: "Memorias y Discos Externos" },
+  { id: 2, nombre: "Memorias y Discos" },
   { id: 3, nombre: "Tarjetas ZEBRA" },
   { id: 4, nombre: "Redes y Conectividad" },
   { id: 5, nombre: "Periféricos y Accesorios" },
@@ -113,7 +113,7 @@ const fallbackProducts: Producto[] = [
     descripcion: "Disco duro externo portátil de 2TB de almacenamiento. Conexión USB 3.0 de alta velocidad y diseño ultra compacto resistente a impactos.",
     precio: 289.00,
     imagen_url: "/img/productos/disco-externo-1tb.jpg",
-    categoria: { nombre: "Memorias y Discos Externos" }
+    categoria: { nombre: "Memorias y Discos" }
   },
   {
     id: 53,
@@ -121,7 +121,7 @@ const fallbackProducts: Producto[] = [
     descripcion: "Memoria RAM DDR4 de alto rendimiento y bajo consumo energético. Ideal para repotenciar laptops y mejorar la capacidad multitarea.",
     precio: 115.00,
     imagen_url: "/img/productos/ram-8gb-ddr4.jpg",
-    categoria: { nombre: "Memorias y Discos Externos" }
+    categoria: { nombre: "Memorias y Discos" }
   },
   {
     id: 54,
@@ -161,7 +161,7 @@ const fallbackProducts: Producto[] = [
     descripcion: "Unidad de estado sólido SATA III de 2.5 pulgadas. Increíble velocidad de lectura (hasta 500MB/s) y escritura (450MB/s) para repotenciar laptops y PCs de escritorio.",
     precio: 180.00,
     imagen_url: "/img/productos/ssd-480gb.jpg",
-    categoria: { nombre: "Memorias y Discos Externos" }
+    categoria: { nombre: "Memorias y Discos" }
   },
   {
     id: 58,
@@ -169,7 +169,7 @@ const fallbackProducts: Producto[] = [
     descripcion: "Memoria USB portátil Kingston DataTraveler Exodia con conexión USB 3.2 Gen 1 rápida. Diseño práctico con capuchón protector y llavero colorido.",
     precio: 29.00,
     imagen_url: "/img/productos/memoria-usb-32gb.jpg",
-    categoria: { nombre: "Memorias y Discos Externos" }
+    categoria: { nombre: "Memorias y Discos" }
   },
   {
     id: 59,
@@ -260,6 +260,7 @@ export default function ProductosPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAnimatingCartButton, setIsAnimatingCartButton] = useState(false);
+  const [confirmingClear, setConfirmingClear] = useState(false);
 
   // Load cart from localStorage after mount (Hydration-safe)
   useEffect(() => {
@@ -372,9 +373,8 @@ export default function ProductosPage() {
   };
 
   const clearCart = () => {
-    if (window.confirm("¿Está seguro de vaciar su lista de cotización?")) {
-      setCart([]);
-    }
+    setCart([]);
+    setConfirmingClear(false);
   };
 
   const cartItemCount = cart.reduce((total, item) => total + item.cantidad, 0);
@@ -404,33 +404,27 @@ export default function ProductosPage() {
   };
 
   // Filter products by query search, category, and price limit
-  const filteredProducts = productos.filter((p) => {
-    const matchesSearch = 
+  const filteredProducts = useMemo(() => productos.filter((p) => {
+    const matchesSearch =
       p.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (p.descripcion && p.descripcion.toLowerCase().includes(searchQuery.toLowerCase()));
-    
-    const matchesCategory = 
-      selectedCategory === "Todos" || 
+
+    const matchesCategory =
+      selectedCategory === "Todos" ||
       (p.categoria && p.categoria.nombre.toLowerCase() === selectedCategory.toLowerCase());
 
     const matchesPrice = Number(p.precio) <= (priceLimit || maxPrice || 9999);
 
     return matchesSearch && matchesCategory && matchesPrice;
-  });
+  }), [productos, searchQuery, selectedCategory, priceLimit, maxPrice]);
 
   // Sort products based on criteria selection
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortBy === "price_asc") {
-      return Number(a.precio) - Number(b.precio);
-    }
-    if (sortBy === "price_desc") {
-      return Number(b.precio) - Number(a.precio);
-    }
-    if (sortBy === "name_asc") {
-      return a.nombre.localeCompare(b.nombre);
-    }
-    return 0; // Default
-  });
+  const sortedProducts = useMemo(() => [...filteredProducts].sort((a, b) => {
+    if (sortBy === "price_asc") return Number(a.precio) - Number(b.precio);
+    if (sortBy === "price_desc") return Number(b.precio) - Number(a.precio);
+    if (sortBy === "name_asc") return a.nombre.localeCompare(b.nombre);
+    return 0;
+  }), [filteredProducts, sortBy]);
 
   // Render sidebar filters for reuse in desktop aside and mobile drawer
   const renderSidebarFilters = (isMobile: boolean = false) => {
@@ -663,14 +657,9 @@ export default function ProductosPage() {
                           <div className="flex items-center justify-between pt-4 border-t border-slate-100 mt-auto">
                             <div className="flex flex-col">
                               <span className="text-[10px] text-slate-400 font-bold uppercase leading-none">Precio Aprox.</span>
-                              <div className="flex items-baseline gap-1.5 mt-1">
-                                <span className="font-headline text-base font-extrabold text-primary leading-none">
-                                  S/ {Number(prod.precio).toFixed(2)}
-                                </span>
-                                <span className="text-[9px] text-slate-400 line-through leading-none font-bold">
-                                  S/ {(Number(prod.precio) * 1.25).toFixed(0)}
-                                </span>
-                              </div>
+                              <span className="font-headline text-base font-extrabold text-primary leading-none mt-1">
+                                S/ {Number(prod.precio).toFixed(2)}
+                              </span>
                             </div>
 
                             {cartItem ? (
@@ -765,8 +754,8 @@ export default function ProductosPage() {
         }`}
       >
         {/* Dark Backdrop Overlay */}
-        <div 
-          onClick={() => setIsCartOpen(false)}
+        <div
+          onClick={() => { setIsCartOpen(false); setConfirmingClear(false); }}
           className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] transition-opacity"
         />
 
@@ -788,8 +777,8 @@ export default function ProductosPage() {
                   </p>
                 </div>
               </div>
-              <button 
-                onClick={() => setIsCartOpen(false)}
+              <button
+                onClick={() => { setIsCartOpen(false); setConfirmingClear(false); }}
                 className="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer border-none"
               >
                 <X className="w-5 h-5" />
@@ -863,24 +852,42 @@ export default function ProductosPage() {
                   <span className="font-headline text-xl font-extrabold text-slate-900">S/ {cartTotal.toFixed(2)}</span>
                 </div>
                 
-                <div className="grid grid-cols-5 gap-2">
-                  <button 
-                    onClick={clearCart}
-                    className="col-span-1 flex items-center justify-center bg-white hover:bg-slate-100 text-slate-500 hover:text-primary border border-slate-200 rounded-xl py-3.5 transition-colors cursor-pointer"
-                    title="Vaciar Lista"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
-                  <a 
-                    href={getWhatsAppUrl()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="col-span-4 flex items-center justify-center gap-2 bg-primary hover:bg-primary/95 text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md shadow-primary/10 active:scale-95 cursor-pointer text-center no-underline"
-                  >
-                    <MessageCircle className="w-5 h-5" />
-                    Enviar Cotización por WhatsApp
-                  </a>
-                </div>
+                {confirmingClear ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-500 font-semibold flex-1">¿Vaciar lista?</span>
+                    <button
+                      onClick={() => setConfirmingClear(false)}
+                      className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-colors cursor-pointer border-none"
+                    >
+                      No
+                    </button>
+                    <button
+                      onClick={clearCart}
+                      className="px-4 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-bold transition-colors cursor-pointer border-none"
+                    >
+                      Sí, vaciar
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-5 gap-2">
+                    <button
+                      onClick={() => setConfirmingClear(true)}
+                      className="col-span-1 flex items-center justify-center bg-white hover:bg-slate-100 text-slate-500 hover:text-red-500 border border-slate-200 rounded-xl py-3.5 transition-colors cursor-pointer"
+                      title="Vaciar Lista"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                    <a
+                      href={getWhatsAppUrl()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="col-span-4 flex items-center justify-center gap-2 bg-primary hover:bg-primary/95 text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md shadow-primary/10 active:scale-95 cursor-pointer text-center no-underline"
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      Enviar Cotización por WhatsApp
+                    </a>
+                  </div>
+                )}
                 <p className="text-[9px] text-slate-400 font-medium text-center leading-relaxed">
                   *Los precios mostrados son aproximados y pueden variar según stock y tipo de cambio. Un técnico se contactará para confirmar su solicitud.
                 </p>
