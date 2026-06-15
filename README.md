@@ -87,14 +87,13 @@ DELLCOM-WEB/
 │   ├── auth.ts                 # Configuracion central de proveedores y callbacks de NextAuth
 │   └── prisma.ts               # Instancia unificada del cliente de Prisma ORM
 ├── prisma/
-│   ├── schema.prisma           # Archivo de modelos de datos relacionales y conectores SQL
-│   └── seed.ts                 # Script de seed (poblado inicial de la base de datos)
+│   └── schema.prisma           # Archivo de modelos de datos relacionales y conectores SQL
 ├── public/                     # Archivos estaticos
 │   ├── img/
 │   │   └── servicios/          # Imagenes locales de soporte tecnico, redes y licencias
 │   └── uploads/                # Directorio local de fallback para subida fisica de archivos
 ├── scripts/
-│   └── seed.ts                 # Enlace o script ejecutor de base de datos
+│   └── seed.ts                 # Script de poblado inicial de la base de datos (npx prisma db seed)
 ├── eslint.config.mjs           # Archivo de configuracion para ESLint
 ├── jest.config.js              # Archivo de configuracion para las pruebas de Jest
 ├── middleware.ts               # Filtro de autenticacion y control de acceso basado en roles
@@ -186,8 +185,8 @@ AWS_SECRET_ACCESS_KEY="tu_secret_access_key_de_iam"
 AWS_REGION="us-east-1"
 AWS_BUCKET_NAME="nombre_del_bucket_s3"
 
-# 4. Automatizacion (Cron Key)
-CRON_SECRET="dellcom-cron-secret-2026"
+# 4. Automatizacion (Cron Key, requerido para /api/cron/check-licencias)
+CRON_SECRET="genera_una_clave_aleatoria_segura_aqui"
 ```
 
 ---

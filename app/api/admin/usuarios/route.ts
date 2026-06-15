@@ -221,8 +221,12 @@ export async function PATCH(req: NextRequest) {
     const { id, activo } = result.data;
 
     const session = await getServerSession(authOptions);
+    const email = session?.user?.email;
+    if (!email) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
     const loggedInUser = await prisma.usuario.findUnique({
-      where: { email: session!.user!.email! },
+      where: { email },
     });
 
     if (loggedInUser && loggedInUser.id === id && !activo) {

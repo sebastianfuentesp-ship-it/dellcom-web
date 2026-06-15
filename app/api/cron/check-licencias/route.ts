@@ -3,9 +3,11 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
   try {
-    // Validar token secreto para asegurar que solo invocaciones autorizadas (ej. Vercel Cron) puedan ejecutarlo
     const authHeader = req.headers.get("Authorization");
-    const secretFromEnv = process.env.CRON_SECRET || "dellcom-cron-secret-2026";
+    const secretFromEnv = process.env.CRON_SECRET;
+    if (!secretFromEnv) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
     const expectedAuth = `Bearer ${secretFromEnv}`;
 
     if (authHeader !== expectedAuth) {

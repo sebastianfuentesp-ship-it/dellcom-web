@@ -37,7 +37,7 @@ interface Categoria {
 interface Producto {
   id: number;
   nombre: string;
-  precio: number | string;
+  precio: number;
   descripcion: string | null;
   activo: boolean;
   id_categoria: number;
