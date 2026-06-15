@@ -62,9 +62,13 @@ export default function SmartAssistant() {
       text.includes("direccion") ||
       text.includes("mapa") ||
       text.includes("local") ||
-      text.includes("olivos")
+      text.includes("olivos") ||
+      text.includes("santa anita") ||
+      text.includes("nogales") ||
+      text.includes("sucursal") ||
+      text.includes("sede")
     ) {
-      return "Nos encontramos en la Av. Santa Elvira, Mza. E, Lote 59, Urb. San Elías, Los Olivos, Lima. Estamos ubicados a la espalda de la Universidad César Vallejo (UCV) de Lima Norte.";
+      return "Contamos con dos locales de atención técnica y venta:\n\n1. Sede Los Olivos (Principal):\n• Dirección: Av. Santa Elvira, Mza. E, Lote 59, Urb. San Elías, Los Olivos.\n• Horario: Lunes a Sábado: 9:00 AM - 7:00 PM.\n\n2. Sede Santa Anita:\n• Dirección: Av. Los Nogales 510, Santa Anita.\n• Horario: Lunes a Viernes: 9:00 AM - 8:00 PM | Sábados: 9:00 AM - 6:00 PM.";
     }
     if (
       text.includes("horario") ||
@@ -74,7 +78,7 @@ export default function SmartAssistant() {
       text.includes("sabado") ||
       text.includes("lunes")
     ) {
-      return "Nuestros horarios de atención técnica presencial son de Lunes a Sábado de 9:00 AM a 7:00 PM. Los domingos y feriados el local físico permanece cerrado.";
+      return "Nuestros horarios de atención son:\n• Sede Los Olivos: Lunes a Sábado de 9:00 AM a 7:00 PM.\n• Sede Santa Anita: Lunes a Viernes de 9:00 AM a 8:00 PM, y Sábados de 9:00 AM a 6:00 PM.\nAmbas sedes permanecen cerradas domingos y feriados.";
     }
     if (
       text.includes("precio") ||

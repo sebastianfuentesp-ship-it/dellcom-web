@@ -408,57 +408,109 @@ export default async function Home() {
         </section>
 
         {/* Ubicación / Google Maps Section */}
-        <section className="py-24 px-margin-mobile md:px-margin-desktop bg-white">
-          <div className="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Map Info Card */}
-            <div className="scroll-reveal lg:col-span-4 space-y-6">
+        <section className="py-24 px-margin-mobile md:px-margin-desktop bg-white border-t border-slate-100">
+          <div className="max-w-container-max mx-auto space-y-12">
+            <div className="text-center max-w-2xl mx-auto space-y-4">
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
                 <span className="material-symbols-outlined text-[16px]">location_on</span>
-                ¿Dónde encontrarnos?
+                Nuestras Sedes
               </div>
-              <h2 className="font-headline text-3xl font-bold text-on-surface">Nuestra Ubicación</h2>
-              <p className="text-sm text-on-surface-variant leading-relaxed">
-                Estamos ubicados en una zona de fácil acceso. Ven a nuestra sucursal para reparaciones inmediatas de laptops, impresoras, microelectrónica o para cotizar suministros Zebra y licencias corporativas.
+              <h2 className="font-headline text-3xl md:text-4xl font-bold text-on-surface">¿Dónde Encontrarnos?</h2>
+              <p className="text-xs md:text-sm text-on-surface-variant leading-relaxed">
+                Visítanos en cualquiera de nuestras sucursales para soporte técnico especializado, repuestos de hardware o licencias de software originales.
               </p>
-              
-              <div className="space-y-4 pt-2">
-                <div className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-primary mt-0.5">location_on</span>
-                  <div className="text-xs">
-                    <p className="font-bold text-on-surface">Dirección Principal</p>
-                    <p className="text-on-surface-variant mt-0.5">Av. Santa Elvira, Mza. E, Lote 59, Urb. San Elías, Los Olivos, Lima</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-primary mt-0.5">schedule</span>
-                  <div className="text-xs">
-                    <p className="font-bold text-on-surface">Horario de Atención</p>
-                    <p className="text-on-surface-variant mt-0.5">Lunes a Sábado: 9:00 AM - 7:00 PM (Soporte continuo)</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-primary mt-0.5">phone_iphone</span>
-                  <div className="text-xs">
-                    <p className="font-bold text-on-surface">Contacto Directo</p>
-                    <p className="text-on-surface-variant mt-0.5 flex flex-col gap-0.5">
-                      <span>+51 925 981 741</span>
-                      <span>+51 922 452 929</span>
-                      <span className="text-[10px] text-slate-400 mt-1 font-semibold">soporte@dellcom.pe</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
 
-            {/* Google Map Embed */}
-            <div className="scroll-reveal lg:col-span-8 bg-slate-100 rounded-3xl overflow-hidden border border-slate-200 shadow-lg relative h-[420px]" style={{ transitionDelay: "150ms" }}>
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3903.1118432328766!2d-77.0756549242084!3d-11.95772378735626!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105d04c4b69dcfb%3A0xd3b34bdf88ea4eb6!2sAv.%20Santa%20Elvira%2C%20Los%20Olivos%2015306!5e0!3m2!1ses!2spe!4v1717210000000!5m2!1ses!2spe"
-                className="w-full h-full border-0 absolute inset-0"
-                allowFullScreen={true}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+              {/* Sede Los Olivos */}
+              <div className="scroll-reveal bg-slate-50/50 border border-slate-200/80 rounded-[2.5rem] p-8 space-y-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-all">
+                <div className="space-y-4">
+                  <h3 className="font-headline font-bold text-xl text-slate-800 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary">store</span>
+                    Sede Los Olivos (Sede Principal)
+                  </h3>
+                  
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-start gap-3">
+                      <span className="material-symbols-outlined text-primary text-lg mt-0.5">location_on</span>
+                      <div className="text-xs">
+                        <p className="font-bold text-on-surface">Dirección</p>
+                        <p className="text-on-surface-variant mt-0.5">Av. Santa Elvira, Mza. E, Lote 59, Urb. San Elías, Los Olivos, Lima</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="material-symbols-outlined text-primary text-lg mt-0.5">schedule</span>
+                      <div className="text-xs">
+                        <p className="font-bold text-on-surface">Horario de Atención</p>
+                        <p className="text-on-surface-variant mt-0.5">Lunes a Sábado: 9:00 AM - 7:00 PM</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="material-symbols-outlined text-primary text-lg mt-0.5">phone_iphone</span>
+                      <div className="text-xs">
+                        <p className="font-bold text-on-surface">Contacto</p>
+                        <p className="text-on-surface-variant mt-0.5">+51 925 981 741 / +51 922 452 929</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Map Los Olivos */}
+                <div className="bg-slate-100 rounded-3xl overflow-hidden border border-slate-200 shadow-sm relative h-[250px] mt-4">
+                  <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3903.1118432328766!2d-77.0756549242084!3d-11.95772378735626!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105d04c4b69dcfb%3A0xd3b34bdf88ea4eb6!2sAv.%20Santa%20Elvira%2C%20Los%20Olivos%2015306!5e0!3m2!1ses!2spe!4v1717210000000!5m2!1ses!2spe"
+                    className="w-full h-full border-0 absolute inset-0"
+                    allowFullScreen={true}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+              </div>
+
+              {/* Sede Santa Anita */}
+              <div className="scroll-reveal bg-slate-50/50 border border-slate-200/80 rounded-[2.5rem] p-8 space-y-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-all" style={{ transitionDelay: "100ms" }}>
+                <div className="space-y-4">
+                  <h3 className="font-headline font-bold text-xl text-slate-800 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary">store</span>
+                    Sede Santa Anita
+                  </h3>
+                  
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-start gap-3">
+                      <span className="material-symbols-outlined text-primary text-lg mt-0.5">location_on</span>
+                      <div className="text-xs">
+                        <p className="font-bold text-on-surface">Dirección</p>
+                        <p className="text-on-surface-variant mt-0.5">Av. Los Nogales 510 - Santa Anita, Lima</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="material-symbols-outlined text-primary text-lg mt-0.5">schedule</span>
+                      <div className="text-xs">
+                        <p className="font-bold text-on-surface">Horario de Atención</p>
+                        <p className="text-on-surface-variant mt-0.5">Lunes a Viernes: 9:00 AM - 8:00 PM | Sábado: 9:00 AM - 6:00 PM</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="material-symbols-outlined text-primary text-lg mt-0.5">phone_iphone</span>
+                      <div className="text-xs">
+                        <p className="font-bold text-on-surface">Contacto</p>
+                        <p className="text-on-surface-variant mt-0.5">+51 925 981 741 / +51 922 452 929</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Map Santa Anita */}
+                <div className="bg-slate-100 rounded-3xl overflow-hidden border border-slate-200 shadow-sm relative h-[250px] mt-4">
+                  <iframe 
+                    src="https://maps.google.com/maps?q=Av.+Los+Nogales+510%2C+Santa+Anita%2C+Lima&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                    className="w-full h-full border-0 absolute inset-0"
+                    allowFullScreen={true}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>
