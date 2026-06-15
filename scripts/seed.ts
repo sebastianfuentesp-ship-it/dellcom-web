@@ -341,14 +341,14 @@ async function main() {
       id_usuario: admin.id,
       nombre: "Zebra Setup Utilities v1.1.9",
       tipo: "programa" as const,
-      url_archivo: "https://dellcom-suministros.s3.amazonaws.com/downloads/zsu-v119.exe",
+      url_archivo: "https://www.zebra.com/us/en/support-downloads/software/utilities/zebra-setup-utilities.html",
       descripcion: "Herramienta de configuración oficial para calibración, configuración de red e impresión de prueba en impresoras Zebra.",
     },
     {
       id_usuario: admin.id,
       nombre: "Driver Zebra ZT411 Industrial",
       tipo: "driver" as const,
-      url_archivo: "https://dellcom-suministros.s3.amazonaws.com/downloads/zebra_zt411_driver.zip",
+      url_archivo: "https://www.zebra.com/us/en/support-downloads/printers/industrial/zt411.html",
       descripcion: "Controladores oficiales de Windows para impresoras industriales de etiquetas Zebra serie ZT400.",
     },
     {
