@@ -53,7 +53,6 @@ export default function PortfolioGallery({ trabajos = [] }: PortfolioGalleryProp
 
   // Filter works based on active tab
   const filteredTrabajos = useMemo(() => {
-    setVisibleCount(6); // Reset pagination count on filter change
     if (selectedCategory === "Todos") {
       return trabajos;
     }
@@ -134,7 +133,7 @@ export default function PortfolioGallery({ trabajos = [] }: PortfolioGalleryProp
             return (
               <button
                 key={cat}
-                onClick={() => setSelectedCategory(cat)}
+                onClick={() => { setSelectedCategory(cat); setVisibleCount(6); }}
                 className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all duration-300 border cursor-pointer ${
                   isActive
                     ? "bg-primary border-primary text-white shadow-md shadow-primary/20 scale-102"

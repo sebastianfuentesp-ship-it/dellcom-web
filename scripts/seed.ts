@@ -266,8 +266,8 @@ async function main() {
     },
     {
       titulo: "Instalación de Cableado Estructurado Cat6 y Racks de Servidor",
-      descripcion: "Montaje y estructurado de cableado de red de datos Cat6 para oficinas. Peinado de cables, ponchado en patch panel, ordenamiento en gabinete rack de servidores, instalación de switches administrables y enrutadores MikroTik/Ubiquiti, y puesta en marcha de servidores NAS de almacenamiento local centralizado con políticas de backup automático.||/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.12 PM (5).jpeg,/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.13 PM.jpeg",
-      imagen_url: "/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.12 PM (5).jpeg",
+      descripcion: "Montaje y estructurado de cableado de red de datos Cat6 para oficinas. Peinado de cables, ponchado en patch panel, ordenamiento en gabinete rack de servidores, instalación de switches administrables y enrutadores MikroTik/Ubiquiti, y puesta en marcha de servidores NAS de almacenamiento local centralizado con políticas de backup automático.||/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.13 PM.jpeg",
+      imagen_url: "/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.13 PM.jpeg",
       id_servicio: serviciosMap["Redes y Servidores"].id,
       fecha: new Date("2026-06-15T09:00:00Z"),
     },
@@ -281,7 +281,7 @@ async function main() {
     {
       titulo: "Saneamiento de Software y Configuración de Correos Corporativos",
       descripcion: "Soporte corporativo presencial y remoto vía AnyDesk/RustDesk. Activación legal de licencias oficiales Windows 10/11 Pro OEM/Retail, suites de Microsoft Office 2021 Hogar y Empresas, configuración de correos corporativos en Google Workspace y Microsoft 365 bajo políticas seguras de spam y envío de emails.||/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.13 PM (2).jpeg,/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.12 PM (2).jpeg,/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.13 PM (4).jpeg",
-      imagen_url: "/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.12 PM (2).jpeg",
+      imagen_url: "/img/portafolio/WhatsApp Image 2026-06-14 at 9.41.13 PM (2).jpeg",
       id_servicio: serviciosMap["Licencias de Software"].id,
       fecha: new Date("2026-06-15T07:00:00Z"),
     },
