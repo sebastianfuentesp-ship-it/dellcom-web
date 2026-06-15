@@ -45,7 +45,20 @@ interface CartItem {
 import { Printer, Network, Cpu, ShieldCheck, Monitor, Search, Plus, Minus, ShoppingCart, ShoppingBag, X, Trash2, MessageCircle, Eye } from "lucide-react";
 
 // Custom Component for Product Images with dynamic fallback icons
-function ProductImage({ src, alt, categoryName }: { src?: string; alt: string; categoryName: string }) {
+// Custom Component for Product Images with dynamic fallback icons
+function ProductImage({ 
+  src, 
+  alt, 
+  categoryName, 
+  className = "max-h-[220px]",
+  style
+}: { 
+  src?: string; 
+  alt: string; 
+  categoryName: string; 
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   const [error, setError] = useState(false);
 
   // Helper to determine the best lucide icon component based on category name
@@ -74,9 +87,64 @@ function ProductImage({ src, alt, categoryName }: { src?: string; alt: string; c
     <img 
       src={src} 
       alt={alt} 
-      className="w-full h-full object-contain mix-blend-multiply drop-shadow-md group-hover:scale-105 transition-transform duration-500 max-h-[200px]"
+      className={`w-full h-full object-contain mix-blend-multiply drop-shadow-md group-hover:scale-105 transition-all duration-500 ${className}`}
+      style={style}
       onError={() => setError(true)}
     />
+  );
+}
+
+// Stateful component to zoom in on product image inside the lightbox modal
+function ZoomableImage({ src, alt, categoryName }: { src?: string; alt: string; categoryName: string }) {
+  const [zoomStyle, setZoomStyle] = useState<{ transformOrigin: string; transform: string } | null>(null);
+  const [isZoomed, setIsZoomed] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setZoomStyle({
+      transformOrigin: `${x}% ${y}%`,
+      transform: "scale(2.2)"
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setZoomStyle(null);
+    setIsZoomed(false);
+  };
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isZoomed) {
+      setZoomStyle(null);
+      setIsZoomed(false);
+    } else {
+      const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+      const x = ((e.clientX - left) / width) * 100;
+      const y = ((e.clientY - top) / height) * 100;
+      setZoomStyle({
+        transformOrigin: `${x}% ${y}%`,
+        transform: "scale(2.2)"
+      });
+      setIsZoomed(true);
+    }
+  };
+
+  return (
+    <div 
+      className="relative w-full h-full overflow-hidden flex items-center justify-center cursor-zoom-in select-none"
+      onMouseMove={isZoomed ? undefined : handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
+    >
+      <ProductImage 
+        src={src} 
+        alt={alt} 
+        categoryName={categoryName} 
+        className="max-h-[380px] transition-transform duration-150 ease-out"
+        style={zoomStyle || { transform: "scale(1)" }}
+      />
+    </div>
   );
 }
 
@@ -621,7 +689,7 @@ export default function ProductosPage() {
                         {/* Product Image Container with Fallbacks */}
                         <div 
                           onClick={() => setSelectedProductDetails(prod)}
-                          className="aspect-square bg-slate-50/40 p-6 flex items-center justify-center border-b border-slate-100/80 relative overflow-hidden select-none cursor-pointer group/img"
+                          className="aspect-square bg-slate-50/40 p-4 flex items-center justify-center border-b border-slate-100/80 relative overflow-hidden select-none cursor-pointer group/img"
                         >
                           <ProductImage 
                             src={prod.imagen_url} 
@@ -910,8 +978,8 @@ export default function ProductosPage() {
             
             {/* Left Column: Image */}
             <div className="md:w-1/2 bg-slate-50/50 p-8 flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-100 relative min-h-[250px] md:min-h-[380px]">
-              <div className="w-full h-full max-h-[280px] flex items-center justify-center">
-                <ProductImage 
+              <div className="w-full h-full max-h-[380px] flex items-center justify-center">
+                <ZoomableImage 
                   src={selectedProductDetails.imagen_url} 
                   alt={selectedProductDetails.nombre} 
                   categoryName={selectedProductDetails.categoria?.nombre || "General"} 
