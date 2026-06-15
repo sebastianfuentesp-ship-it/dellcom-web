@@ -136,7 +136,7 @@ const fallbackProducts: Producto[] = [
     nombre: "Licencia Windows 11 Pro OEM",
     descripcion: "Clave de activación digital original OEM de Windows 11 Professional. Activación permanente en un equipo, vinculable a cuenta Microsoft.",
     precio: 149.00,
-    imagen_url: "/img/productos/windows_11_pro.png",
+    imagen_url: "/img/productos/windows_11_pro.jpg",
     categoria: { nombre: "Licencias de Software" }
   },
   {
@@ -144,7 +144,7 @@ const fallbackProducts: Producto[] = [
     nombre: "Licencia Office 2024 Professional Plus",
     descripcion: "Clave digital original de activación de la suite Office 2024 Professional Plus. Incluye Word, Excel, PowerPoint, Outlook, Teams, OneNote y Access. Licencia permanente.",
     precio: 349.00,
-    imagen_url: "/img/productos/office_2024.png",
+    imagen_url: "/img/productos/office_2024.jpg",
     categoria: { nombre: "Licencias de Software" }
   },
   {
@@ -152,7 +152,7 @@ const fallbackProducts: Producto[] = [
     nombre: "Licencia Windows 11 Home Retail",
     descripcion: "Clave de activación digital original Retail de Windows 11 Home. Activación permanente en un equipo, ideal para computadoras del hogar y laptops personales.",
     precio: 119.00,
-    imagen_url: "/img/productos/windows_11_home.png",
+    imagen_url: "/img/productos/windows_11_home.jpg",
     categoria: { nombre: "Licencias de Software" }
   },
   {
