@@ -187,19 +187,19 @@ export default function DescargasPage() {
         <div className="py-16 max-w-container-max mx-auto w-full px-margin-mobile md:px-margin-desktop space-y-16">
           
           {/* Featured Remote Support Section (Helpful Technical Desk) */}
-          <section className="bg-slate-900 text-white rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden shadow-xl scroll-reveal">
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
+          <section className="bg-slate-50 border border-slate-200/80 text-on-surface rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden shadow-sm scroll-reveal">
+            <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
             
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-8 space-y-4">
-                <span className="inline-block py-1 px-3.5 bg-primary/20 border border-primary/30 text-primary font-bold text-[10px] rounded-full uppercase tracking-widest">
+                <span className="inline-block py-1 px-3.5 bg-primary/10 border border-primary/15 text-primary font-bold text-[10px] rounded-full uppercase tracking-widest">
                   Soporte Remoto Inmediato
                 </span>
-                <h2 className="font-headline text-2xl md:text-4xl font-black text-white leading-tight">
+                <h2 className="font-headline text-2xl md:text-4xl font-black text-on-surface leading-tight">
                   ¿Necesitas asistencia de un <span className="text-primary">ingeniero en tiempo real</span>?
                 </h2>
-                <p className="text-xs md:text-sm text-slate-300 max-w-xl leading-relaxed font-semibold">
+                <p className="text-xs md:text-sm text-on-surface-variant max-w-xl leading-relaxed font-semibold">
                   Descarga AnyDesk, la herramienta portátil oficial elegida por nuestro equipo. Ejecútalo y proporciona tu código de acceso para que un técnico certificado solucione atascos, configure controladores de red o realice soporte de software de inmediato.
                 </p>
               </div>
@@ -208,7 +208,7 @@ export default function DescargasPage() {
                   href="https://anydesk.com/download"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2.5 px-8 py-4 bg-primary hover:bg-white text-white hover:text-slate-900 font-bold text-xs uppercase tracking-wider rounded-xl transition-all duration-300 shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 cursor-pointer"
+                  className="inline-flex items-center gap-2.5 px-8 py-4 bg-primary hover:bg-primary/95 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all duration-300 shadow-md shadow-primary/10 hover:scale-105 active:scale-95 cursor-pointer border-none no-underline"
                 >
                   <span className="material-symbols-outlined text-base">laptop_mac</span>
                   Descargar AnyDesk
@@ -249,7 +249,7 @@ export default function DescargasPage() {
                       onClick={() => setSelectedType(cat.id)}
                       className={`p-5 rounded-[2rem] border text-left flex flex-col justify-between gap-6 transition-all duration-300 cursor-pointer select-none group ${
                         isActive 
-                          ? "bg-slate-900 border-slate-900 text-white shadow-xl shadow-slate-900/10 -translate-y-1"
+                          ? "bg-primary/10 border-primary/25 text-primary shadow-lg shadow-primary/5 -translate-y-1"
                           : "bg-slate-50/50 border-slate-200/80 text-slate-700 hover:bg-white hover:border-slate-300 hover:shadow-md"
                       }`}
                     >
@@ -260,7 +260,7 @@ export default function DescargasPage() {
                       </div>
                       <div>
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">{cat.label}</span>
-                        <span className={`text-xl font-extrabold font-headline mt-1 block leading-none ${isActive ? "text-white" : "text-slate-800"}`}>
+                        <span className={`text-xl font-extrabold font-headline mt-1 block leading-none ${isActive ? "text-primary" : "text-slate-800"}`}>
                           {cat.count}
                         </span>
                       </div>
@@ -343,7 +343,7 @@ export default function DescargasPage() {
                           href={file.url_archivo}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-primary text-white hover:text-white px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 active:scale-95 shadow-md shadow-slate-900/10 hover:shadow-primary/20 cursor-pointer border-none no-underline"
+                          className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/95 text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition-all duration-300 active:scale-95 shadow-md shadow-primary/10 cursor-pointer border-none no-underline"
                         >
                           <span className="material-symbols-outlined text-sm">
                             {file.tipo === "link" ? "open_in_new" : "download"}
