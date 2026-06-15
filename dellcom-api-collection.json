@@ -1,15 +1,27 @@
 {
   "info": {
     "name": "DELLCOM SAC - API Collection",
-    "description": "Colección de peticiones de API para el sistema de DELLCOM SAC. Incluye endpoints públicos y administrativos. Para probar las rutas protegidas administrativamente, se debe haber iniciado sesión en el navegador y que Postman comparta las cookies, o usar la variable de sesión correspondiente.",
+    "description": "Colección completa de endpoints de la API de DELLCOM SAC. Importar en Postman. Los endpoints administrativos requieren sesión activa: iniciar sesión en el navegador y activar 'Send cookies' en Postman, o configurar la cookie 'next-auth.session-token' como variable de entorno.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000", "type": "string" },
+    { "key": "cron_secret", "value": "TU_CRON_SECRET_DEL_ENV", "type": "string" },
+    { "key": "licencia_id", "value": "1", "type": "string" },
+    { "key": "archivo_id", "value": "1", "type": "string" },
+    { "key": "producto_id", "value": "1", "type": "string" },
+    { "key": "categoria_id", "value": "1", "type": "string" },
+    { "key": "servicio_id", "value": "1", "type": "string" },
+    { "key": "trabajo_id", "value": "1", "type": "string" },
+    { "key": "mensaje_id", "value": "1", "type": "string" },
+    { "key": "usuario_id", "value": "1", "type": "string" }
+  ],
   "item": [
     {
       "name": "Endpoints Públicos",
       "item": [
         {
-          "name": "Obtener Productos",
+          "name": "GET Productos activos",
           "request": {
             "method": "GET",
             "header": [],
@@ -18,11 +30,55 @@
               "host": ["{{base_url}}"],
               "path": ["api", "productos"]
             },
-            "description": "Obtiene la lista completa de productos activos del catálogo."
-          }
+            "description": "Devuelve solo los productos con activo=true."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Respuesta es un array', function () { pm.expect(pm.response.json()).to.be.an('array'); });",
+                  "pm.test('Cada producto tiene id, nombre y precio', function () {",
+                  "  const data = pm.response.json();",
+                  "  if (data.length > 0) {",
+                  "    pm.expect(data[0]).to.have.all.keys(['id', 'nombre', 'precio']);",
+                  "  }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
-          "name": "Obtener Categorías",
+          "name": "GET Productos (todos, incluyendo inactivos)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/productos?all=true",
+              "host": ["{{base_url}}"],
+              "path": ["api", "productos"],
+              "query": [{ "key": "all", "value": "true" }]
+            },
+            "description": "Con ?all=true devuelve también los productos desactivados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Respuesta es un array', function () { pm.expect(pm.response.json()).to.be.an('array'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Categorías",
           "request": {
             "method": "GET",
             "header": [],
@@ -30,12 +86,30 @@
               "raw": "{{base_url}}/api/categorias",
               "host": ["{{base_url}}"],
               "path": ["api", "categorias"]
-            },
-            "description": "Obtiene las categorías activas del catálogo para los filtros."
-          }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Respuesta es un array', function () { pm.expect(pm.response.json()).to.be.an('array'); });",
+                  "pm.test('Cada categoría tiene id y nombre', function () {",
+                  "  const data = pm.response.json();",
+                  "  if (data.length > 0) {",
+                  "    pm.expect(data[0]).to.have.property('id');",
+                  "    pm.expect(data[0]).to.have.property('nombre');",
+                  "  }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
-          "name": "Obtener Servicios",
+          "name": "GET Servicios",
           "request": {
             "method": "GET",
             "header": [],
@@ -43,12 +117,23 @@
               "raw": "{{base_url}}/api/servicios",
               "host": ["{{base_url}}"],
               "path": ["api", "servicios"]
-            },
-            "description": "Obtiene la lista de servicios de ingeniería y soporte de DELLCOM."
-          }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Respuesta es un array', function () { pm.expect(pm.response.json()).to.be.an('array'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
-          "name": "Obtener Portafolio (Trabajos)",
+          "name": "GET Portafolio (Trabajos)",
           "request": {
             "method": "GET",
             "header": [],
@@ -56,21 +141,50 @@
               "raw": "{{base_url}}/api/trabajos",
               "host": ["{{base_url}}"],
               "path": ["api", "trabajos"]
-            },
-            "description": "Obtiene la lista de trabajos técnicos reales ejecutados por los técnicos."
-          }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Respuesta es un array', function () { pm.expect(pm.response.json()).to.be.an('array'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
-          "name": "Enviar Mensaje de Contacto",
+          "name": "GET Archivos / Drivers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/archivos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "archivos"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Respuesta es un array', function () { pm.expect(pm.response.json()).to.be.an('array'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST Enviar Mensaje de Contacto",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"nombre\": \"Cliente Demo\",\n  \"correo\": \"cliente.demo@gmail.com\",\n  \"telefono\": \"987654321\",\n  \"asunto\": \"Cotización de Servicio\",\n  \"mensaje\": \"Hola, requiero soporte de red en mi local de Los Olivos.\"\n}"
@@ -80,16 +194,678 @@
               "host": ["{{base_url}}"],
               "path": ["api", "contacto"]
             },
-            "description": "Envía un mensaje de consulta que se almacenará en la base de datos para los administradores."
-          }
+            "description": "Máximo 5 envíos por IP cada 10 minutos. Devuelve 429 si se supera."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', function () { pm.response.to.have.status(201); });",
+                  "pm.test('Respuesta tiene success:true', function () {",
+                  "  pm.expect(pm.response.json().success).to.be.true;",
+                  "});",
+                  "pm.test('Respuesta contiene el mensaje guardado', function () {",
+                  "  pm.expect(pm.response.json().data).to.have.property('id');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST Contacto - Validación fallida (nombre corto)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Jo\",\n  \"correo\": \"no-es-correo\",\n  \"asunto\": \"x\",\n  \"mensaje\": \"ok\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/contacto",
+              "host": ["{{base_url}}"],
+              "path": ["api", "contacto"]
+            },
+            "description": "Debe rechazar datos inválidos con 400."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 para datos inválidos', function () { pm.response.to.have.status(400); });",
+                  "pm.test('Respuesta tiene campo errors', function () {",
+                  "  pm.expect(pm.response.json()).to.have.property('errors');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         }
       ]
     },
     {
-      "name": "Endpoints Administrativos (Requieren Sesión)",
+      "name": "Módulo Licencias",
       "item": [
         {
-          "name": "Obtener Mensajes de Contacto",
+          "name": "GET Listar Licencias",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/licencias",
+              "host": ["{{base_url}}"],
+              "path": ["api", "licencias"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  pm.test('Respuesta es un array', function () { pm.expect(pm.response.json()).to.be.an('array'); });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST Crear Licencia",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"software\": \"Windows 11 Professional\",\n  \"correo_cuenta\": \"cliente@empresa.com\",\n  \"contrasena\": \"clave_licencia_123\",\n  \"nombre_cliente\": \"Corporación ABC S.A.C.\",\n  \"telefono\": \"51987654321\",\n  \"fecha_inicio\": \"2026-01-01\",\n  \"fecha_fin\": \"2027-01-01\",\n  \"observaciones\": \"Licencia anual renovable\",\n  \"estado\": \"activo\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/licencias",
+              "host": ["{{base_url}}"],
+              "path": ["api", "licencias"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 o 401', function () {",
+                  "  pm.expect([201, 401]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  pm.test('Licencia creada con id', function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('id');",
+                  "  });",
+                  "  pm.collectionVariables.set('licencia_id', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT Editar Licencia",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"vencido\",\n  \"observaciones\": \"Licencia no renovada por el cliente.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/licencias/{{licencia_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "licencias", "{{licencia_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE Eliminar Licencia",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/licencias/{{licencia_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "licencias", "{{licencia_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  pm.test('Respuesta ok:true', function () {",
+                  "    pm.expect(pm.response.json().ok).to.be.true;",
+                  "  });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Módulo Archivos y Drivers",
+      "item": [
+        {
+          "name": "POST Registrar Archivo",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Driver HP LaserJet P1102\",\n  \"tipo\": \"driver\",\n  \"url_archivo\": \"https://support.hp.com/drivers/p1102\",\n  \"descripcion\": \"Driver oficial para impresora HP LaserJet P1102\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/archivos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "archivos"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 o 401', function () {",
+                  "  pm.expect([201, 401]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('archivo_id', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT Editar Archivo",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Driver actualizado - versión 2026\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/archivos/{{archivo_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "archivos", "{{archivo_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE Eliminar Archivo",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/archivos/{{archivo_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "archivos", "{{archivo_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Módulo Productos",
+      "item": [
+        {
+          "name": "POST Crear Producto",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Memoria RAM DDR4 8GB\",\n  \"precio\": 89.90,\n  \"descripcion\": \"Memoria RAM DDR4 2666MHz para laptops y PCs de escritorio.\",\n  \"id_categoria\": 1,\n  \"imagen_url\": \"/img/productos/ram-8gb-ddr4.jpg\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/productos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "productos"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 o 401', function () {",
+                  "  pm.expect([201, 401]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('producto_id', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Producto por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/productos/{{producto_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "productos", "{{producto_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 404', function () {",
+                  "  pm.expect([200, 404]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  pm.test('Producto tiene id y nombre', function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('id');",
+                  "    pm.expect(pm.response.json()).to.have.property('nombre');",
+                  "  });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT Editar Producto",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"precio\": 95.00,\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/productos/{{producto_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "productos", "{{producto_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE Desactivar Producto (soft delete)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/productos/{{producto_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "productos", "{{producto_id}}"]
+            },
+            "description": "No elimina físicamente. Pone activo=false (soft delete)."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Módulo Categorías",
+      "item": [
+        {
+          "name": "POST Crear Categoría",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Accesorios de Red\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/categorias",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 o 401', function () {",
+                  "  pm.expect([201, 401]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('categoria_id', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT Editar Categoría",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Accesorios de Red y Conectividad\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/categorias/{{categoria_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias", "{{categoria_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE Desactivar Categoría",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/categorias/{{categoria_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias", "{{categoria_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Módulo Servicios",
+      "item": [
+        {
+          "name": "POST Crear Servicio",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Mantenimiento Preventivo\",\n  \"descripcion\": \"Limpieza y revisión completa de hardware para equipos de escritorio y laptops.\",\n  \"icono_url\": \"build\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/servicios",
+              "host": ["{{base_url}}"],
+              "path": ["api", "servicios"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 o 401', function () {",
+                  "  pm.expect([201, 401]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('servicio_id', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT Editar Servicio",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Limpieza, revisión de hardware y actualización de drivers.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/servicios/{{servicio_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "servicios", "{{servicio_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE Desactivar Servicio",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/servicios/{{servicio_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "servicios", "{{servicio_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Módulo Trabajos / Portafolio",
+      "item": [
+        {
+          "name": "POST Registrar Trabajo",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Instalación de red en oficina Los Olivos\",\n  \"descripcion\": \"Cableado estructurado Cat6 para 12 puestos de trabajo.\",\n  \"imagen_url\": \"/img/portafolio/trabajo_demo.jpg\",\n  \"id_servicio\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/trabajos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trabajos"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 o 401', function () {",
+                  "  pm.expect([201, 401]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('trabajo_id', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT Editar Trabajo",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Instalación de red Cat6 - Los Olivos (actualizado)\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/trabajos/{{trabajo_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trabajos", "{{trabajo_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE Eliminar Trabajo",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/trabajos/{{trabajo_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "trabajos", "{{trabajo_id}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Módulo Mensajes (Admin)",
+      "item": [
+        {
+          "name": "GET Listar Mensajes de Contacto",
           "request": {
             "method": "GET",
             "header": [],
@@ -97,35 +873,96 @@
               "raw": "{{base_url}}/api/admin/contacto",
               "host": ["{{base_url}}"],
               "path": ["api", "admin", "contacto"]
-            },
-            "description": "Obtiene todos los mensajes de contacto enviados por los usuarios."
-          }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  pm.test('Respuesta es un array', function () { pm.expect(pm.response.json()).to.be.an('array'); });",
+                  "  if (pm.response.json().length > 0) {",
+                  "    pm.collectionVariables.set('mensaje_id', pm.response.json()[0].id);",
+                  "  }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
-          "name": "Marcar Mensaje como Leído",
+          "name": "PUT Marcar Mensaje como Leído",
           "request": {
             "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"leido\": true\n}"
+              "raw": "{\n  \"id\": {{mensaje_id}},\n  \"leido\": true\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/admin/contacto/1",
+              "raw": "{{base_url}}/api/admin/contacto",
               "host": ["{{base_url}}"],
-              "path": ["api", "admin", "contacto", "1"]
+              "path": ["api", "admin", "contacto"]
             },
-            "description": "Actualiza el estado de lectura de un mensaje específico."
-          }
+            "description": "El id va en el body, no en la URL. Acepta { id, leido }."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  pm.test('success:true', function () {",
+                  "    pm.expect(pm.response.json().success).to.be.true;",
+                  "  });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
-          "name": "Obtener Personal Técnico (CRUD)",
+          "name": "DELETE Eliminar Mensaje",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/admin/contacto?id={{mensaje_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "contacto"],
+              "query": [{ "key": "id", "value": "{{mensaje_id}}" }]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Módulo Usuarios (solo Admin)",
+      "item": [
+        {
+          "name": "GET Listar Personal",
           "request": {
             "method": "GET",
             "header": [],
@@ -133,40 +970,119 @@
               "raw": "{{base_url}}/api/admin/usuarios",
               "host": ["{{base_url}}"],
               "path": ["api", "admin", "usuarios"]
-            },
-            "description": "Lista todo el personal técnico de la empresa (solo visible por administradores)."
-          }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200, 401 o 403', function () {",
+                  "  pm.expect([200, 401, 403]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
-          "name": "Crear Nuevo Personal Técnico",
+          "name": "POST Crear Usuario",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Juan Técnico\",\n  \"usuario\": \"juantecnico\",\n  \"email\": \"juan@dellcom.pe\",\n  \"contrasena\": \"tecnico123\",\n  \"rol\": \"tecnico\"\n}"
+              "raw": "{\n  \"nombre\": \"Técnico Demo\",\n  \"usuario\": \"tecnico_demo\",\n  \"email\": \"tecnico.demo@dellcom.pe\",\n  \"contrasena\": \"tecnico123\",\n  \"rol\": \"tecnico\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/admin/usuarios",
               "host": ["{{base_url}}"],
               "path": ["api", "admin", "usuarios"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201, 400, 401 o 403', function () {",
+                  "  pm.expect([201, 400, 401, 403]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('usuario_id', pm.response.json().data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT Editar Usuario",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": {{usuario_id}},\n  \"nombre\": \"Técnico Demo Editado\",\n  \"usuario\": \"tecnico_demo\",\n  \"email\": \"tecnico.demo@dellcom.pe\",\n  \"rol\": \"vendedor\"\n}"
             },
-            "description": "Registra un nuevo usuario técnico en el sistema."
-          }
+            "url": {
+              "raw": "{{base_url}}/api/admin/usuarios",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "usuarios"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200, 401 o 403', function () {",
+                  "  pm.expect([200, 401, 403]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "PATCH Desactivar/Activar Usuario",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": {{usuario_id}},\n  \"activo\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/usuarios",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "usuarios"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200, 400, 401 o 403', function () {",
+                  "  pm.expect([200, 400, 401, 403]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         }
       ]
     },
     {
-      "name": "Automatización y Cron Jobs",
+      "name": "Automatización (Cron Jobs)",
       "item": [
         {
-          "name": "Ejecutar Verificación de Licencias",
+          "name": "GET Verificar Licencias Vencidas",
           "request": {
             "method": "GET",
             "header": [
@@ -181,38 +1097,28 @@
               "host": ["{{base_url}}"],
               "path": ["api", "cron", "check-licencias"]
             },
-            "description": "Trigger manual para ejecutar el cron job de verificación de vencimiento de licencias. Requiere enviar el token secreto configurado en el archivo .env."
-          }
+            "description": "Requiere Authorization: Bearer <CRON_SECRET>. Actualiza licencias expiradas a estado 'vencido'."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 401', function () {",
+                  "  pm.expect([200, 401]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  pm.test('Respuesta tiene campo actualizadas', function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('actualizadas');",
+                  "  });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         }
       ]
-    }
-  ],
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    },
-    {
-      "listen": "test",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    }
-  ],
-  "variable": [
-    {
-      "key": "base_url",
-      "value": "http://localhost:3000",
-      "type": "string"
-    },
-    {
-      "key": "cron_secret",
-      "value": "your-cron-secret-token",
-      "type": "string"
     }
   ]
 }
