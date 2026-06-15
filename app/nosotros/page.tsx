@@ -123,32 +123,100 @@ export default function NosotrosPage() {
           </div>
         </section>
 
-        {/* Mission & Vision Cards */}
-        <section className="py-24 bg-slate-50 border-t border-slate-100">
-          <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Mission Card */}
-            <div className="bg-white border border-slate-200/80 p-10 rounded-[2.5rem] flex flex-col gap-6 group hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 scroll-reveal relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none group-hover:bg-primary/10 transition-colors" />
-              <div className="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
-                <span className="material-symbols-outlined text-[28px]">verified_user</span>
-              </div>
-              <h4 className="font-headline text-2xl font-extrabold text-on-surface">Nuestra Misión</h4>
-              <p className="text-sm md:text-base text-on-surface-variant leading-relaxed font-semibold">
-                Garantizar la continuidad operativa de nuestros clientes mediante la implementación de soluciones de infraestructura robustas y soporte técnico de alta precisión, minimizando riesgos y optimizando el rendimiento tecnológico.
-              </p>
-            </div>
+        {/* Mission & Vision Sections (Alternating HubSpot/Dave Style) */}
+        <section className="py-24 bg-slate-50/50 border-t border-b border-slate-100/80 overflow-hidden space-y-28">
+          <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
             
-            {/* Vision Card */}
-            <div className="bg-white border border-slate-200/80 p-10 rounded-[2.5rem] flex flex-col gap-6 group hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 scroll-reveal relative overflow-hidden" style={{ transitionDelay: "150ms" }}>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none group-hover:bg-primary/10 transition-colors" />
-              <div className="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
-                <span className="material-symbols-outlined text-[28px]">visibility</span>
+            {/* Mission Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+              {/* Image Column */}
+              <div className="lg:col-span-5 relative group scroll-reveal">
+                {/* Decorative background blob */}
+                <div 
+                  className="absolute inset-0 bg-primary/5 transform -rotate-6 scale-105 transition-transform duration-700 group-hover:rotate-0" 
+                  style={{ borderRadius: "50% 50% 30% 70% / 50% 60% 40% 50%" }}
+                />
+                
+                {/* Image container with organic blob shape */}
+                <div 
+                  className="relative overflow-hidden aspect-[4/3] shadow-xl border-4 border-white"
+                  style={{ borderRadius: "60% 40% 30% 70% / 60% 30% 70% 40%" }}
+                >
+                  <img 
+                    alt="Misión DELLCOM SAC" 
+                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
+                    src="/img/servicios/reparacion_laptop.jpg" 
+                  />
+                </div>
+
+                {/* Overlapping badge */}
+                <div className="absolute -bottom-4 -right-4 bg-white/95 backdrop-blur-[2px] border border-slate-200/60 py-2.5 px-4 rounded-xl shadow-lg flex items-center gap-2 transform rotate-2 hover:rotate-0 transition-transform duration-300">
+                  <span className="material-symbols-outlined text-primary text-base">verified_user</span>
+                  <span className="text-[9px] font-black uppercase tracking-wider text-on-surface">Continuidad Operativa</span>
+                </div>
               </div>
-              <h4 className="font-headline text-2xl font-extrabold text-on-surface">Nuestra Visión</h4>
-              <p className="text-sm md:text-base text-on-surface-variant leading-relaxed font-semibold">
-                Ser el referente nacional en ingeniería de precisión IT, liderando la transformación tecnológica con estándares internacionales de calidad y siendo reconocidos como el socio más confiable para la infraestructura crítica en el Perú.
-              </p>
+              
+              {/* Text Column */}
+              <div className="lg:col-span-7 space-y-5 scroll-reveal" style={{ transitionDelay: "150ms" }}>
+                <span className="inline-block py-1 px-3 bg-primary/10 border border-primary/15 text-primary font-bold text-[9px] rounded-full uppercase tracking-widest leading-none">
+                  Propósito
+                </span>
+                <h3 className="font-headline text-2xl md:text-4xl font-black text-on-surface leading-tight">
+                  Nuestra <span className="text-primary">Misión</span>
+                </h3>
+                <p className="text-sm md:text-base text-on-surface-variant leading-relaxed font-semibold">
+                  Garantizar la continuidad operativa de nuestros clientes mediante la implementación de soluciones de infraestructura robustas y soporte técnico de alta precisión, minimizando riesgos y optimizando el rendimiento tecnológico.
+                </p>
+              </div>
             </div>
+
+          </div>
+
+          <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+            
+            {/* Vision Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+              {/* Text Column */}
+              <div className="lg:col-span-7 space-y-5 scroll-reveal order-last lg:order-first">
+                <span className="inline-block py-1 px-3 bg-primary/10 border border-primary/15 text-primary font-bold text-[9px] rounded-full uppercase tracking-widest leading-none">
+                  Determinación
+                </span>
+                <h3 className="font-headline text-2xl md:text-4xl font-black text-on-surface leading-tight">
+                  Nuestra <span className="text-primary">Visión</span>
+                </h3>
+                <p className="text-sm md:text-base text-on-surface-variant leading-relaxed font-semibold">
+                  Ser el referente nacional en ingeniería de precisión IT, liderando la transformación tecnológica con estándares internacionales de calidad y siendo reconocidos como el socio más confiable para la infraestructura crítica en el Perú.
+                </p>
+              </div>
+
+              {/* Image Column */}
+              <div className="lg:col-span-5 relative group scroll-reveal" style={{ transitionDelay: "150ms" }}>
+                {/* Decorative background blob */}
+                <div 
+                  className="absolute inset-0 bg-primary/5 transform rotate-6 scale-105 transition-transform duration-700 group-hover:rotate-0" 
+                  style={{ borderRadius: "40% 60% 70% 30% / 40% 50% 60% 50%" }}
+                />
+                
+                {/* Image container with organic blob shape */}
+                <div 
+                  className="relative overflow-hidden aspect-[4/3] shadow-xl border-4 border-white"
+                  style={{ borderRadius: "50% 50% 40% 60% / 60% 40% 50% 50%" }}
+                >
+                  <img 
+                    alt="Visión DELLCOM SAC" 
+                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
+                    src="/img/servicios/microelectronica.jpg" 
+                  />
+                </div>
+
+                {/* Overlapping badge */}
+                <div className="absolute -bottom-4 -left-4 bg-white/95 backdrop-blur-[2px] border border-slate-200/60 py-2.5 px-4 rounded-xl shadow-lg flex items-center gap-2 transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                  <span className="material-symbols-outlined text-primary text-base">visibility</span>
+                  <span className="text-[9px] font-black uppercase tracking-wider text-on-surface">Liderazgo Tecnológico</span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </section>
 
