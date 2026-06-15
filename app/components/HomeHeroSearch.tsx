@@ -7,7 +7,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 interface DiagnosticoItem {
   problema: string;
@@ -63,18 +62,18 @@ export default function HomeHeroSearch() {
   const [suggestions, setSuggestions] = useState<DiagnosticoItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
   // Filter suggestions on query change
   useEffect(() => {
-    if (query.trim() === "") {
+    const cleanQuery = query.replace(/^#+/, "").trim().toLowerCase();
+    if (cleanQuery === "") {
       setSuggestions([]);
       return;
     }
 
-    const filtered = AVERIAS_FRECUENTES.filter(item => 
-      item.problema.toLowerCase().includes(query.toLowerCase()) ||
-      item.categoria.toLowerCase().includes(query.toLowerCase())
+    const filtered = AVERIAS_FRECUENTES.filter(item =>
+      item.problema.toLowerCase().includes(cleanQuery) ||
+      item.categoria.toLowerCase().includes(cleanQuery)
     );
     setSuggestions(filtered);
   }, [query]);
