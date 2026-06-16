@@ -12,7 +12,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import { Resend } from "resend";
+import { transporter, FROM } from "@/lib/mailer";
+import { welcomeEmail } from "@/lib/emailTemplates";
 import crypto from "crypto";
 
 // ── Schemas ────────────────────────────────────────────────────────────────
@@ -85,11 +86,6 @@ function generateTempPassword(): string {
   return chars.join("");
 }
 
-const ROL_LABEL: Record<string, string> = {
-  admin: "Administrador",
-  tecnico: "Técnico",
-  vendedor: "Vendedor",
-};
 
 async function checkAdminAuth() {
   const session = await getServerSession(authOptions);
@@ -181,55 +177,17 @@ export async function POST(req: NextRequest) {
 
     // Send welcome email with credentials
     try {
-      const resend = new Resend(process.env.RESEND_API_KEY);
-      await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? "DELLCOM SAC <onboarding@resend.dev>",
+      await transporter.sendMail({
+        from: FROM,
         to: emailLower,
         subject: "Bienvenido/a a DELLCOM SAC — Tus credenciales de acceso",
-        html: `
-          <div style="font-family: sans-serif; max-width: 520px; margin: 0 auto; padding: 32px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 28px;">
-              <div style="width: 36px; height: 36px; border-radius: 50%; background: #000; border: 2px solid #dc2626; display: flex; align-items: center; justify-content: center;">
-                <span style="color: #dc2626; font-weight: 900; font-size: 16px; font-style: italic;">D</span>
-              </div>
-              <div>
-                <p style="margin: 0; font-weight: 900; font-size: 14px; color: #1e293b;">DELLCOM SAC</p>
-                <p style="margin: 0; font-size: 10px; color: #dc2626; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">Portal de Gestión Interna</p>
-              </div>
-            </div>
-
-            <h1 style="font-size: 22px; font-weight: 900; color: #1e293b; margin: 0 0 8px 0;">¡Bienvenido/a, ${nombre}!</h1>
-            <p style="font-size: 14px; color: #64748b; margin: 0 0 24px 0; line-height: 1.6;">
-              Tu cuenta en el portal de gestión interna de DELLCOM SAC ha sido creada con el rol de <strong>${ROL_LABEL[rol] ?? rol}</strong>. Estas son tus credenciales de acceso:
-            </p>
-
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-              <p style="margin: 0 0 12px 0; font-size: 13px; color: #64748b;">
-                <span style="font-weight: 700; color: #1e293b; display: inline-block; width: 100px;">Usuario:</span>
-                <code style="background: #e2e8f0; padding: 2px 8px; border-radius: 4px; font-size: 14px; color: #0f172a;">${usuario}</code>
-              </p>
-              <p style="margin: 0; font-size: 13px; color: #64748b;">
-                <span style="font-weight: 700; color: #1e293b; display: inline-block; width: 100px;">Contraseña:</span>
-                <code style="background: #e2e8f0; padding: 2px 8px; border-radius: 4px; font-size: 14px; color: #0f172a;">${tempPassword}</code>
-              </p>
-            </div>
-
-            <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
-              <p style="margin: 0; font-size: 13px; color: #92400e; font-weight: 600; line-height: 1.5;">
-                ⚠️ Al ingresar por primera vez, el sistema te pedirá que establezcas una contraseña propia. La contraseña anterior es solo temporal.
-              </p>
-            </div>
-
-            <a href="${process.env.NEXTAUTH_URL}/admin/login" style="display: inline-block; background: #dc2626; color: #ffffff; font-weight: 700; font-size: 14px; padding: 14px 28px; border-radius: 999px; text-decoration: none; margin-bottom: 20px;">
-              Acceder al portal
-            </a>
-
-            <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 24px 0;" />
-            <p style="font-size: 11px; color: #cbd5e1; margin: 0; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
-              © 2026 DELLCOM SAC — Los Olivos, Lima
-            </p>
-          </div>
-        `,
+        html: welcomeEmail({
+          nombre,
+          usuario,
+          tempPassword,
+          rol,
+          loginUrl: `${process.env.NEXTAUTH_URL}/admin/login`,
+        }),
       });
     } catch (emailErr) {
       console.error("[API Admin Usuarios] Email send failed:", emailErr);
