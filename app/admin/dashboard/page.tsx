@@ -148,7 +148,10 @@ export default function AdminDashboardPage() {
 
   // Navigation and data states
   const [activeTab, setActiveTab] = useState("overview"); // overview, licenses, files, products, messages, users, services, portfolio, categories
-  
+
+  // Mobile/tablet sidebar visibility (sidebar is always visible on lg+ screens)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   // Dark mode state
   const [darkMode, setDarkMode] = useState(false);
 
@@ -973,11 +976,10 @@ export default function AdminDashboardPage() {
           const diffDays = diffTime / (1000 * 60 * 60 * 24);
           return diffDays >= 0 && diffDays <= 7;
         }).length;
-        const estimatedInc = activeLicCount * 85;
         return [
           { label: "Licencias Activas", value: activeLicCount, suffix: "", icon: "verified_user", bg: "bg-emerald-50/10 dark:bg-emerald-500/10", fg: "text-emerald-600", valueCls: "text-on-surface" },
           { label: "Mensajes de la Semana", value: messagesThisWeek, suffix: "", icon: "chat", bg: "bg-blue-50/10 dark:bg-blue-500/10", fg: "text-blue-600", valueCls: "text-on-surface" },
-          { label: "Ingresos Estimados", value: `S/. ${estimatedInc}`, suffix: " / mes", icon: "payments", bg: "bg-amber-50/10 dark:bg-amber-500/10", fg: "text-amber-600", valueCls: "text-amber-600" },
+          { label: "Total en Catálogo", value: productos.length, suffix: " productos", icon: "inventory_2", bg: "bg-amber-50/10 dark:bg-amber-500/10", fg: "text-amber-600", valueCls: "text-on-surface" },
         ];
       }
       case "licenses":
@@ -1145,9 +1147,9 @@ export default function AdminDashboardPage() {
 
         .dark-theme aside button[class*="text-primary"],
         .dark-theme aside button.text-primary {
-          color: #f87171 !important;
-          background-color: rgba(239, 68, 68, 0.15) !important;
-          border-color: #ef4444 !important;
+          color: #ff7878 !important;
+          background-color: rgba(255, 0, 0, 0.15) !important;
+          border-color: #ff0000 !important;
         }
 
         .dark-theme header {
@@ -1176,8 +1178,13 @@ export default function AdminDashboardPage() {
 
         .dark-theme .border-slate-200,
         .dark-theme .border-slate-200\\/80,
-        .dark-theme .border-slate-100 {
+        .dark-theme .border-slate-100,
+        .dark-theme .border-slate-300 {
           border-color: var(--border-color) !important;
+        }
+
+        .dark-theme .bg-slate-100 {
+          background-color: var(--bg-hover) !important;
         }
 
         .dark-theme .text-slate-500,
@@ -1186,8 +1193,70 @@ export default function AdminDashboardPage() {
           color: var(--text-muted) !important;
         }
 
+        .dark-theme .text-slate-700,
+        .dark-theme .text-slate-800,
+        .dark-theme .text-slate-900 {
+          color: var(--text-main) !important;
+        }
+
         .dark-theme .text-on-surface {
           color: var(--text-main) !important;
+        }
+
+        /* Status badges, icon chips & colored accents */
+        .dark-theme .bg-red-50,
+        .dark-theme .bg-red-100 {
+          background-color: rgba(255, 0, 0, 0.15) !important;
+        }
+        .dark-theme .bg-red-50\\/30 {
+          background-color: rgba(255, 0, 0, 0.08) !important;
+        }
+        .dark-theme .text-red-600,
+        .dark-theme .text-red-700,
+        .dark-theme .text-red-800 {
+          color: #ff7878 !important;
+        }
+        .dark-theme .border-red-200 {
+          border-color: rgba(255, 0, 0, 0.35) !important;
+        }
+
+        .dark-theme .bg-emerald-50,
+        .dark-theme .bg-emerald-100 {
+          background-color: rgba(16, 185, 129, 0.15) !important;
+        }
+        .dark-theme .text-emerald-500,
+        .dark-theme .text-emerald-600,
+        .dark-theme .text-emerald-800 {
+          color: #34d399 !important;
+        }
+        .dark-theme .border-emerald-200 {
+          border-color: rgba(16, 185, 129, 0.35) !important;
+        }
+
+        .dark-theme .bg-orange-50,
+        .dark-theme .bg-orange-100 {
+          background-color: rgba(249, 115, 22, 0.15) !important;
+        }
+        .dark-theme .text-orange-500,
+        .dark-theme .text-orange-800 {
+          color: #fb923c !important;
+        }
+        .dark-theme .border-orange-200 {
+          border-color: rgba(249, 115, 22, 0.35) !important;
+        }
+
+        .dark-theme .bg-blue-50,
+        .dark-theme .bg-blue-100 {
+          background-color: rgba(59, 130, 246, 0.15) !important;
+        }
+        .dark-theme .text-blue-500,
+        .dark-theme .text-blue-600,
+        .dark-theme .text-blue-800 {
+          color: #60a5fa !important;
+        }
+
+        .dark-theme .text-amber-600 {
+          color: #fbbf24 !important;
         }
 
         .dark-theme table thead tr {
@@ -1233,6 +1302,15 @@ export default function AdminDashboardPage() {
           border-color: var(--border-color) !important;
         }
 
+        .dark-theme .fixed header button:hover {
+          color: var(--text-active) !important;
+        }
+
+        .dark-theme input[type="file"]::file-selector-button {
+          background-color: var(--bg-hover) !important;
+          color: var(--text-main) !important;
+        }
+
         .dark-theme .fixed form input,
         .dark-theme .fixed form textarea,
         .dark-theme .fixed form select {
@@ -1262,16 +1340,36 @@ export default function AdminDashboardPage() {
         }
       ` }} />
       
+      {/* Mobile/tablet backdrop overlay - click to close sidebar */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 bg-slate-900/50 z-40 lg:hidden"
+          aria-hidden="true"
+        />
+      )}
+
       {/* SideNavBar - Clean Premium Light Theme */}
-      <aside className="bg-white h-screen w-64 left-0 top-0 fixed border-r border-slate-200/80 flex flex-col py-6 z-50 shadow-sm">
-        <div className="px-6 mb-8 flex items-center gap-3">
-          <DellcomLogo className="w-10 h-10" />
-          <div>
-            <h1 className="text-lg font-bold tracking-tight text-on-surface">DELLCOM SAC</h1>
-            <p className="text-[10px] text-primary font-bold uppercase tracking-widest leading-none">Enterprise Admin</p>
+      <aside className={`bg-white h-screen w-64 left-0 top-0 fixed border-r border-slate-200/80 flex flex-col py-6 z-50 shadow-sm transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      }`}>
+        <div className="px-6 mb-8 flex items-center gap-3 justify-between">
+          <div className="flex items-center gap-3">
+            <DellcomLogo className="w-10 h-10" />
+            <div>
+              <h1 className="text-lg font-bold tracking-tight text-on-surface">DELLCOM SAC</h1>
+              <p className="text-[10px] text-primary font-bold uppercase tracking-widest leading-none">Enterprise Admin</p>
+            </div>
           </div>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-on-surface hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
+            aria-label="Cerrar menú"
+          >
+            <span className="material-symbols-outlined text-[20px]">close</span>
+          </button>
         </div>
-        
+
         <nav className="flex-1 space-y-1 overflow-y-auto max-h-[calc(100vh-180px)] no-scrollbar pb-6">
           
           {/* Group: INICIO */}
@@ -1280,7 +1378,7 @@ export default function AdminDashboardPage() {
           </div>
 
           <button 
-            onClick={() => { setActiveTab("overview"); setSearchQuery(""); }}
+            onClick={() => { setActiveTab("overview"); setSearchQuery(""); setSidebarOpen(false); }}
             className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
               activeTab === "overview"
                 ? "text-primary font-extrabold border-primary bg-primary/5"
@@ -1297,7 +1395,7 @@ export default function AdminDashboardPage() {
           </div>
 
           <button 
-            onClick={() => { setActiveTab("messages"); setSearchQuery(""); }}
+            onClick={() => { setActiveTab("messages"); setSearchQuery(""); setSidebarOpen(false); }}
             className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
               activeTab === "messages"
                 ? "text-primary font-extrabold border-primary bg-primary/5"
@@ -1314,7 +1412,7 @@ export default function AdminDashboardPage() {
           </button>
 
           <button 
-            onClick={() => { setActiveTab("licenses"); setSearchQuery(""); }}
+            onClick={() => { setActiveTab("licenses"); setSearchQuery(""); setSidebarOpen(false); }}
             className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
               activeTab === "licenses"
                 ? "text-primary font-extrabold border-primary bg-primary/5"
@@ -1338,7 +1436,7 @@ export default function AdminDashboardPage() {
           </div>
 
           <button 
-            onClick={() => { setActiveTab("products"); setSearchQuery(""); }}
+            onClick={() => { setActiveTab("products"); setSearchQuery(""); setSidebarOpen(false); }}
             className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
               activeTab === "products"
                 ? "text-primary font-extrabold border-primary bg-primary/5"
@@ -1350,7 +1448,7 @@ export default function AdminDashboardPage() {
           </button>
 
           <button 
-            onClick={() => { setActiveTab("categories"); setSearchQuery(""); }}
+            onClick={() => { setActiveTab("categories"); setSearchQuery(""); setSidebarOpen(false); }}
             className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
               activeTab === "categories"
                 ? "text-primary font-extrabold border-primary bg-primary/5"
@@ -1362,7 +1460,7 @@ export default function AdminDashboardPage() {
           </button>
 
           <button 
-            onClick={() => { setActiveTab("files"); setSearchQuery(""); }}
+            onClick={() => { setActiveTab("files"); setSearchQuery(""); setSidebarOpen(false); }}
             className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
               activeTab === "files"
                 ? "text-primary font-extrabold border-primary bg-primary/5"
@@ -1379,7 +1477,7 @@ export default function AdminDashboardPage() {
           </div>
 
           <button 
-            onClick={() => { setActiveTab("services"); setSearchQuery(""); }}
+            onClick={() => { setActiveTab("services"); setSearchQuery(""); setSidebarOpen(false); }}
             className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
               activeTab === "services"
                 ? "text-primary font-extrabold border-primary bg-primary/5"
@@ -1391,7 +1489,7 @@ export default function AdminDashboardPage() {
           </button>
 
           <button 
-            onClick={() => { setActiveTab("portfolio"); setSearchQuery(""); }}
+            onClick={() => { setActiveTab("portfolio"); setSearchQuery(""); setSidebarOpen(false); }}
             className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
               activeTab === "portfolio"
                 ? "text-primary font-extrabold border-primary bg-primary/5"
@@ -1409,7 +1507,7 @@ export default function AdminDashboardPage() {
                 Sistema
               </div>
               <button 
-                onClick={() => { setActiveTab("users"); setSearchQuery(""); }}
+                onClick={() => { setActiveTab("users"); setSearchQuery(""); setSidebarOpen(false); }}
                 className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
                   activeTab === "users"
                     ? "text-primary font-extrabold border-primary bg-primary/5"
@@ -1442,11 +1540,18 @@ export default function AdminDashboardPage() {
       </aside>
 
       {/* TopAppBar - Sleek, Blur Glass effect */}
-      <div className="flex-1 flex flex-col min-w-0 pl-64">
-        <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 flex justify-between items-center w-full h-16 px-8 sticky top-0 z-40">
-          
-          {/* Dynamic Search Bar */}
-          <div className="flex items-center gap-6 w-full max-w-md">
+      <div className="flex-1 flex flex-col min-w-0 lg:pl-64">
+        <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 flex justify-between items-center w-full h-16 px-4 sm:px-8 gap-3 sticky top-0 z-40">
+
+          {/* Hamburger menu (mobile/tablet only) + Dynamic Search Bar */}
+          <div className="flex items-center gap-3 sm:gap-6 w-full max-w-md">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden w-9 h-9 shrink-0 rounded-lg flex items-center justify-center text-slate-500 hover:text-on-surface hover:bg-slate-100 transition-colors cursor-pointer"
+              aria-label="Abrir menú"
+            >
+              <span className="material-symbols-outlined text-[22px]">menu</span>
+            </button>
             <div className="relative w-full">
               <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
                 <span className="material-symbols-outlined text-[20px]">search</span>
@@ -1505,7 +1610,7 @@ export default function AdminDashboardPage() {
         </header>
 
         {/* Main Content Area */}
-        <main className="p-8 overflow-y-auto h-[calc(100vh-64px)] custom-scrollbar">
+        <main className="p-4 sm:p-6 lg:p-8 overflow-y-auto h-[calc(100vh-64px)] custom-scrollbar">
           
           {/* Quick Stats Banner — contextual per active tab */}
           <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
