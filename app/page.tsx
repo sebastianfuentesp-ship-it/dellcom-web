@@ -33,7 +33,7 @@ const serviceVisuals: Record<string, { image: string; icon: string }> = {
     icon: "dns"
   },
   "soporte": {
-    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=600&q=80",
+    image: "https://portalinnova.cl/wp-content/uploads/2021/06/Soporte-remoto-de-alta-confiabilidad-Plataforma-resuelve-problemas-tecnicos-en-segundos-y-con-la-maxima-seguridad-que-existe-en-el-mercado-scaled.jpg",
     icon: "support_agent"
   },
   "correo": {
