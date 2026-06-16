@@ -54,6 +54,7 @@ export default function AdminLoginPage() {
   const [contrasena, setContrasena] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,151 +83,227 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row selection:bg-primary/20 selection:text-primary">
+    <div className="w-full min-h-screen md:h-screen flex flex-col md:flex-row overflow-y-auto md:overflow-hidden bg-white selection:bg-primary/20 selection:text-primary">
 
-        {/* Left Column: Welcome Visual Panel */}
-        <div className="w-full md:w-1/2 min-h-[320px] md:min-h-screen bg-gradient-to-br from-red-50/70 via-slate-50 to-rose-100/40 flex flex-col justify-between p-10 md:p-16 lg:p-20 relative overflow-hidden border-b md:border-b-0 md:border-r border-slate-200/60">
+      {/* Left Column: Welcome Visual Panel (Tech Dark Theme) */}
+      <div className="w-full md:w-1/2 min-h-[400px] md:h-full bg-[#0a0a0c] flex flex-col justify-between p-8 md:p-12 lg:p-16 relative overflow-hidden">
+        
+        {/* Background Video with Blur & Overlay */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0 opacity-35 blur-[2px] pointer-events-none"
+        >
+          <source src="/vid/laptop_video.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-br from-red-950/20 via-black/85 to-black/95 z-0 pointer-events-none"></div>
 
-          {/* Background Video, subtle texture under the gradient */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover z-0 opacity-[0.18] pointer-events-none"
-          >
-            <source src="/vid/laptop_video.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-transparent to-white/40 z-0 pointer-events-none"></div>
+        {/* Acceso Técnico Pill Badge */}
+        <div className="relative z-20 flex justify-end">
+          <span className="inline-flex items-center gap-1.5 py-1.5 px-4 bg-black/40 backdrop-blur border border-white/10 text-white font-bold text-[10px] tracking-widest rounded-full uppercase leading-none shadow-lg shadow-black/20">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_#ff0000] animate-pulse"></span>
+            Acceso Técnico
+          </span>
+        </div>
 
-          {/* Decorative tilted rounded arcs (geometric, modern accent) */}
-          <div className="absolute -right-16 -bottom-16 w-[380px] h-[460px] opacity-[0.06] pointer-events-none z-0 rotate-[18deg] border-2 border-slate-800 rounded-[3rem]" />
-          <div className="absolute right-6 bottom-6 w-[380px] h-[460px] opacity-[0.06] pointer-events-none z-0 rotate-[18deg] border-2 border-slate-800 rounded-[3rem]" />
+        {/* Centered Greeting and Slogans */}
+        <div className="relative z-20 my-auto py-8 space-y-6">
+          <h1 className="font-headline text-5xl lg:text-6xl xl:text-7xl font-black text-white leading-[1.1] tracking-tight">
+            ¡Hola, <br />
+            <span className="text-primary">Dellcom!</span>
+          </h1>
+          <p className="text-sm lg:text-base text-slate-400 font-semibold leading-relaxed max-w-sm lg:max-w-md">
+            Soporte IT de primer nivel, repuestos y licencias originales. Gestiona los servicios técnicos de forma eficiente y segura desde un solo panel.
+          </p>
 
-          {/* Status badge */}
-          <div className="relative z-20 flex justify-end">
-            <span className="inline-flex items-center gap-1.5 py-1.5 px-4 bg-white/70 backdrop-blur-md border border-white/80 text-primary font-bold text-[10px] lg:text-xs rounded-full uppercase tracking-widest leading-none shadow-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-              Acceso Técnico
-            </span>
-          </div>
+          {/* Red Circle-Icon Checkbox List */}
+          <div className="space-y-4 pt-4">
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-8 rounded-full border border-primary/30 bg-primary/10 flex items-center justify-center text-primary shadow-sm shadow-red-950/20">
+                <span className="material-symbols-outlined text-base">security</span>
+              </span>
+              <span className="text-sm text-white/90 font-bold tracking-wide">
+                Conexión cifrada extremo a extremo
+              </span>
+            </div>
 
-          {/* Centered Greeting */}
-          <div className="relative z-20 my-auto py-10 space-y-6">
-            <h1 className="font-headline text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-slate-800 leading-none tracking-tight">
-              ¡Hola, <br /><span className="text-primary">Dellcom!</span>
-            </h1>
-            <p className="text-sm md:text-base lg:text-lg text-slate-500 leading-relaxed font-semibold max-w-sm lg:max-w-md">
-              Soporte IT de primer nivel, repuestos y licencias originales. Gestiona los servicios técnicos de forma eficiente y segura desde un solo panel.
-            </p>
-          </div>
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-8 rounded-full border border-primary/30 bg-primary/10 flex items-center justify-center text-primary shadow-sm shadow-red-950/20">
+                <span className="material-symbols-outlined text-base">handyman</span>
+              </span>
+              <span className="text-sm text-white/90 font-bold tracking-wide">
+                Soporte técnico 24/7 disponible
+              </span>
+            </div>
 
-          {/* Footer */}
-          <div className="relative z-20">
-            <p className="text-[10px] lg:text-xs text-slate-400 font-bold uppercase tracking-widest leading-none">
-              © 2026 DELLCOM SAC. Todos los derechos reservados.
-            </p>
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-8 rounded-full border border-primary/30 bg-primary/10 flex items-center justify-center text-primary shadow-sm shadow-red-950/20">
+                <span className="material-symbols-outlined text-base">workspace_premium</span>
+              </span>
+              <span className="text-sm text-white/90 font-bold tracking-wide">
+                Repuestos y licencias certificadas
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Right Column: Credentials Form */}
-        <div className="w-full md:w-1/2 min-h-screen p-10 md:p-16 lg:p-20 flex flex-col justify-between bg-white relative z-10">
+        {/* Technical Footer */}
+        <div className="relative z-20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-t border-white/5 pt-4">
+          <p className="text-[9px] text-white/30 font-bold uppercase tracking-wider">
+            © 2026 DELLCOM SAC - TODOS LOS DERECHOS RESERVADOS
+          </p>
+          <span className="inline-flex items-center gap-1.5 text-[9px] text-white/30 font-bold uppercase tracking-wider">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e] animate-pulse"></span>
+            SISTEMA OPERATIVO - v2.4
+          </span>
+        </div>
+      </div>
 
-          {/* Brand mark */}
-          <div className="flex items-center gap-3 justify-center md:justify-start">
-            <DellcomLogo className="w-10 h-10 lg:w-12 lg:h-12" />
-            <div className="leading-none">
-              <span className="font-headline text-base lg:text-lg font-black text-slate-800 block">DELLCOM</span>
-              <span className="text-[9px] lg:text-[10px] font-bold text-primary uppercase tracking-widest block mt-0.5">Portal de Gestión Interna</span>
-            </div>
+      {/* Right Column: Credentials Form (Clean Light Theme) */}
+      <div className="w-full md:w-1/2 min-h-[600px] md:h-full bg-white flex flex-col justify-between p-8 md:p-12 lg:p-16 overflow-y-auto">
+
+        {/* Brand Header */}
+        <div className="flex items-center gap-3 justify-center md:justify-start">
+          <div className="w-9 h-9 rounded-full bg-black border border-primary flex items-center justify-center font-headline font-black italic text-white text-base select-none shadow-sm shadow-black/20">
+            D
+          </div>
+          <div className="leading-none">
+            <span className="font-headline text-base font-black text-slate-800 block">DELLCOM</span>
+            <span className="text-[8px] font-bold text-primary uppercase tracking-widest block mt-0.5">Portal de Gestión Interna</span>
+          </div>
+        </div>
+
+        {/* Form Container */}
+        <div className="max-w-md w-full mx-auto my-auto py-8 space-y-6">
+          <div className="space-y-2 text-center md:text-left">
+            <h2 className="font-headline text-3xl lg:text-4xl font-extrabold text-slate-800 tracking-tight">
+              ¡Bienvenido <span className="text-primary">de nuevo!</span>
+            </h2>
+            <p className="text-xs lg:text-sm text-slate-400 font-semibold leading-relaxed">
+              Ingresa tus credenciales para acceder al panel administrativo.
+            </p>
           </div>
 
-          {/* Centered form block */}
-          <div className="max-w-md lg:max-w-lg w-full mx-auto my-auto py-10 space-y-8">
-            <div className="space-y-2 text-center md:text-left">
-              <h2 className="font-headline text-3xl md:text-4xl lg:text-5xl font-black text-slate-800 tracking-tight">¡Bienvenido de nuevo!</h2>
-              <p className="text-sm lg:text-base text-slate-400 font-semibold leading-relaxed">
-                Ingresa tus credenciales para acceder al panel administrativo.
-              </p>
+          {error && (
+            <div className="bg-red-50 border border-red-100 text-red-600 text-xs p-3.5 rounded-xl flex items-start gap-2 font-semibold animate-fade-in">
+              <span className="material-symbols-outlined text-base mt-0.5">error</span>
+              <span>{error}</span>
             </div>
+          )}
 
-            {error && (
-              <div className="bg-red-50 border border-red-100 text-red-600 text-sm p-4 rounded-xl flex items-start gap-2.5 font-semibold animate-fade-in">
-                <span className="material-symbols-outlined text-base mt-0.5">error</span>
-                <span>{error}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-
-              {/* Username Field Group */}
-              <div className="group relative flex flex-col">
-                <label className="block text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-                  Usuario
-                </label>
-                <div className="relative flex items-center bg-slate-50/80 border border-slate-200/80 rounded-2xl focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all px-5 py-4">
-                  <span className="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors mr-3 text-xl leading-none">person</span>
-                  <input
-                    type="text"
-                    required
-                    disabled={loading}
-                    value={usuario}
-                    onChange={(e) => setUsuario(e.target.value)}
-                    placeholder="Ingresa tu usuario"
-                    className="w-full bg-transparent border-none focus:outline-none focus:ring-0 p-0 text-slate-800 text-sm lg:text-base font-semibold placeholder:text-slate-400"
-                  />
-                </div>
-              </div>
-
-              {/* Password Field Group */}
-              <div className="group relative flex flex-col">
-                <label className="block text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-                  Contraseña
-                </label>
-                <div className="relative flex items-center bg-slate-50/80 border border-slate-200/80 rounded-2xl focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all px-5 py-4">
-                  <span className="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors mr-3 text-xl leading-none">lock</span>
-                  <input
-                    type="password"
-                    required
-                    disabled={loading}
-                    value={contrasena}
-                    onChange={(e) => setContrasena(e.target.value)}
-                    placeholder="Contraseña"
-                    className="w-full bg-transparent border-none focus:outline-none focus:ring-0 p-0 text-slate-800 text-sm lg:text-base font-semibold placeholder:text-slate-400"
-                  />
-                </div>
-              </div>
-
-              {/* Buttons */}
-              <div className="space-y-3 pt-2">
-                <button
-                  type="submit"
+          <form onSubmit={handleSubmit} className="space-y-4">
+            
+            {/* Username Input Group */}
+            <div className="flex flex-col">
+              <label className="block text-[9px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
+                Usuario
+              </label>
+              <div className="relative flex items-center bg-slate-50 border border-slate-100 rounded-xl focus-within:border-primary/40 focus-within:ring-1 focus-within:ring-primary/40 transition-all px-4 py-3">
+                <span className="material-symbols-outlined text-slate-400 transition-colors mr-3 text-lg leading-none">person</span>
+                <input
+                  type="text"
+                  required
                   disabled={loading}
-                  className="w-full bg-primary hover:bg-primary/95 text-white font-bold py-4 lg:py-5 px-6 rounded-full text-sm lg:text-base transition-all active:scale-[0.98] shadow-lg shadow-primary/10 flex items-center justify-center gap-2 cursor-pointer border-none"
-                >
-                  {loading ? (
-                    <span className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
-                  ) : (
-                    <>
-                      <span className="material-symbols-outlined text-xl leading-none">login</span>
-                      Iniciar Sesión
-                    </>
-                  )}
-                </button>
-
-                <Link
-                  href="/"
-                  className="w-full bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/85 font-bold py-3.5 lg:py-4 px-6 rounded-full text-sm lg:text-base transition-all active:scale-[0.98] flex items-center justify-center gap-2 shadow-sm"
-                >
-                  <span className="material-symbols-outlined text-xl">arrow_back</span>
-                  Volver a Inicio
-                </Link>
+                  value={usuario}
+                  onChange={(e) => setUsuario(e.target.value)}
+                  placeholder="Ingresa tu usuario"
+                  className="w-full bg-transparent border-none focus:outline-none focus:ring-0 p-0 text-slate-800 text-sm font-semibold placeholder:text-slate-400/80"
+                />
               </div>
-            </form>
-          </div>
+            </div>
 
-          <div className="hidden md:block h-2"></div>
+            {/* Password Input Group */}
+            <div className="flex flex-col">
+              <label className="block text-[9px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
+                Contraseña
+              </label>
+              <div className="relative flex items-center bg-slate-50 border border-slate-100 rounded-xl focus-within:border-primary/40 focus-within:ring-1 focus-within:ring-primary/40 transition-all px-4 py-3">
+                <span className="material-symbols-outlined text-slate-400 transition-colors mr-3 text-lg leading-none">lock</span>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  disabled={loading}
+                  value={contrasena}
+                  onChange={(e) => setContrasena(e.target.value)}
+                  placeholder="Contraseña"
+                  className="w-full bg-transparent border-none focus:outline-none focus:ring-0 p-0 text-slate-800 text-sm font-semibold placeholder:text-slate-400/80"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="focus:outline-none text-slate-400 hover:text-slate-600 transition-colors ml-2 flex items-center"
+                >
+                  <span className="material-symbols-outlined text-lg leading-none">
+                    {showPassword ? "visibility_off" : "visibility"}
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Options Row */}
+            <div className="flex items-center justify-between pt-1">
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  className="rounded border-slate-300 text-primary focus:ring-primary w-4 h-4 cursor-pointer"
+                />
+                <span className="text-xs text-slate-500 font-semibold">Recordarme</span>
+              </label>
+              <NextLink
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  alert("Por favor, contacta al administrador del sistema para restablecer tu contraseña.");
+                }}
+                className="text-xs font-bold text-primary hover:text-primary-dark hover:underline transition-all"
+              >
+                ¿Olvidaste tu contraseña?
+              </NextLink>
+            </div>
+
+            {/* Buttons */}
+            <div className="space-y-3 pt-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-primary hover:bg-primary/95 text-white font-bold py-3.5 px-6 rounded-full text-sm transition-all active:scale-[0.98] shadow-md shadow-primary/10 flex items-center justify-center gap-2 cursor-pointer border-none"
+              >
+                {loading ? (
+                  <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-lg leading-none">login</span>
+                    Iniciar Sesión
+                  </>
+                )}
+              </button>
+
+              <Link
+                href="/"
+                className="w-full bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 font-bold py-3 px-6 rounded-full text-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2 shadow-sm"
+              >
+                <span className="material-symbols-outlined text-lg leading-none">arrow_back</span>
+                Volver a Inicio
+              </Link>
+            </div>
+          </form>
         </div>
+
+        {/* Support Link */}
+        <div className="text-center md:text-left text-xs text-slate-400 font-semibold">
+          ¿Problemas para acceder?{" "}
+          <a
+            href="https://wa.me/51987654321"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-700 font-bold hover:underline"
+          >
+            Contacta a soporte
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
