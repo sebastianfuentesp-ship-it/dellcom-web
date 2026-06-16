@@ -16,7 +16,7 @@
 
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 
 interface Licencia {
@@ -1007,6 +1007,68 @@ export default function AdminDashboardPage() {
   // Group files into categories
   const fileCountByType = (type: string) => archivos.filter(a => a.tipo === type).length;
 
+  // Contextual stat cards — change based on active tab
+  const tabStats = useMemo(() => {
+    switch (activeTab) {
+      case "licenses":
+        return [
+          { label: "Licencias Activas", value: licencias.filter(l => l.estado === "activo").length, suffix: "", icon: "verified_user", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Próximas a Vencer", value: licencias.filter(l => getLicenseUrgency(l.fecha_fin) === "warning").length, suffix: "", icon: "schedule", bg: "bg-orange-50", fg: "text-orange-500", valueCls: "text-orange-500" },
+          { label: "Alertas Críticas", value: licencias.filter(l => getLicenseUrgency(l.fecha_fin) === "expired").length, suffix: "", icon: "error", bg: "bg-red-100", fg: "text-red-700", valueCls: "text-red-600" },
+        ];
+      case "files":
+        return [
+          { label: "Total de Archivos", value: archivos.length, suffix: "", icon: "folder_zip", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Controladores", value: fileCountByType("driver"), suffix: "", icon: "settings_input_component", bg: "bg-blue-50", fg: "text-blue-600", valueCls: "text-on-surface" },
+          { label: "Programas (.exe)", value: fileCountByType("programa"), suffix: "", icon: "install_desktop", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+        ];
+      case "products":
+        return [
+          { label: "Productos Activos", value: productos.filter(p => p.activo).length, suffix: "", icon: "inventory_2", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Total en Catálogo", value: productos.length, suffix: "", icon: "storefront", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Categorías Activas", value: categorias.filter(c => c.activo).length, suffix: "", icon: "local_offer", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+        ];
+      case "services":
+        return [
+          { label: "Servicios Activos", value: servicios.filter(s => s.activo).length, suffix: "", icon: "build", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Total Servicios", value: servicios.length, suffix: "", icon: "miscellaneous_services", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Trabajos Portafolio", value: trabajos.length, suffix: "", icon: "photo_library", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+        ];
+      case "portfolio":
+        return [
+          { label: "Trabajos Realizados", value: trabajos.length, suffix: "", icon: "photo_library", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Con Servicio Asociado", value: trabajos.filter(t => t.id_servicio).length, suffix: "", icon: "link", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Servicios Disponibles", value: servicios.filter(s => s.activo).length, suffix: "", icon: "build", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+        ];
+      case "categories":
+        return [
+          { label: "Categorías Activas", value: categorias.filter(c => c.activo).length, suffix: "", icon: "local_offer", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Total Categorías", value: categorias.length, suffix: "", icon: "category", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Productos en Catálogo", value: productos.filter(p => p.activo).length, suffix: "", icon: "inventory_2", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+        ];
+      case "messages": {
+        const unread = mensajes.filter(m => !m.leido).length;
+        return [
+          { label: "Sin Leer", value: unread, suffix: "", icon: "mark_email_unread", bg: unread > 0 ? "bg-red-100" : "bg-slate-100", fg: unread > 0 ? "text-red-700" : "text-slate-500", valueCls: unread > 0 ? "text-red-600" : "text-on-surface" },
+          { label: "Total Mensajes", value: mensajes.length, suffix: "", icon: "mail", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+          { label: "Leídos", value: mensajes.filter(m => m.leido).length, suffix: "", icon: "mark_email_read", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+        ];
+      }
+      case "users":
+        return [
+          { label: "Personal Activo", value: usuarios.filter(u => u.activo).length, suffix: "", icon: "group", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Administradores", value: usuarios.filter(u => u.rol === "admin").length, suffix: "", icon: "admin_panel_settings", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Técnicos", value: usuarios.filter(u => u.rol === "tecnico").length, suffix: "", icon: "engineering", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+        ];
+      default:
+        return [
+          { label: "Licencias Activas", value: licencias.filter(l => l.estado === "activo").length, suffix: "", icon: "verified_user", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Controladores & Drivers", value: archivos.length, suffix: " archivos", icon: "folder_zip", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Alertas de Vencimiento", value: licencias.filter(l => getLicenseUrgency(l.fecha_fin) !== "ok").length, suffix: " críticas", icon: "error", bg: "bg-red-100", fg: "text-red-700", valueCls: "text-red-600" },
+        ];
+    }
+  }, [activeTab, licencias, archivos, productos, categorias, mensajes, usuarios, servicios, trabajos]);
+
   return (
     <div className="bg-slate-50 min-h-screen text-on-surface font-headline overflow-hidden flex">
       
@@ -1122,11 +1184,28 @@ export default function AdminDashboardPage() {
 
         {/* Support & Logout links in sidebar footer */}
         <div className="mt-auto border-t border-slate-100 pt-4 space-y-1">
+          {/* User mini-card */}
+          <div className="mx-3 mb-3 px-3 py-2.5 bg-slate-50 border border-slate-100 rounded-xl flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-black text-xs uppercase shrink-0 shadow-sm">
+              {(() => {
+                const name = session?.user?.name || "";
+                const parts = name.trim().split(/\s+/);
+                return parts.length >= 2
+                  ? (parts[0][0] + parts[1][0]).toUpperCase()
+                  : name.substring(0, 2).toUpperCase() || "US";
+              })()}
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-slate-800 truncate leading-tight">{session?.user?.name || "Usuario"}</p>
+              <p className="text-[10px] text-red-500 font-bold uppercase tracking-wide leading-tight">{(session?.user as any)?.role || "técnico"}</p>
+            </div>
+          </div>
+
           <Link href="/" className="flex items-center gap-3 text-slate-500 hover:text-on-surface px-6 py-3 hover:bg-slate-50 transition-colors">
             <span className="material-symbols-outlined text-[20px] text-slate-400">public</span>
             <span className="text-sm">Ver Web Pública</span>
           </Link>
-          <button 
+          <button
             onClick={() => signOut({ callbackUrl: "/admin/login" })}
             className="w-full flex items-center gap-3 text-slate-500 hover:text-primary px-6 py-3 hover:bg-red-50 transition-colors cursor-pointer"
           >
@@ -1189,39 +1268,21 @@ export default function AdminDashboardPage() {
         {/* Main Content Area */}
         <main className="p-8 overflow-y-auto h-[calc(100vh-64px)] custom-scrollbar">
           
-          {/* Quick Stats Banner (Customized clear Slate & Red style for 2026) */}
+          {/* Quick Stats Banner — contextual per active tab */}
           <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-center justify-between">
-              <div>
-                <span className="text-slate-500 text-[11px] font-bold uppercase tracking-wider">Licencias Activas</span>
-                <h3 className="text-2xl font-black text-on-surface mt-1">{licencias.filter(l => l.estado === "activo").length}</h3>
+            {tabStats.map((stat, i) => (
+              <div key={i} className="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-center justify-between">
+                <div>
+                  <span className="text-slate-500 text-[11px] font-bold uppercase tracking-wider">{stat.label}</span>
+                  <h3 className={`text-2xl font-black mt-1 ${stat.valueCls}`}>
+                    {stat.value}{stat.suffix}
+                  </h3>
+                </div>
+                <div className={`p-3 ${stat.bg} ${stat.fg} rounded-xl`}>
+                  <span className="material-symbols-outlined text-2xl">{stat.icon}</span>
+                </div>
               </div>
-              <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
-                <span className="material-symbols-outlined text-2xl">verified_user</span>
-              </div>
-            </div>
-
-            <div className="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-center justify-between">
-              <div>
-                <span className="text-slate-500 text-[11px] font-bold uppercase tracking-wider">Controladores & Drivers</span>
-                <h3 className="text-2xl font-black text-on-surface mt-1">{archivos.length} archivos</h3>
-              </div>
-              <div className="p-3 bg-red-50 text-red-600 rounded-xl">
-                <span className="material-symbols-outlined text-2xl">folder_zip</span>
-              </div>
-            </div>
-
-            <div className="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm flex items-center justify-between">
-              <div>
-                <span className="text-slate-500 text-[11px] font-bold uppercase tracking-wider">Alertas de Vencimiento</span>
-                <h3 className="text-2xl font-black text-red-600 mt-1">
-                  {licencias.filter(l => getLicenseUrgency(l.fecha_fin) !== "ok").length} críticas
-                </h3>
-              </div>
-              <div className="p-3 bg-red-100 text-red-700 rounded-xl">
-                <span className="material-symbols-outlined text-2xl">error</span>
-              </div>
-            </div>
+            ))}
           </section>
 
           {/* TAB 1: License Management */}

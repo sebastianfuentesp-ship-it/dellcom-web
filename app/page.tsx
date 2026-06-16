@@ -183,7 +183,7 @@ export default async function Home() {
           <div className="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full py-16">
             
             {/* Left Content */}
-            <div className="z-10 space-y-8 animate-fade-in-up">
+            <div className="relative z-20 space-y-8 animate-fade-in-up">
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase">
                 <span className="material-symbols-outlined text-[16px] fill-1">verified</span>
                 10 Años Liderando el Soporte y la Consultoría IT
