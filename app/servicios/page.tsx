@@ -45,7 +45,7 @@ const serviceVisuals: Record<string, ServiceVisual> = {
     specs: ["Cableado estructurado Cat6 y Cat6A certificado", "Montaje, peinado y rotulado de racks de comunicación", "Configuración de enrutadores, firewalls y switches", "Diagnóstico de interferencias y optimización WiFi"]
   },
   "soporte": { 
-    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=800&q=80", 
+    image: "https://portalinnova.cl/wp-content/uploads/2021/06/Soporte-remoto-de-alta-confiabilidad-Plataforma-resuelve-problemas-tecnicos-en-segundos-y-con-la-maxima-seguridad-que-existe-en-el-mercado-scaled.jpg", 
     icon: "support_agent",
     specs: ["Soporte técnico remoto rápido (AnyDesk/RustDesk)", "Configuración de correos corporativos Workspace/365", "Eliminación activa de virus y optimización de sistema", "Mantenimiento preventivo periódico para oficinas"]
   },
