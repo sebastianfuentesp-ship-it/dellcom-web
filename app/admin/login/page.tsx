@@ -82,7 +82,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-8 relative overflow-hidden bg-slate-950">
+    <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-8 relative overflow-hidden bg-slate-100/40">
       
       {/* Background Video covering the entire screen with blur */}
       <video
@@ -90,38 +90,38 @@ export default function AdminLoginPage() {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 blur-[8px] scale-[1.05] pointer-events-none"
+        className="absolute inset-0 w-full h-full object-cover z-0 opacity-[0.55] blur-[8px] scale-[1.05] pointer-events-none"
       >
         <source src="/vid/laptop_video.mp4" type="video/mp4" />
       </video>
 
-      {/* Cinematic dark frosted overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-950/90 via-slate-900/80 to-red-950/20 z-0"></div>
+      {/* Clear frosted overlay for light theme look */}
+      <div className="absolute inset-0 bg-slate-50/40 backdrop-blur-[1px] z-0 pointer-events-none"></div>
 
-      {/* Red Glowing Auroras in the background */}
-      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-red-600/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-red-600/5 rounded-full blur-[150px] pointer-events-none z-0"></div>
+      {/* Soft Red/Rose glowing spots in the background */}
+      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-red-600/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-rose-500/5 rounded-full blur-[150px] pointer-events-none z-0"></div>
 
-      {/* Main Login Card - Glassmorphic and Centered */}
-      <div className="w-full max-w-md bg-slate-900/70 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-2xl hover:border-red-600/25 transition-all duration-500 relative z-10 animate-fade-in flex flex-col justify-between min-h-[500px]">
+      {/* Main Login Card - Glassmorphic and Centered (Light Theme) */}
+      <div className="w-full max-w-md bg-white/85 backdrop-blur-xl border border-slate-200/60 rounded-[2.5rem] p-8 md:p-10 shadow-2xl shadow-slate-200/80 hover:border-primary/20 transition-all duration-500 relative z-10 animate-fade-in flex flex-col justify-between min-h-[500px]">
         
         {/* Brand Logo and Title */}
         <div className="flex flex-col items-center mt-2">
           <DellcomLogo className="w-16 h-16 mb-4 hover:scale-105 transition-transform duration-300" />
-          <h2 className="font-headline text-2xl font-black text-white tracking-tight text-center leading-none">Portal de Gestión Interna</h2>
+          <h2 className="font-headline text-2xl font-black text-slate-800 tracking-tight text-center leading-none">Portal de Gestión Interna</h2>
           <p className="text-[10px] text-primary font-black uppercase tracking-widest mt-2">DELLCOM SAC</p>
         </div>
 
         {/* Welcome Text */}
         <div className="space-y-1 mt-4 text-center">
-          <h3 className="font-headline text-lg font-black text-white">¡Bienvenido de nuevo!</h3>
-          <p className="text-[10px] text-slate-400 font-semibold leading-relaxed">
+          <h3 className="font-headline text-lg font-black text-slate-800">¡Bienvenido de nuevo!</h3>
+          <p className="text-[10px] text-slate-500 font-semibold leading-relaxed">
             Acceso exclusivo para personal técnico autorizado.
           </p>
         </div>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs p-4 rounded-xl mt-4 flex items-start gap-2.5 font-semibold animate-fade-in">
+          <div className="bg-red-50 border border-red-100 text-red-600 text-xs p-4 rounded-xl mt-4 flex items-start gap-2.5 font-semibold animate-fade-in">
             <span className="material-symbols-outlined text-base mt-0.5">error</span>
             <span>{error}</span>
           </div>
@@ -132,10 +132,10 @@ export default function AdminLoginPage() {
           
           {/* Username Field Group */}
           <div className="group relative flex flex-col">
-            <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+            <label className="block text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
               Usuario
             </label>
-            <div className="relative flex items-center bg-slate-950/60 border border-white/10 rounded-2xl focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all px-4 py-3">
+            <div className="relative flex items-center bg-slate-50/80 border border-slate-200/80 rounded-2xl focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all px-4 py-3">
               <span className="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors mr-3 text-lg leading-none">person</span>
               <input 
                 type="text" 
@@ -144,17 +144,17 @@ export default function AdminLoginPage() {
                 value={usuario}
                 onChange={(e) => setUsuario(e.target.value)}
                 placeholder="Ingresa tu usuario"
-                className="w-full bg-transparent border-none focus:outline-none focus:ring-0 p-0 text-white text-sm font-semibold placeholder:text-slate-600"
+                className="w-full bg-transparent border-none focus:outline-none focus:ring-0 p-0 text-slate-800 text-sm font-semibold placeholder:text-slate-400"
               />
             </div>
           </div>
 
           {/* Password Field Group */}
           <div className="group relative flex flex-col">
-            <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+            <label className="block text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
               Contraseña
             </label>
-            <div className="relative flex items-center bg-slate-950/60 border border-white/10 rounded-2xl focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all px-4 py-3">
+            <div className="relative flex items-center bg-slate-50/80 border border-slate-200/80 rounded-2xl focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all px-4 py-3">
               <span className="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors mr-3 text-lg leading-none">lock</span>
               <input 
                 type="password" 
@@ -163,7 +163,7 @@ export default function AdminLoginPage() {
                 value={contrasena}
                 onChange={(e) => setContrasena(e.target.value)}
                 placeholder="Contraseña"
-                className="w-full bg-transparent border-none focus:outline-none focus:ring-0 p-0 text-white text-sm font-semibold placeholder:text-slate-600"
+                className="w-full bg-transparent border-none focus:outline-none focus:ring-0 p-0 text-slate-800 text-sm font-semibold placeholder:text-slate-400"
               />
             </div>
           </div>
@@ -187,7 +187,7 @@ export default function AdminLoginPage() {
 
             <Link 
               href="/"
-              className="w-full bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 font-bold py-3 px-6 rounded-full text-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2 shadow-sm"
+              className="w-full bg-white hover:bg-slate-50 text-slate-750 border border-slate-200/85 font-bold py-3 px-6 rounded-full text-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2 shadow-sm"
             >
               <span className="material-symbols-outlined text-lg">arrow_back</span>
               Volver a Inicio
