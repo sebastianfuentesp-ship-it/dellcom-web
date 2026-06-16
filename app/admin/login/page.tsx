@@ -168,7 +168,7 @@ export default function AdminLoginPage() {
           {/* Auth Title */}
           <div className="space-y-2.5 mt-4">
             <h2 className="font-headline text-3xl md:text-4xl font-black text-slate-800 tracking-tight text-center">
-              Welcome Back!
+              ¡Bienvenido de nuevo!
             </h2>
             <p className="text-xs text-slate-400 font-semibold leading-relaxed text-center">
               Acceso exclusivo para personal técnico autorizado de DELLCOM.
