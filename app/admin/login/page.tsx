@@ -86,19 +86,22 @@ export default function AdminLoginPage() {
       {/* Main Login Card - Rounded and Glass-Shadow styled */}
       <div className="w-full max-w-4xl bg-white border border-slate-200/80 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl shadow-slate-200/50 flex flex-col md:flex-row overflow-hidden relative min-h-[550px]">
         
-        {/* Left Column: Visual Panel (Waves + Background Video + Glassmorphic Greeting Card) */}
+        {/* Left Column: Visual Panel (Waves + Blurred Background Video + Glassmorphic Greeting Card + Image) */}
         <div className="w-full md:w-1/2 min-h-[350px] md:min-h-[500px] bg-slate-50/50 flex flex-col justify-between p-8 md:p-12 relative overflow-hidden border-b md:border-b-0 md:border-r border-slate-200/50">
           
-          {/* Background Video */}
+          {/* Background Video with modern blur and scale */}
           <video
             autoPlay
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover z-0 opacity-[0.8] pointer-events-none"
+            className="absolute inset-0 w-full h-full object-cover z-0 opacity-[0.6] blur-[6px] scale-[1.05] pointer-events-none"
           >
             <source src="/vid/laptop_video.mp4" type="video/mp4" />
           </video>
+
+          {/* Frosted clear overlay */}
+          <div className="absolute inset-0 bg-slate-50/30 backdrop-blur-[1px] z-5 pointer-events-none" />
 
           {/* Layered Gradient Waves */}
           <svg className="absolute top-0 left-0 h-full w-[170px] md:w-[245px] pointer-events-none z-10 opacity-20" viewBox="0 0 100 200" preserveAspectRatio="none">
@@ -123,9 +126,20 @@ export default function AdminLoginPage() {
             </div>
           </div>
 
-          {/* Centered Glassmorphic Greeting Card */}
+          {/* Centered Glassmorphic Greeting Card with Generated Tech Illustration */}
           <div className="relative z-20 my-auto py-6 flex items-center justify-center">
-            <div className="w-full max-w-sm bg-white/80 backdrop-blur-md border border-white/80 rounded-[2rem] shadow-lg shadow-slate-200/50 p-6 md:p-8 space-y-4">
+            <div className="w-full max-w-sm bg-white/90 backdrop-blur-md border border-white/80 rounded-[2rem] shadow-lg shadow-slate-200/50 p-6 md:p-8 space-y-4 hover:-translate-y-1 transition-all duration-300">
+              
+              {/* Premium Tech Illustration */}
+              <div className="w-full aspect-[16/10] rounded-2xl overflow-hidden relative border border-slate-100 bg-slate-50/50 shadow-inner">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src="/img/login_illustration.png" 
+                  alt="Dellcom IT Management" 
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
+                />
+              </div>
+
               <span className="inline-flex items-center gap-1.5 py-1 px-3 bg-primary/10 text-primary font-bold text-[9px] rounded-full uppercase tracking-widest leading-none">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
                 Acceso Técnico
