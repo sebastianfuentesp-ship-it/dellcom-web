@@ -82,13 +82,10 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-red-50/50 via-slate-100 to-rose-50/50 selection:bg-primary/20 selection:text-primary">
-
-      {/* Main Card: bounded, rounded, two columns on desktop */}
-      <div className="w-full max-w-4xl bg-white border border-slate-200/70 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl shadow-slate-200/60 flex flex-col md:flex-row overflow-hidden relative min-h-[600px]">
+    <div className="min-h-screen w-full flex flex-col md:flex-row selection:bg-primary/20 selection:text-primary">
 
         {/* Left Column: Welcome Visual Panel */}
-        <div className="w-full md:w-1/2 min-h-[320px] md:min-h-[600px] bg-gradient-to-br from-red-50/70 via-slate-50 to-rose-100/40 flex flex-col justify-between p-8 md:p-12 lg:p-14 relative overflow-hidden border-b md:border-b-0 md:border-r border-slate-200/60">
+        <div className="w-full md:w-1/2 min-h-[320px] md:min-h-screen bg-gradient-to-br from-red-50/70 via-slate-50 to-rose-100/40 flex flex-col justify-between p-10 md:p-16 lg:p-20 relative overflow-hidden border-b md:border-b-0 md:border-r border-slate-200/60">
 
           {/* Background Video, subtle texture under the gradient */}
           <video
@@ -133,7 +130,7 @@ export default function AdminLoginPage() {
         </div>
 
         {/* Right Column: Credentials Form */}
-        <div className="w-full md:w-1/2 min-h-[500px] p-8 md:p-12 lg:p-14 flex flex-col justify-between bg-white relative z-10">
+        <div className="w-full md:w-1/2 min-h-screen p-10 md:p-16 lg:p-20 flex flex-col justify-between bg-white relative z-10">
 
           {/* Brand mark */}
           <div className="flex items-center gap-2.5 justify-center md:justify-start">
@@ -230,7 +227,6 @@ export default function AdminLoginPage() {
 
           <div className="hidden md:block h-2"></div>
         </div>
-      </div>
     </div>
   );
 }
