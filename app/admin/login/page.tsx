@@ -1,8 +1,7 @@
 /**
  * Página de login del panel de administración: /admin/login
- * Usa signIn("credentials") de NextAuth con redirect:false para manejar
- * errores sin recargar la página. En caso de éxito redirige al dashboard.
- * Incluye video de fondo y el logo SVG de DELLCOM renderizado en línea.
+ * Rediseñada de acuerdo a la estética de tarjeta redondeada clara con ondas
+ * y tarjeta de texto glassmórfica, utilizando el video de fondo sin imágenes de IA.
  */
 "use client";
 
@@ -82,157 +81,174 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row bg-white selection:bg-primary/20 selection:text-primary overflow-hidden">
+    <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-red-50/50 via-slate-100 to-rose-50/50 selection:bg-primary/20 selection:text-primary">
       
-      {/* Left Column: Visual Panel (Beautiful light red/rose gradient + video overlay + glassmorphic layers) */}
-      <div className="group w-full md:w-1/2 min-h-[380px] md:min-h-screen bg-gradient-to-br from-red-50/70 via-slate-50 to-rose-100/30 p-8 md:p-16 lg:p-24 flex flex-col justify-between relative overflow-hidden border-b md:border-b-0 md:border-r border-slate-200/50">
+      {/* Main Login Card - Rounded and Glass-Shadow styled */}
+      <div className="w-full max-w-4xl bg-white border border-slate-200/80 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl shadow-slate-200/50 flex flex-col md:flex-row overflow-hidden relative min-h-[550px]">
         
-        {/* Background Video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0 opacity-[0.28] pointer-events-none"
-        >
-          <source src="/vid/laptop_video.mp4" type="video/mp4" />
-        </video>
-
-        {/* Glowing Auroras */}
-        <div className="absolute top-1/4 left-1/4 w-[260px] h-[260px] bg-primary/6 rounded-full blur-[80px] pointer-events-none z-0"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-[260px] h-[260px] bg-rose-500/8 rounded-full blur-[90px] pointer-events-none z-0"></div>
-
-        {/* Concentric tilted rounded box outlines (Styled like 3D glass panes that shift on hover) */}
-        <div className="absolute -right-20 -bottom-20 w-[420px] h-[520px] opacity-[0.07] pointer-events-none z-0 rotate-[22deg] border border-slate-800 rounded-[3.5rem] bg-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.01)] backdrop-blur-[1px] transition-all duration-700 ease-out group-hover:translate-x-3 group-hover:translate-y-3 group-hover:rotate-[24deg] group-hover:opacity-[0.1]" />
-        <div className="absolute -right-10 -bottom-10 w-[420px] h-[520px] opacity-[0.07] pointer-events-none z-0 rotate-[22deg] border border-slate-800 rounded-[3.5rem] bg-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.01)] backdrop-blur-[1px] transition-all duration-700 ease-out group-hover:translate-x-1.5 group-hover:translate-y-1.5 group-hover:rotate-[23deg]" />
-        <div className="absolute right-0 bottom-0 w-[420px] h-[520px] opacity-[0.07] pointer-events-none z-0 rotate-[22deg] border border-slate-800 rounded-[3.5rem] bg-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.01)] backdrop-blur-[1px] transition-all duration-700 ease-out" />
-        <div className="absolute right-10 bottom-10 w-[420px] h-[520px] opacity-[0.07] pointer-events-none z-0 rotate-[22deg] border border-slate-800 rounded-[3.5rem] bg-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.01)] backdrop-blur-[1px] transition-all duration-700 ease-out group-hover:-translate-x-1.5 group-hover:-translate-y-1.5 group-hover:rotate-[21deg]" />
-
-        {/* 8-Point Asterisk Icon inside premium glass box */}
-        <div className="relative z-10 w-16 h-16 bg-white/70 backdrop-blur-md border border-white/80 shadow-lg shadow-red-100/30 rounded-2xl flex items-center justify-center text-primary transition-all duration-500 ease-out hover:scale-105 hover:rotate-[15deg]">
-          <svg className="w-9 h-9" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="7.5" strokeLinecap="round">
-            <line x1="50" y1="15" x2="50" y2="85" />
-            <line x1="15" y1="50" x2="85" y2="50" />
-            <line x1="25.2" y1="25.2" x2="74.8" y2="74.8" />
-            <line x1="25.2" y1="74.8" x2="74.8" y2="25.2" />
-          </svg>
-        </div>
-
-        {/* Main Headline & Paragraph */}
-        <div className="relative z-10 my-auto py-12 space-y-6">
-          <span className="inline-flex items-center gap-1.5 py-1 px-3 bg-white/90 backdrop-blur-sm border border-slate-200/50 text-primary font-bold text-[9px] rounded-full uppercase tracking-widest shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-            Acceso Autorizado
-          </span>
-          <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl font-black text-slate-800 leading-none tracking-tight">
-            ¡Hola <br />
-            <span className="text-primary">Dellcom!</span>
-          </h1>
-          <p className="text-xs md:text-sm lg:text-base text-slate-500 leading-relaxed font-semibold max-w-sm">
-            Soporte IT de primer nivel, repuestos y licencias originales. Gestiona los servicios técnicos de forma eficiente y segura.
-          </p>
-        </div>
-
-        {/* Footer copyright */}
-        <div className="relative z-10">
-          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none">
-            © 2026 DELLCOM SAC. Todos los derechos reservados.
-          </p>
-        </div>
-      </div>
-
-      {/* Right Column: Form Panel */}
-      <div className="w-full md:w-1/2 min-h-[500px] md:min-h-screen bg-white p-8 md:p-16 lg:p-24 flex flex-col justify-between">
-        
-        {/* Brand Text Logo */}
-        <div className="flex items-center gap-2.5 justify-center md:justify-start">
-          <DellcomLogo className="w-8 h-8" />
-          <span className="font-headline text-lg font-black text-slate-800 tracking-tight leading-none">DELLCOM</span>
-        </div>
-
-        {/* Center Auth Form */}
-        <div className="max-w-md w-full mx-auto my-auto py-12 space-y-8">
+        {/* Left Column: Visual Panel (Waves + Background Video + Glassmorphic Greeting Card) */}
+        <div className="w-full md:w-1/2 min-h-[350px] md:min-h-[500px] bg-slate-50/50 flex flex-col justify-between p-8 md:p-12 relative overflow-hidden border-b md:border-b-0 md:border-r border-slate-200/50">
           
-          <div className="space-y-2.5">
-            <h2 className="font-headline text-3xl md:text-4xl font-black text-slate-800 tracking-tight">
-              Welcome Back!
-            </h2>
-            <p className="text-xs text-slate-400 font-semibold leading-relaxed">
-              ¿No tienes una cuenta? <span className="underline text-primary font-bold cursor-pointer hover:text-primary/80 transition-colors">Solicita acceso al administrador</span>. Toma menos de un minuto.
+          {/* Background Video */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover z-0 opacity-[0.8] pointer-events-none"
+          >
+            <source src="/vid/laptop_video.mp4" type="video/mp4" />
+          </video>
+
+          {/* Layered Gradient Waves */}
+          <svg className="absolute top-0 left-0 h-full w-[170px] md:w-[245px] pointer-events-none z-10 opacity-20" viewBox="0 0 100 200" preserveAspectRatio="none">
+            <path d="M 0,0 C 95,35 105,95 70,140 C 40,175 50,190 0,200 Z" fill="#f87171" />
+          </svg>
+          <svg className="absolute top-0 left-0 h-full w-[150px] md:w-[220px] pointer-events-none z-10 opacity-80" viewBox="0 0 100 200" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="loginWaveGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#dc2626" />
+                <stop offset="100%" stopColor="#991b1b" />
+              </linearGradient>
+            </defs>
+            <path d="M 0,0 C 85,30 100,85 65,130 C 35,165 45,185 0,200 Z" fill="url(#loginWaveGrad)" />
+          </svg>
+
+          {/* Top Brand Logo */}
+          <div className="relative z-20 flex items-center gap-2.5">
+            <DellcomLogo className="w-8 h-8" />
+            <div>
+              <span className="font-headline text-xs font-black text-slate-800 block leading-none">DELLCOM</span>
+              <span className="text-[8px] font-bold text-primary uppercase tracking-widest block mt-0.5 leading-none">IT Engineering</span>
+            </div>
+          </div>
+
+          {/* Centered Glassmorphic Greeting Card */}
+          <div className="relative z-20 my-auto py-6 flex items-center justify-center">
+            <div className="w-full max-w-sm bg-white/80 backdrop-blur-md border border-white/80 rounded-[2rem] shadow-lg shadow-slate-200/50 p-6 md:p-8 space-y-4">
+              <span className="inline-flex items-center gap-1.5 py-1 px-3 bg-primary/10 text-primary font-bold text-[9px] rounded-full uppercase tracking-widest leading-none">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                Acceso Técnico
+              </span>
+              <h1 className="font-headline text-3xl md:text-4xl font-black text-slate-800 leading-none tracking-tight">
+                ¡Hola <br />
+                <span className="text-primary">Dellcom!</span>
+              </h1>
+              <p className="text-xs md:text-sm text-slate-500 leading-relaxed font-semibold">
+                Soporte IT de primer nivel, repuestos y licencias originales. Gestiona los servicios técnicos de forma eficiente.
+              </p>
+            </div>
+          </div>
+
+          {/* Footer Label */}
+          <div className="relative z-20">
+            <p className="text-[9px] text-slate-450 font-bold uppercase tracking-widest leading-none">
+              © 2026 DELLCOM SAC.
             </p>
+          </div>
+        </div>
+
+        {/* Right Column: Form Panel (Avatar Circles + Inputs + Pill Buttons) */}
+        <div className="w-full md:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-between bg-white min-h-[500px]">
+          
+          {/* Top Header circles matching original design */}
+          <div className="flex justify-center mt-2">
+            <div className="flex items-center">
+              {/* Circle 1: Security Icon */}
+              <div className="w-12 h-12 rounded-full bg-primary/10 border-2 border-white shadow-md flex items-center justify-center text-primary relative z-10 transition-transform duration-300 hover:scale-105">
+                <span className="material-symbols-outlined text-lg leading-none">admin_panel_settings</span>
+              </div>
+              {/* Circle 2: Technical Icon */}
+              <div className="w-12 h-12 rounded-full bg-slate-100 border-2 border-white shadow-md flex items-center justify-center text-slate-600 relative -ml-4 z-0 transition-transform duration-300 hover:scale-105">
+                <span className="material-symbols-outlined text-lg leading-none">engineering</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Auth Title */}
+          <div className="text-center mt-4">
+            <h3 className="font-headline text-xl font-bold text-slate-800 tracking-tight leading-none">
+              Inicio de Sesión
+            </h3>
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-100 text-red-600 text-xs p-4 rounded-xl flex items-start gap-2.5 font-semibold animate-fade-in">
+            <div className="bg-red-50 border border-red-100 text-red-600 text-xs p-3.5 rounded-xl flex items-start gap-2.5 font-semibold animate-fade-in mt-4">
               <span className="material-symbols-outlined text-base mt-0.5">error</span>
               <span>{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Form with icons and underlined fields */}
+          <form onSubmit={handleSubmit} className="space-y-6 mt-6">
             
-            {/* Username/Email Input with Bottom-Border Style + Icon */}
-            <div className="relative flex items-center border-b-2 border-slate-200 focus-within:border-primary transition-all py-1">
-              <span className="material-symbols-outlined text-slate-400 mr-3 text-lg leading-none">mail</span>
-              <input 
-                type="text" 
-                required
-                disabled={loading}
-                value={usuario}
-                onChange={(e) => setUsuario(e.target.value)}
-                placeholder="Usuario o Correo"
-                className="w-full bg-transparent border-none focus:outline-none focus:ring-0 px-0 py-2.5 text-slate-800 text-sm font-semibold placeholder:text-slate-300"
-              />
+            {/* Email Field Group */}
+            <div className="group relative flex flex-col">
+              <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-wider mb-1">
+                Correo Electrónico
+              </label>
+              <div className="relative flex items-center border-b-2 border-slate-200 focus-within:border-primary transition-all py-1">
+                <span className="material-symbols-outlined text-slate-450 group-focus-within:text-primary transition-colors mr-3 text-lg leading-none">mail</span>
+                <input 
+                  type="text" 
+                  required
+                  disabled={loading}
+                  value={usuario}
+                  onChange={(e) => setUsuario(e.target.value)}
+                  placeholder="Usuario o Correo"
+                  className="w-full bg-transparent border-none focus:outline-none focus:ring-0 px-0 py-1.5 text-slate-800 text-sm font-semibold placeholder:text-slate-350"
+                />
+              </div>
             </div>
 
-            {/* Password Input with Bottom-Border Style + Icon */}
-            <div className="relative flex items-center border-b-2 border-slate-200 focus-within:border-primary transition-all py-1">
-              <span className="material-symbols-outlined text-slate-400 mr-3 text-lg leading-none">lock</span>
-              <input 
-                type="password" 
-                required
-                disabled={loading}
-                value={contrasena}
-                onChange={(e) => setContrasena(e.target.value)}
-                placeholder="Contraseña"
-                className="w-full bg-transparent border-none focus:outline-none focus:ring-0 px-0 py-2.5 text-slate-800 text-sm font-semibold placeholder:text-slate-300"
-              />
+            {/* Password Field Group */}
+            <div className="group relative flex flex-col">
+              <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-wider mb-1">
+                Contraseña
+              </label>
+              <div className="relative flex items-center border-b-2 border-slate-200 focus-within:border-primary transition-all py-1">
+                <span className="material-symbols-outlined text-slate-450 group-focus-within:text-primary transition-colors mr-3 text-lg leading-none">lock</span>
+                <input 
+                  type="password" 
+                  required
+                  disabled={loading}
+                  value={contrasena}
+                  onChange={(e) => setContrasena(e.target.value)}
+                  placeholder="Contraseña"
+                  className="w-full bg-transparent border-none focus:outline-none focus:ring-0 px-0 py-1.5 text-slate-800 text-sm font-semibold placeholder:text-slate-350"
+                />
+              </div>
+              <span className="text-[11px] text-slate-400 hover:text-primary transition-colors cursor-pointer font-bold block text-right mt-2">
+                ¿Necesitas una Cuenta?
+              </span>
             </div>
 
-            {/* Login button (Dark Slate Solid Button) */}
+            {/* Iniciar Sesión button (Pill shaped, Crimson Red) */}
             <button 
               type="submit" 
               disabled={loading}
-              className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-4 rounded-xl text-sm transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-2 cursor-pointer border-none"
+              className="w-full bg-primary hover:bg-primary/95 text-white font-bold py-3.5 px-6 rounded-full text-sm transition-all active:scale-[0.98] shadow-md shadow-primary/10 flex items-center justify-center gap-2 mt-6 cursor-pointer border-none"
             >
               {loading ? (
                 <span className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
               ) : (
-                <span>Login Now</span>
+                <span>Iniciar Sesión</span>
               )}
             </button>
 
-            {/* Return to Home button (Bordered Style matching Google button) */}
+            {/* Volver a Inicio button (Pill shaped, Bordered) */}
             <Link 
               href="/"
-              className="w-full bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold py-3.5 px-4 rounded-xl text-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2.5 shadow-sm"
+              className="w-full bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold py-3 px-6 rounded-full text-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2 shadow-sm"
             >
               <span className="material-symbols-outlined text-lg">arrow_back</span>
               Volver a Inicio
             </Link>
           </form>
 
-          {/* Under-form Links */}
-          <div className="text-center">
-            <span className="text-xs text-slate-400 font-semibold">
-              Forgot password? <span className="underline text-slate-800 cursor-pointer font-bold hover:text-slate-600 transition-colors">Click here</span>
-            </span>
-          </div>
-
+          {/* Under-form placeholder */}
+          <div className="h-4"></div>
         </div>
-
-        {/* Empty placeholder for alignment */}
-        <div className="hidden md:block h-8"></div>
       </div>
     </div>
   );
