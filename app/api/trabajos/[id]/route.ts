@@ -6,8 +6,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { requireRole } from "@/lib/apiAuth";
 import { z } from "zod";
 
 // Todos los campos son opcionales para permitir actualizaciones parciales
@@ -20,8 +19,8 @@ const TrabajoUpdateSchema = z.object({
 
 // Actualiza solo los campos enviados en el body
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  const auth = await requireRole(["admin", "tecnico"]);
+  if (!auth.authorized) return auth.errorResponse;
 
   const { id } = await params;
   const body = await req.json();
@@ -39,8 +38,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
 // Elimina el trabajo de forma permanente (borrado físico)
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  const auth = await requireRole(["admin"]);
+  if (!auth.authorized) return auth.errorResponse;
 
   const { id } = await params;
   await prisma.trabajoRealizado.delete({ where: { id: Number(id) } });

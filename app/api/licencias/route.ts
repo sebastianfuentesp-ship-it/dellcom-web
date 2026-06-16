@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { requireRole } from "@/lib/apiAuth";
 import { z } from "zod";
 
 // Esquema Zod para crear una licencia nueva
@@ -37,11 +38,11 @@ export async function GET() {
 
 // Crea una licencia nueva asignada al usuario autenticado
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user?.email) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  const auth = await requireRole(["admin"]);
+  if (!auth.authorized) return auth.errorResponse;
 
   // Busca el usuario para obtener su ID y asignarlo a la licencia
-  const user = await prisma.usuario.findUnique({ where: { email: session.user.email } });
+  const user = await prisma.usuario.findUnique({ where: { email: auth.email } });
   if (!user) return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 });
 
   const body = await req.json();

@@ -8,8 +8,7 @@
  * Devuelve { success, url, name, size, storage: "s3" | "local" }.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { requireRole, type Rol } from "@/lib/apiAuth";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
@@ -23,14 +22,15 @@ const s3Client = new S3Client({
   },
 });
 
+// Qué roles pueden subir a cada carpeta (además de admin, que siempre puede)
+const folderAllowedRoles: Record<string, Rol[]> = {
+  productos: ["admin", "vendedor"],
+  portfolio: ["admin", "tecnico"],
+  uploads: ["admin", "tecnico"],
+};
+
 export async function POST(req: NextRequest) {
   try {
-    // Verificar autenticación
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-    }
-
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
     const folderParam = (formData.get("folder") as string | null) || "uploads";
@@ -42,6 +42,10 @@ export async function POST(req: NextRequest) {
       uploads: "uploads",
     };
     const folder = allowedFolders[folderParam] ?? "uploads";
+
+    // Verificar autenticación y que el rol pueda subir a esta carpeta específica
+    const auth = await requireRole(folderAllowedRoles[folder]);
+    if (!auth.authorized) return auth.errorResponse;
 
     if (!file) {
       return NextResponse.json({ error: "No se proporcionó ningún archivo" }, { status: 400 });

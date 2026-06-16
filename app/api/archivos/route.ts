@@ -6,8 +6,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { requireRole } from "@/lib/apiAuth";
 import { z } from "zod";
 
 // Esquema Zod para crear un archivo técnico
@@ -32,11 +31,11 @@ export async function GET() {
 
 // Crea un archivo nuevo asignado al usuario autenticado
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user?.email) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  const auth = await requireRole(["admin", "tecnico"]);
+  if (!auth.authorized) return auth.errorResponse;
 
   // Busca el usuario para obtener su ID y asignarlo al registro
-  const user = await prisma.usuario.findUnique({ where: { email: session.user.email } });
+  const user = await prisma.usuario.findUnique({ where: { email: auth.email } });
   if (!user) return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 });
 
   const body = await req.json();

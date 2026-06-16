@@ -5,8 +5,12 @@
  * Reglas de acceso:
  * - GET de productos/servicios/trabajos/categorias/archivos → público (sin sesión)
  * - Todo lo demás bajo /api/ o /admin/ → requiere JWT válido
- * - Escritura (POST/PUT/DELETE/PATCH) en /api/licencias y /api/archivos → solo admin
+ * - Escritura (POST/PUT/DELETE/PATCH) en /api/licencias → solo admin
+ * - Escritura en /api/archivos → admin o tecnico (vendedor bloqueado)
  * - Gestión de usuarios (/api/admin/usuarios) → solo admin
+ * Nota: las restricciones mas finas (p. ej. que DELETE quede exclusivo de admin
+ * incluso para roles con permiso de escritura) se aplican a nivel de cada ruta
+ * via `requireRole()` en lib/apiAuth.ts.
  */
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
@@ -35,13 +39,22 @@ export default withAuth(
     }
 
     const esAdmin = token?.role === "admin";
+    const esTecnico = token?.role === "tecnico";
     const esEscritura = ["POST", "PUT", "DELETE", "PATCH"].includes(method);
 
-    // Técnico y vendedor NO pueden modificar licencias ni archivos
+    // Licencias: solo admin puede crear, editar o eliminar
+    if (path.startsWith("/api/licencias") && !esAdmin && esEscritura) {
+      return NextResponse.json(
+        { error: "No tienes permisos para esta accion" },
+        { status: 403 }
+      );
+    }
+
+    // Archivos/Drivers: admin y tecnico pueden escribir; vendedor no
     if (
-      (path.startsWith("/api/licencias") ||
-        path.startsWith("/api/archivos")) &&
+      path.startsWith("/api/archivos") &&
       !esAdmin &&
+      !esTecnico &&
       esEscritura
     ) {
       return NextResponse.json(

@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { requireRole } from "@/lib/apiAuth";
 import { z } from "zod";
 
 // Esquema Zod para cambiar el estado de lectura de un mensaje
@@ -77,10 +78,8 @@ export async function PUT(req: NextRequest) {
 // Elimina un mensaje de forma permanente usando el ID en el query string (?id=X)
 export async function DELETE(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-    }
+    const auth = await requireRole(["admin"]);
+    if (!auth.authorized) return auth.errorResponse;
 
     const { searchParams } = new URL(req.url);
     const idParam = searchParams.get("id");
