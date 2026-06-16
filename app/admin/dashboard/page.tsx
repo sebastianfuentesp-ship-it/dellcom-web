@@ -938,6 +938,70 @@ export default function AdminDashboardPage() {
     return "ok";
   };
 
+  // Must be before early returns to respect Rules of Hooks
+  const fileCountByType = (type: string) => archivos.filter(a => a.tipo === type).length;
+
+  const tabStats = useMemo(() => {
+    switch (activeTab) {
+      case "licenses":
+        return [
+          { label: "Licencias Activas", value: licencias.filter(l => l.estado === "activo").length, suffix: "", icon: "verified_user", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Próximas a Vencer", value: licencias.filter(l => getLicenseUrgency(l.fecha_fin) === "warning").length, suffix: "", icon: "schedule", bg: "bg-orange-50", fg: "text-orange-500", valueCls: "text-orange-500" },
+          { label: "Alertas Críticas", value: licencias.filter(l => getLicenseUrgency(l.fecha_fin) === "expired").length, suffix: "", icon: "error", bg: "bg-red-100", fg: "text-red-700", valueCls: "text-red-600" },
+        ];
+      case "files":
+        return [
+          { label: "Total de Archivos", value: archivos.length, suffix: "", icon: "folder_zip", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Controladores", value: fileCountByType("driver"), suffix: "", icon: "settings_input_component", bg: "bg-blue-50", fg: "text-blue-600", valueCls: "text-on-surface" },
+          { label: "Programas (.exe)", value: fileCountByType("programa"), suffix: "", icon: "install_desktop", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+        ];
+      case "products":
+        return [
+          { label: "Productos Activos", value: productos.filter(p => p.activo).length, suffix: "", icon: "inventory_2", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Total en Catálogo", value: productos.length, suffix: "", icon: "storefront", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Categorías Activas", value: categorias.filter(c => c.activo).length, suffix: "", icon: "local_offer", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+        ];
+      case "services":
+        return [
+          { label: "Servicios Activos", value: servicios.filter(s => s.activo).length, suffix: "", icon: "build", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Total Servicios", value: servicios.length, suffix: "", icon: "miscellaneous_services", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Trabajos Portafolio", value: trabajos.length, suffix: "", icon: "photo_library", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+        ];
+      case "portfolio":
+        return [
+          { label: "Trabajos Realizados", value: trabajos.length, suffix: "", icon: "photo_library", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Con Servicio Asociado", value: trabajos.filter(t => t.id_servicio).length, suffix: "", icon: "link", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Servicios Disponibles", value: servicios.filter(s => s.activo).length, suffix: "", icon: "build", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+        ];
+      case "categories":
+        return [
+          { label: "Categorías Activas", value: categorias.filter(c => c.activo).length, suffix: "", icon: "local_offer", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Total Categorías", value: categorias.length, suffix: "", icon: "category", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Productos en Catálogo", value: productos.filter(p => p.activo).length, suffix: "", icon: "inventory_2", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+        ];
+      case "messages": {
+        const unread = mensajes.filter(m => !m.leido).length;
+        return [
+          { label: "Sin Leer", value: unread, suffix: "", icon: "mark_email_unread", bg: unread > 0 ? "bg-red-100" : "bg-slate-100", fg: unread > 0 ? "text-red-700" : "text-slate-500", valueCls: unread > 0 ? "text-red-600" : "text-on-surface" },
+          { label: "Total Mensajes", value: mensajes.length, suffix: "", icon: "mail", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+          { label: "Leídos", value: mensajes.filter(m => m.leido).length, suffix: "", icon: "mark_email_read", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+        ];
+      }
+      case "users":
+        return [
+          { label: "Personal Activo", value: usuarios.filter(u => u.activo).length, suffix: "", icon: "group", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Administradores", value: usuarios.filter(u => u.rol === "admin").length, suffix: "", icon: "admin_panel_settings", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Técnicos", value: usuarios.filter(u => u.rol === "tecnico").length, suffix: "", icon: "engineering", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
+        ];
+      default:
+        return [
+          { label: "Licencias Activas", value: licencias.filter(l => l.estado === "activo").length, suffix: "", icon: "verified_user", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
+          { label: "Controladores & Drivers", value: archivos.length, suffix: " archivos", icon: "folder_zip", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Alertas de Vencimiento", value: licencias.filter(l => getLicenseUrgency(l.fecha_fin) !== "ok").length, suffix: " críticas", icon: "error", bg: "bg-red-100", fg: "text-red-700", valueCls: "text-red-600" },
+        ];
+    }
+  }, [activeTab, licencias, archivos, productos, categorias, mensajes, usuarios, servicios, trabajos]);
+
   if (status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
@@ -1004,70 +1068,6 @@ export default function AdminDashboardPage() {
     c.nombre.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Group files into categories
-  const fileCountByType = (type: string) => archivos.filter(a => a.tipo === type).length;
-
-  // Contextual stat cards — change based on active tab
-  const tabStats = useMemo(() => {
-    switch (activeTab) {
-      case "licenses":
-        return [
-          { label: "Licencias Activas", value: licencias.filter(l => l.estado === "activo").length, suffix: "", icon: "verified_user", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
-          { label: "Próximas a Vencer", value: licencias.filter(l => getLicenseUrgency(l.fecha_fin) === "warning").length, suffix: "", icon: "schedule", bg: "bg-orange-50", fg: "text-orange-500", valueCls: "text-orange-500" },
-          { label: "Alertas Críticas", value: licencias.filter(l => getLicenseUrgency(l.fecha_fin) === "expired").length, suffix: "", icon: "error", bg: "bg-red-100", fg: "text-red-700", valueCls: "text-red-600" },
-        ];
-      case "files":
-        return [
-          { label: "Total de Archivos", value: archivos.length, suffix: "", icon: "folder_zip", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
-          { label: "Controladores", value: fileCountByType("driver"), suffix: "", icon: "settings_input_component", bg: "bg-blue-50", fg: "text-blue-600", valueCls: "text-on-surface" },
-          { label: "Programas (.exe)", value: fileCountByType("programa"), suffix: "", icon: "install_desktop", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
-        ];
-      case "products":
-        return [
-          { label: "Productos Activos", value: productos.filter(p => p.activo).length, suffix: "", icon: "inventory_2", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
-          { label: "Total en Catálogo", value: productos.length, suffix: "", icon: "storefront", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
-          { label: "Categorías Activas", value: categorias.filter(c => c.activo).length, suffix: "", icon: "local_offer", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
-        ];
-      case "services":
-        return [
-          { label: "Servicios Activos", value: servicios.filter(s => s.activo).length, suffix: "", icon: "build", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
-          { label: "Total Servicios", value: servicios.length, suffix: "", icon: "miscellaneous_services", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
-          { label: "Trabajos Portafolio", value: trabajos.length, suffix: "", icon: "photo_library", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
-        ];
-      case "portfolio":
-        return [
-          { label: "Trabajos Realizados", value: trabajos.length, suffix: "", icon: "photo_library", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
-          { label: "Con Servicio Asociado", value: trabajos.filter(t => t.id_servicio).length, suffix: "", icon: "link", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
-          { label: "Servicios Disponibles", value: servicios.filter(s => s.activo).length, suffix: "", icon: "build", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
-        ];
-      case "categories":
-        return [
-          { label: "Categorías Activas", value: categorias.filter(c => c.activo).length, suffix: "", icon: "local_offer", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
-          { label: "Total Categorías", value: categorias.length, suffix: "", icon: "category", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
-          { label: "Productos en Catálogo", value: productos.filter(p => p.activo).length, suffix: "", icon: "inventory_2", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
-        ];
-      case "messages": {
-        const unread = mensajes.filter(m => !m.leido).length;
-        return [
-          { label: "Sin Leer", value: unread, suffix: "", icon: "mark_email_unread", bg: unread > 0 ? "bg-red-100" : "bg-slate-100", fg: unread > 0 ? "text-red-700" : "text-slate-500", valueCls: unread > 0 ? "text-red-600" : "text-on-surface" },
-          { label: "Total Mensajes", value: mensajes.length, suffix: "", icon: "mail", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
-          { label: "Leídos", value: mensajes.filter(m => m.leido).length, suffix: "", icon: "mark_email_read", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
-        ];
-      }
-      case "users":
-        return [
-          { label: "Personal Activo", value: usuarios.filter(u => u.activo).length, suffix: "", icon: "group", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
-          { label: "Administradores", value: usuarios.filter(u => u.rol === "admin").length, suffix: "", icon: "admin_panel_settings", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
-          { label: "Técnicos", value: usuarios.filter(u => u.rol === "tecnico").length, suffix: "", icon: "engineering", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
-        ];
-      default:
-        return [
-          { label: "Licencias Activas", value: licencias.filter(l => l.estado === "activo").length, suffix: "", icon: "verified_user", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
-          { label: "Controladores & Drivers", value: archivos.length, suffix: " archivos", icon: "folder_zip", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
-          { label: "Alertas de Vencimiento", value: licencias.filter(l => getLicenseUrgency(l.fecha_fin) !== "ok").length, suffix: " críticas", icon: "error", bg: "bg-red-100", fg: "text-red-700", valueCls: "text-red-600" },
-        ];
-    }
-  }, [activeTab, licencias, archivos, productos, categorias, mensajes, usuarios, servicios, trabajos]);
 
   return (
     <div className="bg-slate-50 min-h-screen text-on-surface font-headline overflow-hidden flex">
