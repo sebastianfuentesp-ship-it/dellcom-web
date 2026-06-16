@@ -1068,6 +1068,10 @@ export default function AdminDashboardPage() {
     c.nombre.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const unreadMessagesCount = mensajes.filter((m) => !m.leido).length;
+  const expiredLicensesCount = licencias.filter((lic) => getLicenseUrgency(lic.fecha_fin) === "expired").length;
+  const warningLicensesCount = licencias.filter((lic) => getLicenseUrgency(lic.fecha_fin) === "warning").length;
+  const totalUrgentLicenses = expiredLicensesCount + warningLicensesCount;
 
   return (
     <div className="bg-slate-50 min-h-screen text-on-surface font-headline overflow-hidden flex">
@@ -1082,7 +1086,30 @@ export default function AdminDashboardPage() {
           </div>
         </div>
         
-        <nav className="flex-1 space-y-1 overflow-y-auto max-h-[calc(100vh-180px)] no-scrollbar">
+        <nav className="flex-1 space-y-1 overflow-y-auto max-h-[calc(100vh-180px)] no-scrollbar pb-6">
+          
+          {/* Group: CLIENTES Y SOPORTE */}
+          <div className="px-6 pt-2 pb-1 text-[9px] font-black text-slate-400 uppercase tracking-widest select-none">
+            Clientes y Soporte
+          </div>
+
+          <button 
+            onClick={() => { setActiveTab("messages"); setSearchQuery(""); }}
+            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
+              activeTab === "messages"
+                ? "text-primary font-extrabold border-primary bg-primary/5"
+                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
+            }`}
+          >
+            <span className={`material-symbols-outlined text-[20px] ${activeTab === "messages" ? "text-primary" : "text-slate-400"}`}>mail</span>
+            <span className="text-sm">Mensajes de Contacto</span>
+            {unreadMessagesCount > 0 && (
+              <span className="ml-auto w-5 h-5 rounded-full bg-primary text-white text-[10px] font-black flex items-center justify-center animate-pulse shadow-sm shadow-red-100 shrink-0">
+                {unreadMessagesCount}
+              </span>
+            )}
+          </button>
+
           <button 
             onClick={() => { setActiveTab("licenses"); setSearchQuery(""); }}
             className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
@@ -1093,19 +1120,19 @@ export default function AdminDashboardPage() {
           >
             <span className={`material-symbols-outlined text-[20px] ${activeTab === "licenses" ? "text-primary" : "text-slate-400"}`}>verified_user</span>
             <span className="text-sm">Gestión de Licencias</span>
+            {totalUrgentLicenses > 0 && (
+              <span className={`ml-auto w-5 h-5 rounded-full text-white text-[10px] font-black flex items-center justify-center shadow-sm shrink-0 ${
+                expiredLicensesCount > 0 ? "bg-red-600 animate-pulse" : "bg-orange-500"
+              }`}>
+                {totalUrgentLicenses}
+              </span>
+            )}
           </button>
           
-          <button 
-            onClick={() => { setActiveTab("files"); setSearchQuery(""); }}
-            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
-              activeTab === "files"
-                ? "text-primary font-extrabold border-primary bg-primary/5"
-                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
-            }`}
-          >
-            <span className={`material-symbols-outlined text-[20px] ${activeTab === "files" ? "text-primary" : "text-slate-400"}`}>folder_open</span>
-            <span className="text-sm">Archivos y Drivers</span>
-          </button>
+          {/* Group: INVENTARIO Y RECURSOS */}
+          <div className="px-6 pt-5 pb-1 text-[9px] font-black text-slate-400 uppercase tracking-widest select-none">
+            Inventario y Recursos
+          </div>
 
           <button 
             onClick={() => { setActiveTab("products"); setSearchQuery(""); }}
@@ -1132,6 +1159,23 @@ export default function AdminDashboardPage() {
           </button>
 
           <button 
+            onClick={() => { setActiveTab("files"); setSearchQuery(""); }}
+            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
+              activeTab === "files"
+                ? "text-primary font-extrabold border-primary bg-primary/5"
+                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
+            }`}
+          >
+            <span className={`material-symbols-outlined text-[20px] ${activeTab === "files" ? "text-primary" : "text-slate-400"}`}>folder_open</span>
+            <span className="text-sm">Archivos y Drivers</span>
+          </button>
+
+          {/* Group: CONTENIDO PÚBLICO */}
+          <div className="px-6 pt-5 pb-1 text-[9px] font-black text-slate-400 uppercase tracking-widest select-none">
+            Contenido Público
+          </div>
+
+          <button 
             onClick={() => { setActiveTab("services"); setSearchQuery(""); }}
             className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
               activeTab === "services"
@@ -1155,30 +1199,24 @@ export default function AdminDashboardPage() {
             <span className="text-sm">Trabajos Realizados</span>
           </button>
 
-          <button 
-            onClick={() => { setActiveTab("messages"); setSearchQuery(""); }}
-            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
-              activeTab === "messages"
-                ? "text-primary font-extrabold border-primary bg-primary/5"
-                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
-            }`}
-          >
-            <span className={`material-symbols-outlined text-[20px] ${activeTab === "messages" ? "text-primary" : "text-slate-400"}`}>mail</span>
-            <span className="text-sm">Mensajes de Contacto</span>
-          </button>
-
+          {/* Group: SISTEMA */}
           {(session?.user as any)?.role === "admin" && (
-            <button 
-              onClick={() => { setActiveTab("users"); setSearchQuery(""); }}
-              className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
-                activeTab === "users"
-                  ? "text-primary font-extrabold border-primary bg-primary/5"
-                  : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
-              }`}
-            >
-              <span className={`material-symbols-outlined text-[20px] ${activeTab === "users" ? "text-primary" : "text-slate-400"}`}>group</span>
-              <span className="text-sm">Gestión de Personal</span>
-            </button>
+            <>
+              <div className="px-6 pt-5 pb-1 text-[9px] font-black text-slate-400 uppercase tracking-widest select-none">
+                Sistema
+              </div>
+              <button 
+                onClick={() => { setActiveTab("users"); setSearchQuery(""); }}
+                className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
+                  activeTab === "users"
+                    ? "text-primary font-extrabold border-primary bg-primary/5"
+                    : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
+                }`}
+              >
+                <span className={`material-symbols-outlined text-[20px] ${activeTab === "users" ? "text-primary" : "text-slate-400"}`}>group</span>
+                <span className="text-sm">Gestión de Personal</span>
+              </button>
+            </>
           )}
         </nav>
 
