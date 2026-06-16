@@ -87,7 +87,52 @@ export default function AdminLoginPage() {
       {/* Main Card: bounded, rounded, two columns on desktop */}
       <div className="w-full max-w-4xl bg-white border border-slate-200/70 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl shadow-slate-200/60 flex flex-col md:flex-row overflow-hidden relative min-h-[600px]">
 
-        {/* Left Column: Credentials Form */}
+        {/* Left Column: Welcome Visual Panel */}
+        <div className="w-full md:w-1/2 min-h-[320px] md:min-h-[600px] bg-gradient-to-br from-red-50/70 via-slate-50 to-rose-100/40 flex flex-col justify-between p-8 md:p-12 lg:p-14 relative overflow-hidden border-b md:border-b-0 md:border-r border-slate-200/60">
+
+          {/* Background Video, subtle texture under the gradient */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover z-0 opacity-[0.18] pointer-events-none"
+          >
+            <source src="/vid/laptop_video.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-transparent to-white/40 z-0 pointer-events-none"></div>
+
+          {/* Decorative tilted rounded arcs (geometric, modern accent) */}
+          <div className="absolute -right-16 -bottom-16 w-[380px] h-[460px] opacity-[0.06] pointer-events-none z-0 rotate-[18deg] border-2 border-slate-800 rounded-[3rem]" />
+          <div className="absolute right-6 bottom-6 w-[380px] h-[460px] opacity-[0.06] pointer-events-none z-0 rotate-[18deg] border-2 border-slate-800 rounded-[3rem]" />
+
+          {/* Status badge */}
+          <div className="relative z-20 flex justify-end">
+            <span className="inline-flex items-center gap-1.5 py-1 px-3 bg-white/70 backdrop-blur-md border border-white/80 text-primary font-bold text-[9px] rounded-full uppercase tracking-widest leading-none shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+              Acceso Técnico
+            </span>
+          </div>
+
+          {/* Centered Greeting */}
+          <div className="relative z-20 my-auto py-10 space-y-4">
+            <h1 className="font-headline text-4xl md:text-5xl font-black text-slate-800 leading-none tracking-tight">
+              ¡Hola, <br /><span className="text-primary">Dellcom!</span>
+            </h1>
+            <p className="text-xs md:text-sm text-slate-500 leading-relaxed font-semibold max-w-sm">
+              Soporte IT de primer nivel, repuestos y licencias originales. Gestiona los servicios técnicos de forma eficiente y segura desde un solo panel.
+            </p>
+          </div>
+
+          {/* Footer */}
+          <div className="relative z-20">
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none">
+              © 2026 DELLCOM SAC. Todos los derechos reservados.
+            </p>
+          </div>
+        </div>
+
+        {/* Right Column: Credentials Form */}
         <div className="w-full md:w-1/2 min-h-[500px] p-8 md:p-12 lg:p-14 flex flex-col justify-between bg-white relative z-10">
 
           {/* Brand mark */}
@@ -184,51 +229,6 @@ export default function AdminLoginPage() {
           </div>
 
           <div className="hidden md:block h-2"></div>
-        </div>
-
-        {/* Right Column: Welcome Visual Panel */}
-        <div className="w-full md:w-1/2 min-h-[320px] md:min-h-[600px] bg-gradient-to-br from-red-50/70 via-slate-50 to-rose-100/40 flex flex-col justify-between p-8 md:p-12 lg:p-14 relative overflow-hidden border-t md:border-t-0 md:border-l border-slate-200/60">
-
-          {/* Background Video, subtle texture under the gradient */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover z-0 opacity-[0.18] pointer-events-none"
-          >
-            <source src="/vid/laptop_video.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-transparent to-white/40 z-0 pointer-events-none"></div>
-
-          {/* Decorative tilted rounded arcs (geometric, modern accent) */}
-          <div className="absolute -right-16 -bottom-16 w-[380px] h-[460px] opacity-[0.06] pointer-events-none z-0 rotate-[18deg] border-2 border-slate-800 rounded-[3rem]" />
-          <div className="absolute right-6 bottom-6 w-[380px] h-[460px] opacity-[0.06] pointer-events-none z-0 rotate-[18deg] border-2 border-slate-800 rounded-[3rem]" />
-
-          {/* Status badge */}
-          <div className="relative z-20 flex justify-end">
-            <span className="inline-flex items-center gap-1.5 py-1 px-3 bg-white/70 backdrop-blur-md border border-white/80 text-primary font-bold text-[9px] rounded-full uppercase tracking-widest leading-none shadow-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-              Acceso Técnico
-            </span>
-          </div>
-
-          {/* Centered Greeting */}
-          <div className="relative z-20 my-auto py-10 space-y-4">
-            <h1 className="font-headline text-4xl md:text-5xl font-black text-slate-800 leading-none tracking-tight">
-              ¡Hola, <br /><span className="text-primary">Dellcom!</span>
-            </h1>
-            <p className="text-xs md:text-sm text-slate-500 leading-relaxed font-semibold max-w-sm">
-              Soporte IT de primer nivel, repuestos y licencias originales. Gestiona los servicios técnicos de forma eficiente y segura desde un solo panel.
-            </p>
-          </div>
-
-          {/* Footer */}
-          <div className="relative z-20">
-            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none">
-              © 2026 DELLCOM SAC. Todos los derechos reservados.
-            </p>
-          </div>
         </div>
       </div>
     </div>
