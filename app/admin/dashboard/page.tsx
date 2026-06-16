@@ -155,15 +155,15 @@ export default function AdminDashboardPage() {
   // Dark mode state
   const [darkMode, setDarkMode] = useState(false);
 
-  // Sidebar collapsible groups
+  // Sidebar collapsible groups — all closed by default
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
-    clientes: true, inventario: true, contenido: true, sistema: true,
+    clientes: false, inventario: false, contenido: false, sistema: false,
   });
   const toggleGroup = (key: string) =>
     setOpenGroups((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  // Section guide visibility (shown by default once, dismissible)
-  const [guideVisible, setGuideVisible] = useState(true);
+  // Section guide visibility — toggled via the ? button in the header
+  const [guideVisible, setGuideVisible] = useState(false);
 
   // Load theme preference on mount
   useEffect(() => {
@@ -1439,7 +1439,7 @@ export default function AdminDashboardPage() {
           {(() => {
             const NavItem = ({ tab, icon, label, badge }: { tab: string; icon: string; label: string; badge?: React.ReactNode }) => (
               <button
-                onClick={() => { setActiveTab(tab); setSearchQuery(""); setSidebarOpen(false); setGuideVisible(true); }}
+                onClick={() => { setActiveTab(tab); setSearchQuery(""); setSidebarOpen(false); }}
                 className={`w-full flex items-center gap-3 px-6 py-3 transition-colors duration-150 border-l-4 cursor-pointer text-left ${
                   activeTab === tab
                     ? "text-primary font-extrabold border-primary bg-primary/5"
@@ -1588,7 +1588,18 @@ export default function AdminDashboardPage() {
           </div>
           
           {/* User Profile dropdown panel */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            {/* Guía de sección */}
+            <button
+              onClick={() => setGuideVisible((v) => !v)}
+              className="w-10 h-10 rounded-xl flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark-theme-toggle transition-all cursor-pointer text-slate-600 hover:text-on-surface"
+              title={guideVisible ? "Ocultar guía" : "Mostrar guía de esta sección"}
+            >
+              <span className="material-symbols-outlined text-[20px]">
+                {guideVisible ? "help" : "help_outline"}
+              </span>
+            </button>
+
             {/* Toggle Modo Oscuro */}
             <button
               onClick={toggleDarkMode}
