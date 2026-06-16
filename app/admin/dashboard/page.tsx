@@ -155,6 +155,16 @@ export default function AdminDashboardPage() {
   // Dark mode state
   const [darkMode, setDarkMode] = useState(false);
 
+  // Sidebar collapsible groups
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
+    clientes: true, inventario: true, contenido: true, sistema: true,
+  });
+  const toggleGroup = (key: string) =>
+    setOpenGroups((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  // Section guide visibility (shown by default once, dismissible)
+  const [guideVisible, setGuideVisible] = useState(true);
+
   // Load theme preference on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -1017,7 +1027,7 @@ export default function AdminDashboardPage() {
       case "services":
         return [
           { label: "Servicios Activos", value: servicios.filter(s => s.activo).length, suffix: "", icon: "build", bg: "bg-emerald-50", fg: "text-emerald-600", valueCls: "text-on-surface" },
-          { label: "Total Servicios", value: servicios.length, suffix: "", icon: "miscellaneous_services", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
+          { label: "Total Servicios", value: servicios.length, suffix: "", icon: "design_services", bg: "bg-red-50", fg: "text-red-600", valueCls: "text-on-surface" },
           { label: "Trabajos Portafolio", value: trabajos.length, suffix: "", icon: "photo_library", bg: "bg-slate-100", fg: "text-slate-500", valueCls: "text-on-surface" },
         ];
       case "portfolio":
@@ -1352,6 +1362,45 @@ export default function AdminDashboardPage() {
         .dark-theme .fixed footer button:hover {
           background-color: var(--bg-hover) !important;
         }
+
+        /* Card hover in dark mode */
+        .dark-theme .bg-white:hover,
+        .dark-theme .hover\\:bg-slate-50:hover {
+          background-color: #27374d !important;
+        }
+
+        /* Material icons visible in dark mode */
+        .dark-theme .material-symbols-outlined {
+          color: inherit !important;
+        }
+        .dark-theme .text-slate-400 .material-symbols-outlined,
+        .dark-theme span.material-symbols-outlined.text-slate-400 {
+          color: #94a3b8 !important;
+        }
+
+        /* Product / portfolio image containers in dark mode */
+        .dark-theme .border-slate-100.bg-white,
+        .dark-theme .bg-white.border-slate-100 {
+          background-color: #1e293b !important;
+          border-color: #334155 !important;
+        }
+        .dark-theme img {
+          border-color: transparent !important;
+        }
+
+        /* Stat card icon chips */
+        .dark-theme .rounded-xl.bg-slate-100 {
+          background-color: #334155 !important;
+        }
+        .dark-theme .rounded-xl.bg-slate-100 .material-symbols-outlined {
+          color: #94a3b8 !important;
+        }
+
+        /* Image preview thumbnail border */
+        .dark-theme .img-thumb-wrap {
+          background-color: #1e293b !important;
+          border-color: #334155 !important;
+        }
       ` }} />
       
       {/* Mobile/tablet backdrop overlay - click to close sidebar */}
@@ -1384,155 +1433,95 @@ export default function AdminDashboardPage() {
           </button>
         </div>
 
-        <nav className="flex-1 space-y-1 overflow-y-auto max-h-[calc(100vh-180px)] no-scrollbar pb-6">
-          
-          {/* Group: INICIO */}
-          <div className="px-6 pt-2 pb-1 text-[9px] font-black text-slate-400 uppercase tracking-widest select-none">
-            Inicio
-          </div>
+        <nav className="flex-1 overflow-y-auto max-h-[calc(100vh-180px)] no-scrollbar pb-6">
 
-          <button 
-            onClick={() => { setActiveTab("overview"); setSearchQuery(""); setSidebarOpen(false); }}
-            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
-              activeTab === "overview"
-                ? "text-primary font-extrabold border-primary bg-primary/5"
-                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
-            }`}
-          >
-            <span className={`material-symbols-outlined text-[20px] ${activeTab === "overview" ? "text-primary" : "text-slate-400"}`}>dashboard</span>
-            <span className="text-sm">Resumen General</span>
-          </button>
-          
-          {/* Group: CLIENTES Y SOPORTE */}
-          <div className="px-6 pt-2 pb-1 text-[9px] font-black text-slate-400 uppercase tracking-widest select-none">
-            Clientes y Soporte
-          </div>
-
-          <button 
-            onClick={() => { setActiveTab("messages"); setSearchQuery(""); setSidebarOpen(false); }}
-            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
-              activeTab === "messages"
-                ? "text-primary font-extrabold border-primary bg-primary/5"
-                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
-            }`}
-          >
-            <span className={`material-symbols-outlined text-[20px] ${activeTab === "messages" ? "text-primary" : "text-slate-400"}`}>mail</span>
-            <span className="text-sm">Mensajes de Contacto</span>
-            {unreadMessagesCount > 0 && (
-              <span className="ml-auto w-5 h-5 rounded-full bg-primary text-white text-[10px] font-black flex items-center justify-center animate-pulse shadow-sm shadow-red-100 shrink-0">
-                {unreadMessagesCount}
-              </span>
-            )}
-          </button>
-
-          <button 
-            onClick={() => { setActiveTab("licenses"); setSearchQuery(""); setSidebarOpen(false); }}
-            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
-              activeTab === "licenses"
-                ? "text-primary font-extrabold border-primary bg-primary/5"
-                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
-            }`}
-          >
-            <span className={`material-symbols-outlined text-[20px] ${activeTab === "licenses" ? "text-primary" : "text-slate-400"}`}>verified_user</span>
-            <span className="text-sm">Gestión de Licencias</span>
-            {totalUrgentLicenses > 0 && (
-              <span className={`ml-auto w-5 h-5 rounded-full text-white text-[10px] font-black flex items-center justify-center shadow-sm shrink-0 ${
-                expiredLicensesCount > 0 ? "bg-red-600 animate-pulse" : "bg-orange-500"
-              }`}>
-                {totalUrgentLicenses}
-              </span>
-            )}
-          </button>
-          
-          {/* Group: INVENTARIO Y RECURSOS */}
-          <div className="px-6 pt-5 pb-1 text-[9px] font-black text-slate-400 uppercase tracking-widest select-none">
-            Inventario y Recursos
-          </div>
-
-          <button 
-            onClick={() => { setActiveTab("products"); setSearchQuery(""); setSidebarOpen(false); }}
-            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
-              activeTab === "products"
-                ? "text-primary font-extrabold border-primary bg-primary/5"
-                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
-            }`}
-          >
-            <span className={`material-symbols-outlined text-[20px] ${activeTab === "products" ? "text-primary" : "text-slate-400"}`}>inventory_2</span>
-            <span className="text-sm">Catálogo de Suministros</span>
-          </button>
-
-          <button 
-            onClick={() => { setActiveTab("categories"); setSearchQuery(""); setSidebarOpen(false); }}
-            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
-              activeTab === "categories"
-                ? "text-primary font-extrabold border-primary bg-primary/5"
-                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
-            }`}
-          >
-            <span className={`material-symbols-outlined text-[20px] ${activeTab === "categories" ? "text-primary" : "text-slate-400"}`}>category</span>
-            <span className="text-sm">Categorías Catálogo</span>
-          </button>
-
-          <button 
-            onClick={() => { setActiveTab("files"); setSearchQuery(""); setSidebarOpen(false); }}
-            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
-              activeTab === "files"
-                ? "text-primary font-extrabold border-primary bg-primary/5"
-                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
-            }`}
-          >
-            <span className={`material-symbols-outlined text-[20px] ${activeTab === "files" ? "text-primary" : "text-slate-400"}`}>folder_open</span>
-            <span className="text-sm">Archivos y Drivers</span>
-          </button>
-
-          {/* Group: CONTENIDO PÚBLICO */}
-          <div className="px-6 pt-5 pb-1 text-[9px] font-black text-slate-400 uppercase tracking-widest select-none">
-            Contenido Público
-          </div>
-
-          <button 
-            onClick={() => { setActiveTab("services"); setSearchQuery(""); setSidebarOpen(false); }}
-            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
-              activeTab === "services"
-                ? "text-primary font-extrabold border-primary bg-primary/5"
-                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
-            }`}
-          >
-            <span className={`material-symbols-outlined text-[20px] ${activeTab === "services" ? "text-primary" : "text-slate-400"}`}>build</span>
-            <span className="text-sm">Gestión de Servicios</span>
-          </button>
-
-          <button 
-            onClick={() => { setActiveTab("portfolio"); setSearchQuery(""); setSidebarOpen(false); }}
-            className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
-              activeTab === "portfolio"
-                ? "text-primary font-extrabold border-primary bg-primary/5"
-                : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
-            }`}
-          >
-            <span className={`material-symbols-outlined text-[20px] ${activeTab === "portfolio" ? "text-primary" : "text-slate-400"}`}>photo_library</span>
-            <span className="text-sm">Trabajos Realizados</span>
-          </button>
-
-          {/* Group: SISTEMA */}
-          {(session?.user as any)?.role === "admin" && (
-            <>
-              <div className="px-6 pt-5 pb-1 text-[9px] font-black text-slate-400 uppercase tracking-widest select-none">
-                Sistema
-              </div>
-              <button 
-                onClick={() => { setActiveTab("users"); setSearchQuery(""); setSidebarOpen(false); }}
-                className={`w-full flex items-center gap-3 px-6 py-3.5 transition-colors duration-200 border-l-4 cursor-pointer ${
-                  activeTab === "users"
+          {/* NavItem helper rendered inline */}
+          {(() => {
+            const NavItem = ({ tab, icon, label, badge }: { tab: string; icon: string; label: string; badge?: React.ReactNode }) => (
+              <button
+                onClick={() => { setActiveTab(tab); setSearchQuery(""); setSidebarOpen(false); setGuideVisible(true); }}
+                className={`w-full flex items-center gap-3 px-6 py-3 transition-colors duration-150 border-l-4 cursor-pointer text-left ${
+                  activeTab === tab
                     ? "text-primary font-extrabold border-primary bg-primary/5"
                     : "text-slate-500 border-transparent hover:text-on-surface hover:bg-slate-50"
                 }`}
               >
-                <span className={`material-symbols-outlined text-[20px] ${activeTab === "users" ? "text-primary" : "text-slate-400"}`}>group</span>
-                <span className="text-sm">Gestión de Personal</span>
+                <span className={`material-symbols-outlined text-[20px] shrink-0 ${activeTab === tab ? "text-primary" : "text-slate-400"}`}>{icon}</span>
+                <span className="text-sm leading-tight">{label}</span>
+                {badge && <span className="ml-auto shrink-0">{badge}</span>}
               </button>
-            </>
-          )}
+            );
+
+            const GroupHeader = ({ label, groupKey }: { label: string; groupKey: string }) => (
+              <button
+                onClick={() => toggleGroup(groupKey)}
+                className="w-full flex items-center justify-between px-6 pt-5 pb-1 text-[9px] font-black text-slate-400 uppercase tracking-widest select-none hover:text-slate-600 transition-colors cursor-pointer"
+              >
+                <span>{label}</span>
+                <span className={`material-symbols-outlined text-sm transition-transform duration-200 ${openGroups[groupKey] ? "rotate-0" : "-rotate-90"}`}>
+                  expand_more
+                </span>
+              </button>
+            );
+
+            return (
+              <>
+                {/* INICIO — always open */}
+                <div className="pt-2 pb-1 px-6 text-[9px] font-black text-slate-400 uppercase tracking-widest select-none">Inicio</div>
+                <NavItem tab="overview" icon="dashboard" label="Resumen General" />
+
+                {/* CLIENTES Y SOPORTE */}
+                <GroupHeader label="Clientes y Soporte" groupKey="clientes" />
+                {openGroups.clientes && (
+                  <>
+                    <NavItem tab="messages" icon="mail" label="Mensajes de Contacto" badge={
+                      unreadMessagesCount > 0 && (
+                        <span className="w-5 h-5 rounded-full bg-primary text-white text-[10px] font-black flex items-center justify-center animate-pulse shadow-sm">
+                          {unreadMessagesCount}
+                        </span>
+                      )
+                    } />
+                    <NavItem tab="licenses" icon="verified_user" label="Gestión de Licencias" badge={
+                      totalUrgentLicenses > 0 && (
+                        <span className={`w-5 h-5 rounded-full text-white text-[10px] font-black flex items-center justify-center shadow-sm ${expiredLicensesCount > 0 ? "bg-red-600 animate-pulse" : "bg-orange-500"}`}>
+                          {totalUrgentLicenses}
+                        </span>
+                      )
+                    } />
+                  </>
+                )}
+
+                {/* INVENTARIO Y RECURSOS */}
+                <GroupHeader label="Inventario y Recursos" groupKey="inventario" />
+                {openGroups.inventario && (
+                  <>
+                    <NavItem tab="products" icon="inventory_2" label="Catálogo de Suministros" />
+                    <NavItem tab="categories" icon="category" label="Categorías Catálogo" />
+                    <NavItem tab="files" icon="folder_open" label="Archivos y Drivers" />
+                  </>
+                )}
+
+                {/* CONTENIDO PÚBLICO */}
+                <GroupHeader label="Contenido Público" groupKey="contenido" />
+                {openGroups.contenido && (
+                  <>
+                    <NavItem tab="services" icon="build" label="Gestión de Servicios" />
+                    <NavItem tab="portfolio" icon="photo_library" label="Trabajos Realizados" />
+                  </>
+                )}
+
+                {/* SISTEMA — admin only */}
+                {(session?.user as any)?.role === "admin" && (
+                  <>
+                    <GroupHeader label="Sistema" groupKey="sistema" />
+                    {openGroups.sistema && (
+                      <NavItem tab="users" icon="group" label="Gestión de Personal" />
+                    )}
+                  </>
+                )}
+              </>
+            );
+          })()}
         </nav>
 
         {/* Support & Logout links in sidebar footer */}
@@ -1642,6 +1631,84 @@ export default function AdminDashboardPage() {
               </div>
             ))}
           </section>
+
+          {/* Section Guide Banner */}
+          {guideVisible && (() => {
+            const guides: Record<string, { icon: string; title: string; desc: string; steps: string[] }> = {
+              overview: {
+                icon: "dashboard", title: "Resumen General",
+                desc: "Vista de alto nivel de toda la actividad del sistema.",
+                steps: ["Revisa los mensajes sin leer en la tarjeta de alertas", "Consulta la tendencia de consultas de clientes esta semana", "Verifica las licencias próximas a vencer", "Usa el buscador superior para encontrar cualquier dato rápido"],
+              },
+              messages: {
+                icon: "mail", title: "Mensajes de Contacto",
+                desc: "Aquí llegan todos los mensajes enviados desde el formulario de contacto del sitio web.",
+                steps: ["Los mensajes en negrita son no leídos", "Haz clic en un mensaje para ver el contenido completo", "Márcalos como leídos para limpiar la bandeja", "Solo el admin puede eliminar mensajes"],
+              },
+              licenses: {
+                icon: "verified_user", title: "Gestión de Licencias",
+                desc: "Registro de licencias de software vendidas a clientes, con alertas de vencimiento.",
+                steps: ["Las licencias en rojo están vencidas, en naranja por vencer pronto", "Usa '+ Nueva Licencia' para registrar una venta", "Edita una licencia para actualizar su estado o fecha", "Filtra por estado para ver solo las activas o vencidas"],
+              },
+              products: {
+                icon: "inventory_2", title: "Catálogo de Suministros",
+                desc: "Gestiona los productos que aparecen en el catálogo público del sitio web.",
+                steps: ["Sube imágenes desde tu PC o pega una URL directamente", "Asigna categorías para que los clientes puedan filtrar", "Activa/desactiva productos sin eliminarlos", "Los precios se muestran en soles (S/)"],
+              },
+              categories: {
+                icon: "category", title: "Categorías del Catálogo",
+                desc: "Las categorías organizan los productos del catálogo público.",
+                steps: ["Crea categorías antes de agregar productos", "Desactiva una categoría para ocultar sus productos en la web", "Los nombres deben ser únicos"],
+              },
+              files: {
+                icon: "folder_open", title: "Archivos y Drivers",
+                desc: "Repositorio interno de controladores, programas y documentos para el equipo técnico.",
+                steps: ["Sube archivos desde tu PC o pega un enlace (Drive, Dropbox, etc.)", "Clasifica por tipo: programa, driver, excel o link", "Solo técnicos y admins pueden subir archivos", "Los archivos solo son visibles para el personal con sesión activa"],
+              },
+              services: {
+                icon: "build", title: "Gestión de Servicios",
+                desc: "Los servicios que aparecen en la sección de servicios del sitio web público.",
+                steps: ["Cada servicio tiene un icono de Material Symbols (ej: laptop_mac)", "Desactiva un servicio para ocultarlo del sitio sin eliminarlo", "Los trabajos del portafolio se asocian a servicios"],
+              },
+              portfolio: {
+                icon: "photo_library", title: "Trabajos Realizados",
+                desc: "Galería de proyectos completados que se muestra en el sitio web público.",
+                steps: ["Agrega una imagen representativa del trabajo", "Asocia el trabajo a un servicio para que aparezca clasificado", "Los trabajos más recientes aparecen primero en la web"],
+              },
+              users: {
+                icon: "group", title: "Gestión de Personal",
+                desc: "Administra las cuentas de acceso al panel. Solo los administradores pueden ver y editar esta sección.",
+                steps: ["Al crear un usuario, el sistema genera automáticamente su nombre de usuario y contraseña temporal", "Las credenciales se envían al correo del personal al crearse la cuenta", "El personal nuevo debe cambiar su contraseña en su primer ingreso", "Puedes desactivar cuentas sin eliminarlas"],
+              },
+            };
+            const g = guides[activeTab];
+            if (!g) return null;
+            return (
+              <div className="mb-6 bg-blue-50 border border-blue-100 rounded-2xl p-4 flex gap-4 items-start animate-fade-in">
+                <div className="shrink-0 w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-blue-500 text-lg">{g.icon}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-extrabold text-blue-800 mb-0.5">{g.title} — {g.desc}</p>
+                  <ol className="mt-1.5 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-0.5">
+                    {g.steps.map((step, i) => (
+                      <li key={i} className="text-[11px] text-blue-700 font-medium flex items-start gap-1.5">
+                        <span className="shrink-0 font-black text-blue-400">{i + 1}.</span>
+                        {step}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+                <button
+                  onClick={() => setGuideVisible(false)}
+                  className="shrink-0 text-blue-300 hover:text-blue-500 transition-colors cursor-pointer"
+                  title="Cerrar guía"
+                >
+                  <span className="material-symbols-outlined text-lg">close</span>
+                </button>
+              </div>
+            );
+          })()}
 
           {/* TAB: Overview (Resumen General) */}
           {activeTab === "overview" && (
@@ -3099,18 +3166,21 @@ export default function AdminDashboardPage() {
                 </div>
                 <div className="space-y-3">
                   {formProductImages.map((imgUrl, idx) => (
-                    <div key={idx} className="border border-slate-200 rounded-xl p-3 bg-slate-50/50 space-y-2">
-                      {imgUrl.trim() && (
-                        <div className="h-28 rounded-lg overflow-hidden bg-white border border-slate-100 flex items-center justify-center">
-                          <img
-                            src={imgUrl}
-                            alt={`Vista previa ${idx + 1}`}
-                            className="max-h-full max-w-full object-contain"
-                            onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-                          />
-                        </div>
-                      )}
+                    <div key={idx} className="border border-slate-200 rounded-xl p-3 bg-slate-50/50 space-y-1.5">
                       <div className="flex gap-2 items-center">
+                        {/* Thumbnail preview beside input */}
+                        <div className="img-thumb-wrap shrink-0 w-12 h-12 rounded-lg overflow-hidden bg-white border border-slate-200 flex items-center justify-center">
+                          {imgUrl.trim() ? (
+                            <img
+                              src={imgUrl}
+                              alt={`Vista previa ${idx + 1}`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => { (e.target as HTMLImageElement).src = ""; (e.target as HTMLImageElement).style.display = "none"; }}
+                            />
+                          ) : (
+                            <span className="material-symbols-outlined text-slate-300 text-xl leading-none">image</span>
+                          )}
+                        </div>
                         <input
                           type="text"
                           value={imgUrl}
@@ -3145,7 +3215,7 @@ export default function AdminDashboardPage() {
                         )}
                       </div>
                       {uploadingProductIdx === idx && (
-                        <p className="text-[10px] text-primary font-bold animate-pulse">Subiendo imagen {idx + 1}...</p>
+                        <p className="text-[10px] text-primary font-bold animate-pulse pl-14">Subiendo imagen {idx + 1}...</p>
                       )}
                     </div>
                   ))}
