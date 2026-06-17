@@ -368,7 +368,7 @@ export default function ContactoPage() {
                     <p className="text-on-surface-variant mt-0.5 flex flex-col gap-0.5">
                       <span>+51 925 981 741</span>
                       <span>+51 922 452 929</span>
-                      <span className="text-[10px] text-slate-400 mt-1 font-semibold">soporte@dellcom.pe</span>
+                      <span className="text-[10px] text-slate-400 mt-1 font-semibold">ventas@dellcom-sac.com</span>
                     </p>
                   </div>
                 </div>

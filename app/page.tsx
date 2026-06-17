@@ -210,7 +210,7 @@ export default async function Home() {
               <div className="absolute -bottom-12 -left-2 w-20 h-20 border border-primary/5 rounded-full pointer-events-none -z-10" />
               
               {/* Rectangular/Square Framed Image wrapper with localized relative context */}
-              <div className="relative z-10 w-full max-w-[480px]">
+              <div className="relative z-10 w-full max-w-[540px]">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border-[6px] border-white shadow-2xl hover:scale-[1.02] transition-transform duration-500">
                   <img 
                     alt="Sede DELLCOM SAC Counter" 
