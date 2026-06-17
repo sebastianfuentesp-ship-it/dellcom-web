@@ -1418,11 +1418,47 @@ export default function AdminDashboardPage() {
           border-color: rgba(255, 0, 0, 0.4) !important;
           box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
         }
-        .dark-theme .guide-popup-card .bg-white {
+        /* Texto principal dentro del popup */
+        .dark-theme .guide-popup-card .text-slate-800,
+        .dark-theme .guide-popup-card .text-slate-700,
+        .dark-theme .guide-popup-card .text-on-background {
+          color: #f1f5f9 !important;
+        }
+        .dark-theme .guide-popup-card .text-slate-500,
+        .dark-theme .guide-popup-card .text-slate-400 {
+          color: #94a3b8 !important;
+        }
+        /* Divisor del header */
+        .dark-theme .guide-popup-card .border-slate-100 {
+          border-color: #334155 !important;
+        }
+        /* Selector de modo (pill) */
+        .dark-theme .guide-popup-card .bg-slate-100 {
           background-color: #1e293b !important;
           border-color: #334155 !important;
         }
-        .dark-theme .guide-popup-card .border-white\\/60 {
+        /* Barra de progreso (track) */
+        .dark-theme .guide-popup-card .bg-slate-200 {
+          background-color: #334155 !important;
+        }
+        /* Items de paso (undone y done) */
+        .dark-theme .guide-popup-card .bg-white {
+          background-color: #1e293b !important;
+        }
+        .dark-theme .guide-popup-card .bg-slate-50 {
+          background-color: #172033 !important;
+        }
+        .dark-theme .guide-popup-card .border-slate-200,
+        .dark-theme .guide-popup-card .border-slate-200\\/60,
+        .dark-theme .guide-popup-card .border-slate-100 {
+          border-color: #334155 !important;
+        }
+        /* Check icon bg */
+        .dark-theme .guide-popup-card .bg-red-50 {
+          background-color: rgba(255, 0, 0, 0.15) !important;
+        }
+        /* "Hecho" label */
+        .dark-theme .guide-popup-card .border-slate-200 {
           border-color: #334155 !important;
         }
         .dark-theme .text-on-background {
