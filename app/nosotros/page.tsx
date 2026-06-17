@@ -35,7 +35,7 @@ export default function NosotrosPage() {
             <h1 className="font-headline text-3xl md:text-5xl font-black text-on-surface leading-tight tracking-tight">
               Sobre <span className="text-primary">Nosotros</span>
             </h1>
-            <p className="text-xs md:text-sm text-on-surface-variant max-w-xl mx-auto mt-2 leading-relaxed">
+            <p className="text-xs md:text-sm font-semibold text-on-surface-variant max-w-xl mx-auto mt-2 leading-relaxed">
               Más de 10 años transformando desafíos técnicos en soluciones de vanguardia para la infraestructura IT más exigente del Perú.
             </p>
           </div>
@@ -229,7 +229,7 @@ export default function NosotrosPage() {
                 Pilares del Soporte
               </span>
               <h3 className="font-headline text-3xl font-bold text-on-surface">Nuestros Valores Fundamentales</h3>
-              <p className="text-sm text-on-surface-variant max-w-lg mx-auto">
+              <p className="text-sm font-semibold text-on-surface-variant max-w-lg mx-auto">
                 El ADN que guía cada intervención técnica y decisión estratégica.
               </p>
             </div>

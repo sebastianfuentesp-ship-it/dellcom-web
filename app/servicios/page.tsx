@@ -220,7 +220,7 @@ export default async function ServiciosPage() {
             <h1 className="font-headline text-3xl md:text-5xl font-black text-on-surface leading-tight tracking-tight">
               Nuestros <span className="text-primary">Servicios</span>
             </h1>
-            <p className="text-xs md:text-sm text-on-surface-variant max-w-xl mx-auto mt-2 leading-relaxed">
+            <p className="text-xs md:text-sm font-semibold text-on-surface-variant max-w-xl mx-auto mt-2 leading-relaxed">
               Diagnósticos rigurosos y microelectrónica de precisión. Haz clic para cotizar o revisar casos de éxito.
             </p>
           </div>

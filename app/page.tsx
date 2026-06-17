@@ -220,7 +220,7 @@ export default async function Home() {
                 </div>
 
                 {/* Floating Badge: Soporte Técnico Certificado (Overlaying the bottom-right corner of the image) */}
-                <div className="absolute bottom-1 right-[-30] bg-white/95 backdrop-blur-md border border-slate-200/60 py-2.5 px-4 rounded-2xl shadow-xl flex items-center gap-2.5 transform rotate-2 hover:rotate-0 transition-transform duration-300 z-20">
+                <div className="absolute bottom-0 right-[-30] bg-white/95 backdrop-blur-md border border-slate-200/60 py-2.5 px-4 rounded-2xl shadow-xl flex items-center gap-2.5 transform rotate-2 hover:rotate-0 transition-transform duration-300 z-20">
                   <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                     <span className="material-symbols-outlined text-[18px] font-bold animate-pulse">workspace_premium</span>
                   </div>
@@ -244,7 +244,7 @@ export default async function Home() {
                 Servicios Técnicos Especializados
               </span>
               <h2 className="font-headline text-3xl md:text-4xl font-bold text-on-surface">Soluciones Integrales para tu Negocio</h2>
-              <p className="text-sm text-on-surface-variant max-w-2xl mx-auto">
+              <p className="text-sm font-semibold text-on-surface-variant max-w-2xl mx-auto">
                 Estructura de bento grid diferenciada por importancia operativa. Haz clic para cotizar directamente en laboratorios.
               </p>
             </div>
@@ -348,10 +348,10 @@ export default async function Home() {
           <div className="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="scroll-reveal space-y-6">
               <h2 className="font-headline text-3xl md:text-4xl font-bold text-on-surface">¿Por qué confiar en <span className="text-primary">DELLCOM</span>?</h2>
-              <p className="text-sm md:text-base text-on-surface-variant leading-relaxed">
+              <p className="text-sm md:text-base font-semibold text-on-surface-variant leading-relaxed">
                 En DELLCOM SAC somos especialistas en brindar soluciones de soporte tecnológico diseñadas para asegurar la continuidad operativa de tu negocio. Nos enfocamos en diagnósticos de alta precisión a nivel de hardware, licenciamiento oficial y suministro de consumibles Zebra.
               </p>
-              <p className="text-sm md:text-base text-on-surface-variant leading-relaxed">
+              <p className="text-sm md:text-base font-semibold text-on-surface-variant leading-relaxed">
                 Brindamos atención personalizada para empresas, colegios e institutos, con soluciones presenciales y soporte remoto inmediato a nivel nacional, respaldados por personal técnico certificado.
               </p>
               <div className="pt-2">
@@ -469,7 +469,7 @@ export default async function Home() {
                 Nuestras Sedes
               </div>
               <h2 className="font-headline text-3xl md:text-4xl font-bold text-on-surface">¿Dónde Encontrarnos?</h2>
-              <p className="text-xs md:text-sm text-on-surface-variant leading-relaxed">
+              <p className="text-xs md:text-sm font-semibold text-on-surface-variant leading-relaxed">
                 Visítanos en cualquiera de nuestras sucursales para soporte técnico especializado, repuestos de hardware o licencias de software originales.
               </p>
             </div>
