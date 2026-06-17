@@ -241,28 +241,28 @@ export default function NosotrosPage() {
                 { icon: "lightbulb", title: "Innovación", desc: "Búsqueda constante de soluciones disruptivas y eficientes.", video: "/img/videos/innovacion.mp4" },
                 { icon: "gavel", title: "Integridad", desc: "Ética profesional y transparencia absoluta en cada proceso.", video: "/img/videos/integridad.mp4" }
               ].map((item, index) => (
-                <div 
-                  key={item.title} 
-                  className="group relative border border-slate-100 hover:border-primary/20 hover:shadow-lg rounded-[2rem] p-8 transition-all duration-300 overflow-hidden flex flex-col justify-between min-h-[220px]"
+                <div
+                  key={item.title}
+                  className="group relative border border-slate-100 hover:border-primary/30 hover:shadow-xl rounded-[2rem] p-8 transition-all duration-500 overflow-hidden flex flex-col justify-between min-h-[260px]"
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
-                  <video 
-                    src={item.video} 
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline 
-                    className="absolute inset-0 w-full h-full object-cover opacity-[0.92] group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                  <video
+                    src={item.video}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover opacity-90 transition-opacity duration-500"
                   />
-                  <div className="absolute inset-0 bg-white/12 group-hover:bg-primary/92 transition-all duration-300" />
-                  
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-primary/92 transition-colors duration-500" />
+
                   <div className="relative z-10 flex flex-col justify-between h-full">
                     <div>
-                      <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200/50 flex items-center justify-center mb-6 text-primary group-hover:bg-white group-hover:text-primary transition-all duration-500 shadow-sm">
+                      <div className="w-14 h-14 rounded-2xl bg-white border border-white/60 flex items-center justify-center mb-6 text-primary shadow-sm transition-colors duration-300">
                         <span className="material-symbols-outlined text-2xl">{item.icon}</span>
                       </div>
-                      <h5 className="font-headline text-lg font-bold text-on-surface group-hover:text-white mb-2 transition-colors duration-300">{item.title}</h5>
-                      <p className="text-xs text-on-surface-variant group-hover:text-white/90 leading-relaxed font-semibold transition-colors duration-300">{item.desc}</p>
+                      <h5 className="font-headline text-lg font-bold text-white mb-2">{item.title}</h5>
+                      <p className="text-xs text-white/80 leading-relaxed font-semibold">{item.desc}</p>
                     </div>
                   </div>
                 </div>

@@ -240,7 +240,7 @@ export default async function Home() {
                   <div 
                     key={service.id} 
                     className={`scroll-reveal group bg-slate-50/60 border border-slate-200/60 rounded-3xl overflow-hidden hover:border-primary/50 transition-all duration-500 hover:shadow-xl hover:bg-white flex flex-col justify-between ${
-                      isLastAlone ? "lg:col-span-3" : isFeatured ? "lg:col-span-2" : "lg:col-span-1"
+                      isLastAlone ? "md:col-span-2 lg:col-span-3" : isFeatured ? "lg:col-span-2" : "lg:col-span-1"
                     }`}
                     style={{ transitionDelay: `${(index % 3) * 100}ms` }}
                   >
@@ -345,80 +345,88 @@ export default async function Home() {
               
               {/* Card 1: Reparaciones */}
               <div className="group relative p-5 rounded-2xl border border-slate-100 hover:border-primary/20 hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col justify-between min-h-[140px]">
-                <video 
-                  src="/img/videos/reparacion.mp4" 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline 
-                  className="absolute inset-0 w-full h-full object-cover opacity-[0.92] group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                <video
+                  src="/img/videos/reparacion.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover opacity-90"
                 />
-                <div className="absolute inset-0 bg-white/12 group-hover:bg-primary/92 transition-all duration-300" />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-primary/92 transition-colors duration-300" />
                 <div className="relative z-10 flex flex-col justify-between h-full">
                   <div>
-                    <span className="material-symbols-outlined text-primary group-hover:text-white text-3xl mb-2 group-hover:scale-110 transition-all duration-300 block">devices</span>
-                    <h4 className="font-headline font-bold text-on-surface group-hover:text-white text-sm transition-colors duration-300">Reparaciones</h4>
-                    <p className="text-[11px] text-on-surface-variant group-hover:text-white/90 mt-1 leading-snug font-medium transition-colors duration-300">Laptops, impresoras térmicas, láser y matriciales.</p>
+                    <div className="w-11 h-11 rounded-xl bg-white flex items-center justify-center mb-3 text-primary shadow-sm">
+                      <span className="material-symbols-outlined text-xl">devices</span>
+                    </div>
+                    <h4 className="font-headline font-bold text-white text-sm">Reparaciones</h4>
+                    <p className="text-[11px] text-white/80 mt-1 leading-snug font-medium">Laptops, impresoras térmicas, láser y matriciales.</p>
                   </div>
                 </div>
               </div>
 
               {/* Card 2: Soporte Remoto */}
               <div className="group relative p-5 rounded-2xl border border-slate-100 hover:border-primary/20 hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col justify-between min-h-[140px]">
-                <video 
-                  src="/img/videos/soporte_remoto.mp4" 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline 
-                  className="absolute inset-0 w-full h-full object-cover opacity-[0.92] group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                <video
+                  src="/img/videos/soporte_remoto.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover opacity-90"
                 />
-                <div className="absolute inset-0 bg-white/12 group-hover:bg-primary/92 transition-all duration-300" />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-primary/92 transition-colors duration-300" />
                 <div className="relative z-10 flex flex-col justify-between h-full">
                   <div>
-                    <span className="material-symbols-outlined text-primary group-hover:text-white text-3xl mb-2 group-hover:scale-110 transition-all duration-300 block">support_agent</span>
-                    <h4 className="font-headline font-bold text-on-surface group-hover:text-white text-sm transition-colors duration-300">Soporte Remoto</h4>
-                    <p className="text-[11px] text-on-surface-variant group-hover:text-white/90 mt-1 leading-snug font-medium transition-colors duration-300">Asistencia técnica remota inmediata vía AnyDesk.</p>
+                    <div className="w-11 h-11 rounded-xl bg-white flex items-center justify-center mb-3 text-primary shadow-sm">
+                      <span className="material-symbols-outlined text-xl">support_agent</span>
+                    </div>
+                    <h4 className="font-headline font-bold text-white text-sm">Soporte Remoto</h4>
+                    <p className="text-[11px] text-white/80 mt-1 leading-snug font-medium">Asistencia técnica remota inmediata vía AnyDesk.</p>
                   </div>
                 </div>
               </div>
 
               {/* Card 3: Licencias */}
               <div className="group relative p-5 rounded-2xl border border-slate-100 hover:border-primary/20 hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col justify-between min-h-[140px]">
-                <video 
-                  src="/img/videos/licencias.mp4" 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline 
-                  className="absolute inset-0 w-full h-full object-cover opacity-[0.92] group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                <video
+                  src="/img/videos/licencias.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover opacity-90"
                 />
-                <div className="absolute inset-0 bg-white/12 group-hover:bg-primary/92 transition-all duration-300" />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-primary/92 transition-colors duration-300" />
                 <div className="relative z-10 flex flex-col justify-between h-full">
                   <div>
-                    <span className="material-symbols-outlined text-primary group-hover:text-white text-3xl mb-2 group-hover:scale-110 transition-all duration-300 block">security</span>
-                    <h4 className="font-headline font-bold text-on-surface group-hover:text-white text-sm transition-colors duration-300">Licencias</h4>
-                    <p className="text-[11px] text-on-surface-variant group-hover:text-white/90 mt-1 leading-snug font-medium transition-colors duration-300">Windows, Office, Antivirus certificados.</p>
+                    <div className="w-11 h-11 rounded-xl bg-white flex items-center justify-center mb-3 text-primary shadow-sm">
+                      <span className="material-symbols-outlined text-xl">security</span>
+                    </div>
+                    <h4 className="font-headline font-bold text-white text-sm">Licencias</h4>
+                    <p className="text-[11px] text-white/80 mt-1 leading-snug font-medium">Windows, Office, Antivirus certificados.</p>
                   </div>
                 </div>
               </div>
 
               {/* Card 4: Ribbons y Zebra */}
               <div className="group relative p-5 rounded-2xl border border-slate-100 hover:border-primary/20 hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col justify-between min-h-[140px]">
-                <video 
-                  src="/img/videos/ribbons_zebra.mp4" 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline 
-                  className="absolute inset-0 w-full h-full object-cover opacity-[0.92] group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                <video
+                  src="/img/videos/ribbons_zebra.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover opacity-90"
                 />
-                <div className="absolute inset-0 bg-white/12 group-hover:bg-primary/92 transition-all duration-300" />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-primary/92 transition-colors duration-300" />
                 <div className="relative z-10 flex flex-col justify-between h-full">
                   <div>
-                    <span className="material-symbols-outlined text-primary group-hover:text-white text-3xl mb-2 group-hover:scale-110 transition-all duration-300 block">print</span>
-                    <h4 className="font-headline font-bold text-on-surface group-hover:text-white text-sm transition-colors duration-300">Ribbons y Zebra</h4>
-                    <p className="text-[11px] text-on-surface-variant group-hover:text-white/90 mt-1 leading-snug font-medium transition-colors duration-300">Suministros originales de ribbons, tintas y tarjetas Zebra.</p>
+                    <div className="w-11 h-11 rounded-xl bg-white flex items-center justify-center mb-3 text-primary shadow-sm">
+                      <span className="material-symbols-outlined text-xl">print</span>
+                    </div>
+                    <h4 className="font-headline font-bold text-white text-sm">Ribbons y Zebra</h4>
+                    <p className="text-[11px] text-white/80 mt-1 leading-snug font-medium">Suministros originales de ribbons, tintas y tarjetas Zebra.</p>
                   </div>
                 </div>
               </div>

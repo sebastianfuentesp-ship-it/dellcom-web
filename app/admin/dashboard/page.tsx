@@ -1464,7 +1464,7 @@ export default function AdminDashboardPage() {
             <DellcomLogo className="w-10 h-10" />
             <div>
               <h1 className="text-lg font-bold tracking-tight text-on-surface">DELLCOM SAC</h1>
-              <p className="text-[10px] text-primary font-bold uppercase tracking-widest leading-none">Enterprise Admin</p>
+              <p className="text-[10px] text-primary font-bold uppercase tracking-widest leading-none">Portal de Gestión Interna</p>
             </div>
           </div>
           <button
