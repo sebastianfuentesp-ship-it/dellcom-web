@@ -351,9 +351,9 @@ export default async function Home() {
                   loop 
                   muted 
                   playsInline 
-                  className="absolute inset-0 w-full h-full object-cover opacity-[0.25] group-hover:opacity-[0.40] group-hover:scale-105 transition-all duration-500"
+                  className="absolute inset-0 w-full h-full object-cover opacity-[0.60] group-hover:opacity-[0.85] group-hover:scale-105 transition-all duration-500"
                 />
-                <div className="absolute inset-0 bg-white/75 group-hover:bg-primary/95 transition-all duration-300" />
+                <div className="absolute inset-0 bg-white/45 group-hover:bg-primary/92 transition-all duration-300" />
                 <div className="relative z-10 flex flex-col justify-between h-full">
                   <div>
                     <span className="material-symbols-outlined text-primary group-hover:text-white text-3xl mb-2 group-hover:scale-110 transition-all duration-300 block">devices</span>
@@ -371,9 +371,9 @@ export default async function Home() {
                   loop 
                   muted 
                   playsInline 
-                  className="absolute inset-0 w-full h-full object-cover opacity-[0.25] group-hover:opacity-[0.40] group-hover:scale-105 transition-all duration-500"
+                  className="absolute inset-0 w-full h-full object-cover opacity-[0.60] group-hover:opacity-[0.85] group-hover:scale-105 transition-all duration-500"
                 />
-                <div className="absolute inset-0 bg-white/75 group-hover:bg-primary/95 transition-all duration-300" />
+                <div className="absolute inset-0 bg-white/45 group-hover:bg-primary/92 transition-all duration-300" />
                 <div className="relative z-10 flex flex-col justify-between h-full">
                   <div>
                     <span className="material-symbols-outlined text-primary group-hover:text-white text-3xl mb-2 group-hover:scale-110 transition-all duration-300 block">support_agent</span>
@@ -391,9 +391,9 @@ export default async function Home() {
                   loop 
                   muted 
                   playsInline 
-                  className="absolute inset-0 w-full h-full object-cover opacity-[0.25] group-hover:opacity-[0.40] group-hover:scale-105 transition-all duration-500"
+                  className="absolute inset-0 w-full h-full object-cover opacity-[0.60] group-hover:opacity-[0.85] group-hover:scale-105 transition-all duration-500"
                 />
-                <div className="absolute inset-0 bg-white/75 group-hover:bg-primary/95 transition-all duration-300" />
+                <div className="absolute inset-0 bg-white/45 group-hover:bg-primary/92 transition-all duration-300" />
                 <div className="relative z-10 flex flex-col justify-between h-full">
                   <div>
                     <span className="material-symbols-outlined text-primary group-hover:text-white text-3xl mb-2 group-hover:scale-110 transition-all duration-300 block">security</span>
@@ -411,9 +411,9 @@ export default async function Home() {
                   loop 
                   muted 
                   playsInline 
-                  className="absolute inset-0 w-full h-full object-cover opacity-[0.25] group-hover:opacity-[0.40] group-hover:scale-105 transition-all duration-500"
+                  className="absolute inset-0 w-full h-full object-cover opacity-[0.60] group-hover:opacity-[0.85] group-hover:scale-105 transition-all duration-500"
                 />
-                <div className="absolute inset-0 bg-white/75 group-hover:bg-primary/95 transition-all duration-300" />
+                <div className="absolute inset-0 bg-white/45 group-hover:bg-primary/92 transition-all duration-300" />
                 <div className="relative z-10 flex flex-col justify-between h-full">
                   <div>
                     <span className="material-symbols-outlined text-primary group-hover:text-white text-3xl mb-2 group-hover:scale-110 transition-all duration-300 block">print</span>
