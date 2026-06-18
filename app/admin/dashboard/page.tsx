@@ -2761,24 +2761,26 @@ export default function AdminDashboardPage() {
                       {filteredProductos.length > 0 ? (
                         filteredProductos.map((prod) => (
                           <tr key={prod.id} className="hover:bg-slate-50/50 transition-colors">
-                            <td className="px-6 py-4 flex items-center gap-3">
-                              {prod.imagen_url && !prod.imagen_url.includes("placeholder.png") ? (
-                                <img 
-                                  src={prod.imagen_url.startsWith("http") || prod.imagen_url.startsWith("/") ? prod.imagen_url : `/${prod.imagen_url}`} 
-                                  alt={prod.nombre} 
-                                  className="w-10 h-10 object-contain rounded-lg border border-slate-200 bg-slate-50"
-                                  onError={(e) => {
-                                    const target = e.currentTarget as HTMLImageElement;
-                                    target.onerror = null;
-                                    target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><rect width='100%' height='100%' fill='%23f1f5f9'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='10' fill='%2394a3b8'>DELLCOM</text></svg>";
-                                  }}
-                                />
-                              ) : (
-                                <div className="w-10 h-10 rounded-lg border border-slate-200 bg-slate-100 flex items-center justify-center text-slate-400">
-                                  <span className="material-symbols-outlined text-lg">image</span>
-                                </div>
-                              )}
-                              <span className="font-semibold text-sm text-on-surface">{prod.nombre}</span>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-3">
+                                {prod.imagen_url && !prod.imagen_url.includes("placeholder.png") ? (
+                                  <img 
+                                    src={prod.imagen_url.startsWith("http") || prod.imagen_url.startsWith("/") ? prod.imagen_url : `/${prod.imagen_url}`} 
+                                    alt={prod.nombre} 
+                                    className="w-10 h-10 object-contain rounded-lg border border-slate-200 bg-slate-50"
+                                    onError={(e) => {
+                                      const target = e.currentTarget as HTMLImageElement;
+                                      target.onerror = null;
+                                      target.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><rect width='100%' height='100%' fill='%23f1f5f9'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='10' fill='%2394a3b8'>DELLCOM</text></svg>";
+                                    }}
+                                  />
+                                ) : (
+                                  <div className="w-10 h-10 rounded-lg border border-slate-200 bg-slate-100 flex items-center justify-center text-slate-400">
+                                    <span className="material-symbols-outlined text-lg">image</span>
+                                  </div>
+                                )}
+                                <span className="font-semibold text-sm text-on-surface">{prod.nombre}</span>
+                              </div>
                             </td>
                             <td className="px-6 py-4 text-xs text-slate-600 font-semibold">
                               {prod.categoria?.nombre || "Sin Categoría"}
