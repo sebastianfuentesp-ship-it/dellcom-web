@@ -376,6 +376,17 @@ export default function AdminDashboardPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Validación de límite de tamaño (4.5MB) para evitar el error 413 de Vercel en producción
+    const MAX_SIZE = 4.5 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      alert(
+        `El archivo "${file.name}" supera el límite permitido para carga directa de 4.5MB (Pesa ${(file.size / (1024 * 1024)).toFixed(2)}MB).\n\n` +
+        `Para archivos grandes (como drivers o instaladores pesados), se recomienda alojar el archivo en Google Drive/Dropbox y colocar la URL directa en el campo de enlace superior.`
+      );
+      e.target.value = ""; // Limpiar el input
+      return;
+    }
+
     if (target === "product" && idx !== undefined) {
       setUploadingProductIdx(idx);
     } else if (target === "portfolio-extra" && idx !== undefined) {
@@ -3328,7 +3339,11 @@ export default function AdminDashboardPage() {
                   disabled={uploading}
                   className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer"
                 />
-                {uploading && <p className="text-[10px] text-primary font-bold mt-1 animate-pulse">Subiendo archivo...</p>}
+                {uploading ? (
+                  <p className="text-[10px] text-primary font-bold mt-1 animate-pulse">Subiendo archivo...</p>
+                ) : (
+                  <p className="text-[9px] text-slate-400 mt-1">Límite de 4.5MB para carga directa. Para archivos más pesados, coloca el enlace directo arriba.</p>
+                )}
               </div>
 
               <div>
