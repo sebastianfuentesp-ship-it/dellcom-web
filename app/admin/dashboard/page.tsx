@@ -142,6 +142,46 @@ function DellcomLogo({ className = "w-10 h-10" }: { className?: string }) {
   );
 }
 
+const detectFileType = (name: string, url: string): "programa" | "driver" | "excel" | "link" => {
+  const n = name.toLowerCase();
+  const u = url.toLowerCase();
+
+  // 1. PDF / Excel / Plantillas (tipo 'excel' en la base de datos)
+  if (
+    n.endsWith(".pdf") || u.includes(".pdf") || n.includes(" pdf") ||
+    n.endsWith(".xlsx") || n.endsWith(".xls") || n.endsWith(".csv") ||
+    u.includes(".xlsx") || u.includes(".xls") || u.includes(".csv") ||
+    n.includes("excel") || n.includes("planilla") || n.includes("documento") || n.includes("ficha tecnica")
+  ) {
+    return "excel";
+  }
+
+  // 2. Controladores / Drivers
+  if (
+    n.includes("driver") || n.includes("controlador") || n.includes("drv") ||
+    u.includes("driver") || u.includes("controlador") || u.includes("drv") ||
+    n.endsWith(".inf") || u.includes(".inf")
+  ) {
+    return "driver";
+  }
+
+  // 3. Programas / Utilidades
+  if (
+    n.endsWith(".exe") || n.endsWith(".msi") || u.includes(".exe") || u.includes(".msi") ||
+    n.includes("setup") || n.includes("install") || n.includes("utility") || n.includes("utilities") ||
+    n.includes("programa") || n.includes("aplicacion") || n.includes("anydesk") || n.includes("soporte")
+  ) {
+    return "programa";
+  }
+
+  // 4. Por defecto, si es un link útil o no cumple con lo anterior
+  if (u.startsWith("http://") || u.startsWith("https://")) {
+    return "link";
+  }
+
+  return "programa"; // Valor por defecto seguro
+};
+
 export default function AdminDashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -416,6 +456,19 @@ export default function AdminDashboardPage() {
         setFormPortfolioImgUrl(data.url);
       } else {
         setFormFileUrl(data.url);
+        let newName = formFileName;
+        if (!formFileName) {
+          const cleanName = file.name
+            .replace(/\.[^/.]+$/, "") // Remover extensión
+            .replace(/[-_]/g, " ") // Reemplazar guiones por espacios
+            .split(" ")
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+          setFormFileName(cleanName);
+          newName = cleanName;
+        }
+        const detected = detectFileType(newName, data.url);
+        setFormFileType(detected);
       }
       alert("Archivo cargado y guardado fisicamente con exito.");
     } catch (err) {
@@ -608,6 +661,18 @@ export default function AdminDashboardPage() {
     } catch (err) {
       alert("Error de conexión al guardar la licencia.");
     }
+  };
+
+  const handleFileNameChange = (val: string) => {
+    setFormFileName(val);
+    const detected = detectFileType(val, formFileUrl);
+    setFormFileType(detected);
+  };
+
+  const handleFileUrlChange = (val: string) => {
+    setFormFileUrl(val);
+    const detected = detectFileType(formFileName, val);
+    setFormFileType(detected);
   };
 
   const handleCreateFile = async (e: React.FormEvent) => {
@@ -2548,9 +2613,38 @@ export default function AdminDashboardPage() {
                               </div>
                             </td>
                             <td className="px-6 py-4">
-                              <span className="inline-block px-2.5 py-1 rounded bg-slate-100 text-slate-700 text-[10px] font-bold uppercase tracking-wider">
-                                {file.tipo}
-                              </span>
+                              {(() => {
+                                const name = file.nombre.toLowerCase();
+                                const url = file.url_archivo.toLowerCase();
+                                const isPdf = name.endsWith(".pdf") || url.includes(".pdf") || name.includes(" pdf");
+                                const isExcel = name.endsWith(".xlsx") || name.endsWith(".xls") || url.includes(".xlsx") || url.includes(".xls") || name.includes("excel");
+                                
+                                let badgeBg = "bg-slate-100 text-slate-700 border-slate-200";
+                                let badgeText = file.tipo.toUpperCase();
+                                
+                                if (isPdf) {
+                                  badgeBg = "bg-red-50 text-red-600 border-red-100";
+                                  badgeText = "PDF";
+                                } else if (isExcel) {
+                                  badgeBg = "bg-emerald-50 text-emerald-600 border-emerald-100";
+                                  badgeText = "XLSX";
+                                } else if (file.tipo === "driver") {
+                                  badgeBg = "bg-blue-50 text-blue-600 border-blue-100";
+                                  badgeText = "DRIVER";
+                                } else if (file.tipo === "programa") {
+                                  badgeBg = "bg-purple-50 text-purple-600 border-purple-100";
+                                  badgeText = "PROGRAMA";
+                                } else if (file.tipo === "link") {
+                                  badgeBg = "bg-amber-50 text-amber-600 border-amber-100";
+                                  badgeText = "LINK";
+                                }
+
+                                return (
+                                  <span className={`inline-block px-2.5 py-1 rounded-md border text-[10px] font-bold uppercase tracking-wider ${badgeBg}`}>
+                                    {badgeText}
+                                  </span>
+                                );
+                              })()}
                             </td>
                             <td className="px-6 py-4 text-xs text-red-600 font-semibold max-w-[200px] truncate">
                               <a href={file.url_archivo} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
@@ -3298,7 +3392,7 @@ export default function AdminDashboardPage() {
                   type="text" 
                   required
                   value={formFileName}
-                  onChange={(e) => setFormFileName(e.target.value)}
+                  onChange={(e) => handleFileNameChange(e.target.value)}
                   placeholder="Driver de Impresora Zebra GK420t"
                   className="w-full bg-slate-50 border border-slate-200 focus:border-red-600 focus:ring-1 focus:ring-red-600 focus:outline-none rounded-xl px-4 py-3 text-sm transition-all"
                 />
@@ -3324,7 +3418,7 @@ export default function AdminDashboardPage() {
                     type="text" 
                     required
                     value={formFileUrl}
-                    onChange={(e) => setFormFileUrl(e.target.value)}
+                    onChange={(e) => handleFileUrlChange(e.target.value)}
                     placeholder="https://drive.google.com/..."
                     className="w-full bg-slate-50 border border-slate-200 focus:border-red-600 focus:ring-1 focus:ring-red-600 focus:outline-none rounded-xl px-4 py-3 text-sm transition-all font-mono text-xs"
                   />
