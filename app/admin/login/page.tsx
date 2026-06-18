@@ -280,7 +280,7 @@ export default function AdminLoginPage() {
             href="https://wa.me/51987654321"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-slate-700 font-bold hover:underline"
+            className="text-primary font-bold hover:underline"
           >
             Contacta a soporte
           </a>
