@@ -7,7 +7,7 @@
  */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import StatusHeader from "../components/StatusHeader";
 import CleanFooter from "../components/CleanFooter";
@@ -130,6 +130,48 @@ export default function DescargasPage() {
     return matchesSearch && matchesType;
   });
 
+  // Paginación (4 recursos por página)
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 4;
+  const downloadsListRef = useRef<HTMLDivElement>(null);
+
+  // Reset a la página 1 cuando cambia el filtro o la búsqueda
+  const filterKey = `${searchQuery}|${selectedType}`;
+  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+  if (filterKey !== prevFilterKey) {
+    setPrevFilterKey(filterKey);
+    setCurrentPage(1);
+  }
+
+  const totalPages = Math.max(1, Math.ceil(filteredArchivos.length / ITEMS_PER_PAGE));
+  const activePage = Math.min(Math.max(currentPage, 1), totalPages);
+
+  const paginatedArchivos = filteredArchivos.slice(
+    (activePage - 1) * ITEMS_PER_PAGE,
+    activePage * ITEMS_PER_PAGE
+  );
+
+  const goToPage = (n: number) => {
+    setCurrentPage(n);
+    downloadsListRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const getPageNumbers = (current: number, total: number): (number | "...")[] => {
+    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+
+    const keep = new Set<number>([1, 2, total - 1, total, current - 1, current, current + 1]);
+    const sorted = [...keep].filter((p) => p >= 1 && p <= total).sort((a, b) => a - b);
+
+    const result: (number | "...")[] = [];
+    let prev = 0;
+    for (const p of sorted) {
+      if (prev && p - prev > 1) result.push("...");
+      result.push(p);
+      prev = p;
+    }
+    return result;
+  };
+
   const getIconForType = (type: string) => {
     switch (type) {
       case "programa": return "laptop_mac";
@@ -238,9 +280,9 @@ export default function DescargasPage() {
             </div>
 
             {/* List of Files (Detailed Rows Layout) */}
-            <div className="space-y-4 scroll-reveal">
-              {filteredArchivos.length > 0 ? (
-                filteredArchivos.map((file) => {
+            <div ref={downloadsListRef} className="space-y-4 scroll-reveal">
+              {paginatedArchivos.length > 0 ? (
+                paginatedArchivos.map((file) => {
                   const meta = getFileMetadata(file);
                   const isFeatured = file.nombre.toLowerCase().includes("anydesk") || file.nombre.toLowerCase().includes("zebra");
                   return (
@@ -337,6 +379,47 @@ export default function DescargasPage() {
                 </div>
               )}
             </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 pt-8 flex-wrap">
+                <button
+                  onClick={() => goToPage(activePage - 1)}
+                  disabled={activePage === 1}
+                  className="w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer bg-white"
+                >
+                  <span className="material-symbols-outlined text-base">chevron_left</span>
+                </button>
+
+                {getPageNumbers(activePage, totalPages).map((p, idx) =>
+                  p === "..." ? (
+                    <span key={`dots-${idx}`} className="w-9 h-9 flex items-center justify-center text-slate-400 text-xs font-bold">
+                      ···
+                    </span>
+                  ) : (
+                    <button
+                      key={p}
+                      onClick={() => goToPage(p)}
+                      className={`w-9 h-9 flex items-center justify-center rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                        p === activePage
+                          ? "bg-primary text-white border-primary shadow-md shadow-primary/20"
+                          : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
+
+                <button
+                  onClick={() => goToPage(activePage + 1)}
+                  disabled={activePage === totalPages}
+                  className="w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer bg-white"
+                >
+                  <span className="material-symbols-outlined text-base">chevron_right</span>
+                </button>
+              </div>
+            )}
           </section>
 
           {/* Featured Remote Support Section (Helpful Technical Desk - Moved to the bottom as a CTA) */}
