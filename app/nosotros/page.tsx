@@ -129,8 +129,21 @@ export default function NosotrosPage() {
             
             {/* Mission Row */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+              {/* Text Column */}
+              <div className="lg:col-span-7 space-y-5 scroll-reveal">
+                <span className="inline-block py-1 px-3 bg-primary/10 border border-primary/15 text-primary font-bold text-[9px] rounded-full uppercase tracking-widest leading-none">
+                  Propósito
+                </span>
+                <h3 className="font-headline text-2xl md:text-4xl font-black text-on-surface leading-tight">
+                  Nuestra <span className="text-primary">Misión</span>
+                </h3>
+                <p className="text-sm md:text-base text-on-surface-variant leading-relaxed font-semibold">
+                  Garantizar la continuidad operativa de nuestros clientes mediante la implementación de soluciones de infraestructura robustas y soporte técnico de alta precisión, minimizando riesgos y optimizando el rendimiento tecnológico.
+                </p>
+              </div>
+
               {/* Image Column */}
-              <div className="lg:col-span-5 relative group scroll-reveal">
+              <div className="lg:col-span-5 relative group scroll-reveal" style={{ transitionDelay: "150ms" }}>
                 {/* Decorative background blob */}
                 <div 
                   className="absolute inset-0 bg-primary/5 transform -rotate-6 scale-105 transition-transform duration-700 group-hover:rotate-0" 
@@ -155,19 +168,6 @@ export default function NosotrosPage() {
                   <span className="text-[9px] font-black uppercase tracking-wider text-on-surface">Continuidad Operativa</span>
                 </div>
               </div>
-              
-              {/* Text Column */}
-              <div className="lg:col-span-7 space-y-5 scroll-reveal" style={{ transitionDelay: "150ms" }}>
-                <span className="inline-block py-1 px-3 bg-primary/10 border border-primary/15 text-primary font-bold text-[9px] rounded-full uppercase tracking-widest leading-none">
-                  Propósito
-                </span>
-                <h3 className="font-headline text-2xl md:text-4xl font-black text-on-surface leading-tight">
-                  Nuestra <span className="text-primary">Misión</span>
-                </h3>
-                <p className="text-sm md:text-base text-on-surface-variant leading-relaxed font-semibold">
-                  Garantizar la continuidad operativa de nuestros clientes mediante la implementación de soluciones de infraestructura robustas y soporte técnico de alta precisión, minimizando riesgos y optimizando el rendimiento tecnológico.
-                </p>
-              </div>
             </div>
 
           </div>
@@ -176,21 +176,8 @@ export default function NosotrosPage() {
             
             {/* Vision Row */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
-              {/* Text Column */}
-              <div className="lg:col-span-7 space-y-5 scroll-reveal order-last lg:order-first">
-                <span className="inline-block py-1 px-3 bg-primary/10 border border-primary/15 text-primary font-bold text-[9px] rounded-full uppercase tracking-widest leading-none">
-                  Determinación
-                </span>
-                <h3 className="font-headline text-2xl md:text-4xl font-black text-on-surface leading-tight">
-                  Nuestra <span className="text-primary">Visión</span>
-                </h3>
-                <p className="text-sm md:text-base text-on-surface-variant leading-relaxed font-semibold">
-                  Ser el referente nacional en ingeniería de precisión IT, liderando la transformación tecnológica con estándares internacionales de calidad y siendo reconocidos como el socio más confiable para la infraestructura crítica en el Perú.
-                </p>
-              </div>
-
               {/* Image Column */}
-              <div className="lg:col-span-5 relative group scroll-reveal" style={{ transitionDelay: "150ms" }}>
+              <div className="lg:col-span-5 relative group scroll-reveal">
                 {/* Decorative background blob */}
                 <div 
                   className="absolute inset-0 bg-primary/5 transform rotate-6 scale-105 transition-transform duration-700 group-hover:rotate-0" 
@@ -215,6 +202,19 @@ export default function NosotrosPage() {
                   <span className="text-[9px] font-black uppercase tracking-wider text-on-surface">Liderazgo Tecnológico</span>
                 </div>
               </div>
+
+              {/* Text Column */}
+              <div className="lg:col-span-7 space-y-5 scroll-reveal" style={{ transitionDelay: "150ms" }}>
+                <span className="inline-block py-1 px-3 bg-primary/10 border border-primary/15 text-primary font-bold text-[9px] rounded-full uppercase tracking-widest leading-none">
+                  Determinación
+                </span>
+                <h3 className="font-headline text-2xl md:text-4xl font-black text-on-surface leading-tight">
+                  Nuestra <span className="text-primary">Visión</span>
+                </h3>
+                <p className="text-sm md:text-base text-on-surface-variant leading-relaxed font-semibold">
+                  Ser el referente nacional en ingeniería de precisión IT, liderando la transformación tecnológica con estándares internacionales de calidad y siendo reconocidos como el socio más confiable para la infraestructura crítica en el Perú.
+                </p>
+              </div>
             </div>
 
           </div>
@@ -224,11 +224,11 @@ export default function NosotrosPage() {
         <section className="py-24 bg-white border-t border-slate-100">
           <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
             <div className="text-center mb-16 space-y-3 scroll-reveal">
-              <span className="inline-flex items-center gap-2 bg-slate-100 border border-slate-200/60 text-slate-700 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-2">
+              <span className="inline-flex items-center gap-2 bg-primary/10 border border-primary/15 text-primary px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-2">
                 <span className="material-symbols-outlined text-[16px]">stars</span>
                 Pilares del Soporte
               </span>
-              <h3 className="font-headline text-3xl font-bold text-on-surface">Nuestros Valores Fundamentales</h3>
+              <h3 className="font-headline text-3xl font-bold text-on-surface">Nuestros <span className="text-primary">Valores Fundamentales</span></h3>
               <p className="text-sm font-semibold text-on-surface-variant max-w-lg mx-auto">
                 El ADN que guía cada intervención técnica y decisión estratégica.
               </p>
