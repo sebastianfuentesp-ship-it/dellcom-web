@@ -1367,6 +1367,20 @@ export default function AdminDashboardPage() {
           background-color: rgba(255, 0, 0, 0.08) !important;
         }
 
+        .dark-theme .bg-slate-50 {
+          background-color: #1e293b !important;
+          color: var(--text-main) !important;
+        }
+
+        .dark-theme button.bg-slate-50:hover {
+          background-color: #334155 !important;
+          color: #ffffff !important;
+        }
+
+        .dark-theme .border-red-600 {
+          border-color: #ef4444 !important;
+        }
+
         .dark-theme .bg-blue-50,
         .dark-theme .bg-blue-100 {
           background-color: rgba(59, 130, 246, 0.15) !important;
