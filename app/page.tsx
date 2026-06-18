@@ -243,9 +243,9 @@ export default async function Home() {
                 <span className="material-symbols-outlined text-[16px]">build</span>
                 Servicios Técnicos Especializados
               </span>
-              <h2 className="font-headline text-3xl md:text-4xl font-bold text-on-surface">Soluciones Integrales para tu Negocio</h2>
+              <h2 className="font-headline text-3xl md:text-4xl font-bold text-on-surface"><span className="text-primary">Soluciones Integrales</span> para tu <span className="text-primary">Negocio</span></h2>
               <p className="text-sm font-semibold text-on-surface-variant max-w-2xl mx-auto">
-                Estructura de bento grid diferenciada por importancia operativa. Haz clic para cotizar directamente en laboratorios.
+                Explora nuestra gama de servicios y soporte certificado. Selecciona la opción que necesitas para cotizar o iniciar tu atención técnica de inmediato.
               </p>
             </div>
             
@@ -468,7 +468,7 @@ export default async function Home() {
                 <span className="material-symbols-outlined text-[16px]">location_on</span>
                 Nuestras Sedes
               </div>
-              <h2 className="font-headline text-3xl md:text-4xl font-bold text-on-surface">¿Dónde Encontrarnos?</h2>
+              <h2 className="font-headline text-3xl md:text-4xl font-bold text-on-surface">¿<span className="text-primary">Dónde Encontrarnos?</span></h2>
               <p className="text-xs md:text-sm font-semibold text-on-surface-variant leading-relaxed">
                 Visítanos en cualquiera de nuestras sucursales para soporte técnico especializado, repuestos de hardware o licencias de software originales.
               </p>
