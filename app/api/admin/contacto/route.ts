@@ -59,10 +59,14 @@ export async function PUT(req: NextRequest) {
     }
 
     const { id, leido } = result.data;
+    const userId = Number((session.user as any).id);
 
     const mensajeActualizado = await prisma.mensajeContacto.update({
       where: { id },
-      data: { leido },
+      data: {
+        leido,
+        id_usuario_leido: leido ? userId : null,
+      },
     });
 
     return NextResponse.json({ success: true, data: mensajeActualizado });

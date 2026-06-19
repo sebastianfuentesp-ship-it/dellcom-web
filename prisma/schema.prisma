@@ -10,17 +10,21 @@ datasource db {
 // ─── SISTEMA ADMINISTRATIVO ───────────────────────────
 
 model Usuario {
-  id                  Int              @id @default(autoincrement()) @map("id_usuario")
+  id                  Int                  @id @default(autoincrement()) @map("id_usuario")
   nombre              String
-  usuario             String           @unique
-  email               String           @unique
+  usuario             String               @unique
+  email               String               @unique
   contrasena          String
-  rol                 Rol              @default(tecnico)
-  activo              Boolean          @default(true)
-  mustChangePassword  Boolean          @default(false)
-  createdAt           DateTime         @default(now())
+  rol                 Rol                  @default(tecnico)
+  activo              Boolean              @default(true)
+  mustChangePassword  Boolean              @default(false)
+  createdAt           DateTime             @default(now())
   archivos            ArchivoTecnico[]
   licencias           Licencia[]
+  productos           Producto[]
+  servicios           Servicio[]
+  mensajesLeidos      MensajeContacto[]
+  passwordResetTokens PasswordResetToken[]
 }
 
 enum Rol {
@@ -72,6 +76,8 @@ enum TipoArchivo {
 
 model Servicio {
   id          Int                @id @default(autoincrement()) @map("id_servicio")
+  id_usuario  Int?               @map("id_usuario")
+  usuario     Usuario?           @relation(fields: [id_usuario], references: [id])
   nombre      String
   descripcion String             @db.Text
   icono_url   String?
@@ -90,6 +96,8 @@ model Producto {
   id           Int       @id @default(autoincrement()) @map("id_producto")
   id_categoria Int
   categoria    Categoria @relation(fields: [id_categoria], references: [id])
+  id_usuario   Int?      @map("id_usuario")
+  usuario      Usuario?  @relation(fields: [id_usuario], references: [id])
   nombre       String
   descripcion  String?   @db.Text
   precio       Decimal   @db.Decimal(10, 2)
@@ -111,6 +119,8 @@ model TrabajoRealizado {
 
 model PasswordResetToken {
   id        Int      @id @default(autoincrement())
+  id_usuario Int?    @map("id_usuario")
+  usuario   Usuario? @relation(fields: [id_usuario], references: [id])
   token     String   @unique
   email     String
   expiresAt DateTime
@@ -119,12 +129,14 @@ model PasswordResetToken {
 }
 
 model MensajeContacto {
-  id        Int      @id @default(autoincrement()) @map("id_mensaje")
-  nombre    String
-  correo    String
-  telefono  String?
-  asunto    String
-  mensaje   String   @db.Text
-  leido     Boolean  @default(false)
-  fecha     DateTime @default(now())
+  id               Int      @id @default(autoincrement()) @map("id_mensaje")
+  id_usuario_leido Int?     @map("id_usuario_leido")
+  usuarioLeido     Usuario? @relation(fields: [id_usuario_leido], references: [id])
+  nombre           String
+  correo           String
+  telefono         String?
+  asunto           String
+  mensaje          String   @db.Text
+  leido            Boolean  @default(false)
+  fecha            DateTime @default(now())
 }

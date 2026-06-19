@@ -32,7 +32,6 @@ export async function GET(req: NextRequest) {
   });
   return NextResponse.json(productos);
 }
-
 // Crea un producto nuevo tras validar el cuerpo con Zod
 export async function POST(req: NextRequest) {
   const auth = await requireRole(["admin", "vendedor"]);
@@ -44,6 +43,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ errors: result.error.flatten().fieldErrors }, { status: 400 });
   }
 
-  const producto = await prisma.producto.create({ data: result.data });
+  const producto = await prisma.producto.create({
+    data: {
+      ...result.data,
+      id_usuario: auth.userId || null,
+    },
+  });
   return NextResponse.json(producto, { status: 201 });
 }

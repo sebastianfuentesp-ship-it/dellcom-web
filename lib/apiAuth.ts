@@ -9,7 +9,7 @@ import { authOptions } from "@/lib/auth";
 export type Rol = "admin" | "tecnico" | "vendedor";
 
 type AuthResult =
-  | { authorized: true; role: Rol; email: string }
+  | { authorized: true; role: Rol; email: string; userId: number }
   | { authorized: false; errorResponse: NextResponse };
 
 // Verifica que haya sesión activa y que el rol esté en la lista permitida
@@ -24,5 +24,7 @@ export async function requireRole(allowedRoles: Rol[]): Promise<AuthResult> {
     return { authorized: false, errorResponse: NextResponse.json({ error: "Permisos insuficientes" }, { status: 403 }) };
   }
 
-  return { authorized: true, role, email: session.user?.email || "" };
+  const userId = Number((session.user as { id?: string }).id);
+
+  return { authorized: true, role, email: session.user?.email || "", userId };
 }

@@ -59,15 +59,19 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = (user as any).role;
-        token.mustChangePassword = (user as any).mustChangePassword;
+        const u = user as { role?: string; mustChangePassword?: boolean; id?: string };
+        token.role = u.role;
+        token.mustChangePassword = u.mustChangePassword;
+        token.id = u.id;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).role = token.role;
-        (session.user as any).mustChangePassword = token.mustChangePassword;
+        const su = session.user as { role?: string; mustChangePassword?: boolean; id?: string };
+        su.role = token.role as string;
+        su.mustChangePassword = token.mustChangePassword as boolean;
+        su.id = token.id as string;
       }
       return session;
     },

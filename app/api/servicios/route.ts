@@ -35,6 +35,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ errors: result.error.flatten().fieldErrors }, { status: 400 });
   }
 
-  const servicio = await prisma.servicio.create({ data: result.data });
+  const servicio = await prisma.servicio.create({
+    data: {
+      ...result.data,
+      id_usuario: auth.userId || null,
+    },
+  });
   return NextResponse.json(servicio, { status: 201 });
 }
