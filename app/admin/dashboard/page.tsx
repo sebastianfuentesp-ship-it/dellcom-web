@@ -276,6 +276,8 @@ export default function AdminDashboardPage() {
   const [uploadingProductIdx, setUploadingProductIdx] = useState<number | null>(null);
   const [formProductActive, setFormProductActive] = useState(true);
   const [draggingProductImgIdx, setDraggingProductImgIdx] = useState<number | null>(null);
+  const [draggingPortfolioMain, setDraggingPortfolioMain] = useState(false);
+  const [draggingPortfolioExtraIdx, setDraggingPortfolioExtraIdx] = useState<number | null>(null);
 
   // Form states for User CRUD (Admin)
   const [formUserNombre, setFormUserNombre] = useState("");
@@ -516,6 +518,62 @@ export default function AdminDashboardPage() {
       alert("Error al subir la imagen.");
     } finally {
       setUploadingProductIdx(null);
+    }
+  };
+
+  const handlePortfolioMainDrop = async (file: File) => {
+    const MAX_SIZE = 4.5 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      alert(`El archivo "${file.name}" supera el límite de 4.5MB (Pesa ${(file.size / (1024 * 1024)).toFixed(2)}MB).`);
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      alert("Solo se permiten archivos de imagen (JPG, PNG, WEBP, etc.).");
+      return;
+    }
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", "portfolio");
+    try {
+      const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      setFormPortfolioImgUrl(data.url);
+      alert("Imagen cargada con éxito.");
+    } catch (err) {
+      console.error(err);
+      alert("Error al subir la imagen.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handlePortfolioExtraDrop = async (file: File, idx: number) => {
+    const MAX_SIZE = 4.5 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      alert(`El archivo "${file.name}" supera el límite de 4.5MB (Pesa ${(file.size / (1024 * 1024)).toFixed(2)}MB).`);
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      alert("Solo se permiten archivos de imagen (JPG, PNG, WEBP, etc.).");
+      return;
+    }
+    setUploadingPortfolioExtraIdx(idx);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", "portfolio");
+    try {
+      const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      setFormPortfolioExtraImgs(prev => prev.map((u, i) => i === idx ? data.url : u));
+      alert("Imagen cargada con éxito.");
+    } catch (err) {
+      console.error(err);
+      alert("Error al subir la imagen.");
+    } finally {
+      setUploadingPortfolioExtraIdx(null);
     }
   };
 
@@ -4054,36 +4112,64 @@ export default function AdminDashboardPage() {
 
               <div>
                 <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Foto principal (portada)</label>
-                <div className="flex gap-3 items-center">
-                  <input
-                    type="text"
-                    required
-                    value={formPortfolioImgUrl}
-                    onChange={(e) => setFormPortfolioImgUrl(e.target.value)}
-                    placeholder="https://..."
-                    className="flex-1 bg-slate-50 border border-slate-200 focus:border-red-600 focus:ring-1 focus:ring-red-600 focus:outline-none rounded-xl px-4 py-3 text-sm transition-all"
-                  />
-                  <div className="relative">
+                <div
+                  className={`border-2 border-dashed rounded-xl p-3 space-y-2 transition-all duration-200 ${
+                    draggingPortfolioMain
+                      ? "border-red-500 bg-red-50/30 scale-[1.01]"
+                      : formPortfolioImgUrl
+                        ? "border-slate-200 bg-slate-50/50 border-solid"
+                        : "border-slate-300 bg-slate-50/30"
+                  }`}
+                  onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setDraggingPortfolioMain(true); }}
+                  onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setDraggingPortfolioMain(true); }}
+                  onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); setDraggingPortfolioMain(false); }}
+                  onDrop={(e) => {
+                    e.preventDefault(); e.stopPropagation();
+                    setDraggingPortfolioMain(false);
+                    const file = e.dataTransfer.files?.[0];
+                    if (file) handlePortfolioMainDrop(file);
+                  }}
+                >
+                  {draggingPortfolioMain && (
+                    <div className="flex items-center justify-center gap-2 py-2 text-red-500">
+                      <span className="material-symbols-outlined text-lg animate-bounce">cloud_upload</span>
+                      <span className="text-[11px] font-bold">Suelta la imagen aquí</span>
+                    </div>
+                  )}
+                  <div className={`flex gap-3 items-center ${draggingPortfolioMain ? "opacity-50" : ""}`}>
+                    {formPortfolioImgUrl && (
+                      <img src={formPortfolioImgUrl} alt="portada" className="w-12 h-12 object-cover rounded-xl border border-slate-200 shrink-0" />
+                    )}
                     <input
-                      type="file"
-                      id="formPortfolioImgFile"
-                      onChange={(e) => handleUploadFile(e, "portfolio")}
-                      className="hidden"
-                      accept="image/*"
+                      type="text"
+                      required
+                      value={formPortfolioImgUrl}
+                      onChange={(e) => setFormPortfolioImgUrl(e.target.value)}
+                      placeholder="Arrastra una imagen aquí o pega URL →"
+                      className="flex-1 bg-white border border-slate-200 focus:border-red-600 focus:ring-1 focus:ring-red-600 focus:outline-none rounded-xl px-4 py-3 text-sm transition-all"
                     />
-                    <label
-                      htmlFor="formPortfolioImgFile"
-                      className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5"
-                    >
-                      <span className="material-symbols-outlined text-sm">upload</span>
-                      Subir
-                    </label>
+                    <div className="relative shrink-0">
+                      <input
+                        type="file"
+                        id="formPortfolioImgFile"
+                        onChange={(e) => handleUploadFile(e, "portfolio")}
+                        className="hidden"
+                        accept="image/*"
+                      />
+                      <label
+                        htmlFor="formPortfolioImgFile"
+                        className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5"
+                      >
+                        {uploading
+                          ? <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span>
+                          : <span className="material-symbols-outlined text-sm">upload</span>
+                        }
+                        Subir
+                      </label>
+                    </div>
                   </div>
+                  {uploading && <span className="text-[10px] text-red-600 font-bold block">Cargando archivo...</span>}
                 </div>
-                {uploading && <span className="text-[10px] text-red-600 font-bold block mt-1">Cargando archivo...</span>}
-                {formPortfolioImgUrl && (
-                  <img src={formPortfolioImgUrl} alt="portada" className="mt-2 w-20 h-20 object-cover rounded-xl border border-slate-200" />
-                )}
               </div>
 
               <div>
@@ -4103,42 +4189,68 @@ export default function AdminDashboardPage() {
                 )}
                 <div className="space-y-2">
                   {formPortfolioExtraImgs.map((url, idx) => (
-                    <div key={idx} className="flex gap-2 items-center">
-                      <div className="w-10 h-10 flex-shrink-0 rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
-                        {url && <img src={url} alt="" className="w-full h-full object-cover" />}
-                      </div>
-                      <input
-                        type="text"
-                        value={url}
-                        onChange={(e) => setFormPortfolioExtraImgs(prev => prev.map((u, i) => i === idx ? e.target.value : u))}
-                        placeholder="https://..."
-                        className="flex-1 bg-slate-50 border border-slate-200 focus:border-red-600 focus:ring-1 focus:ring-red-600 focus:outline-none rounded-xl px-3 py-2 text-sm transition-all"
-                      />
-                      <div className="relative flex-shrink-0">
+                    <div
+                      key={idx}
+                      className={`border-2 border-dashed rounded-xl p-2.5 transition-all duration-200 ${
+                        draggingPortfolioExtraIdx === idx
+                          ? "border-red-500 bg-red-50/30 scale-[1.01]"
+                          : url.trim()
+                            ? "border-slate-200 bg-slate-50/50 border-solid"
+                            : "border-slate-300 bg-slate-50/30"
+                      }`}
+                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setDraggingPortfolioExtraIdx(idx); }}
+                      onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setDraggingPortfolioExtraIdx(idx); }}
+                      onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); if (draggingPortfolioExtraIdx === idx) setDraggingPortfolioExtraIdx(null); }}
+                      onDrop={(e) => {
+                        e.preventDefault(); e.stopPropagation();
+                        setDraggingPortfolioExtraIdx(null);
+                        const file = e.dataTransfer.files?.[0];
+                        if (file) handlePortfolioExtraDrop(file, idx);
+                      }}
+                    >
+                      {draggingPortfolioExtraIdx === idx && (
+                        <div className="flex items-center justify-center gap-2 py-1 text-red-500">
+                          <span className="material-symbols-outlined text-base animate-bounce">cloud_upload</span>
+                          <span className="text-[11px] font-bold">Suelta aquí</span>
+                        </div>
+                      )}
+                      <div className={`flex gap-2 items-center ${draggingPortfolioExtraIdx === idx ? "opacity-50" : ""}`}>
+                        <div className="w-10 h-10 flex-shrink-0 rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
+                          {url && <img src={url} alt="" className="w-full h-full object-cover" />}
+                        </div>
                         <input
-                          type="file"
-                          id={`formPortfolioExtra_${idx}`}
-                          onChange={(e) => handleUploadFile(e, "portfolio-extra", idx)}
-                          className="hidden"
-                          accept="image/*"
+                          type="text"
+                          value={url}
+                          onChange={(e) => setFormPortfolioExtraImgs(prev => prev.map((u, i) => i === idx ? e.target.value : u))}
+                          placeholder="Arrastra una imagen o pega URL →"
+                          className="flex-1 bg-white border border-slate-200 focus:border-red-600 focus:ring-1 focus:ring-red-600 focus:outline-none rounded-xl px-3 py-2 text-sm transition-all"
                         />
-                        <label
-                          htmlFor={`formPortfolioExtra_${idx}`}
-                          className="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1"
+                        <div className="relative flex-shrink-0">
+                          <input
+                            type="file"
+                            id={`formPortfolioExtra_${idx}`}
+                            onChange={(e) => handleUploadFile(e, "portfolio-extra", idx)}
+                            className="hidden"
+                            accept="image/*"
+                          />
+                          <label
+                            htmlFor={`formPortfolioExtra_${idx}`}
+                            className="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1"
+                          >
+                            {uploadingPortfolioExtraIdx === idx
+                              ? <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span>
+                              : <span className="material-symbols-outlined text-sm">upload</span>
+                            }
+                          </label>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setFormPortfolioExtraImgs(prev => prev.filter((_, i) => i !== idx))}
+                          className="flex-shrink-0 p-2 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
                         >
-                          {uploadingPortfolioExtraIdx === idx
-                            ? <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span>
-                            : <span className="material-symbols-outlined text-sm">upload</span>
-                          }
-                        </label>
+                          <span className="material-symbols-outlined text-sm">delete</span>
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => setFormPortfolioExtraImgs(prev => prev.filter((_, i) => i !== idx))}
-                        className="flex-shrink-0 p-2 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
-                      >
-                        <span className="material-symbols-outlined text-sm">delete</span>
-                      </button>
                     </div>
                   ))}
                 </div>
