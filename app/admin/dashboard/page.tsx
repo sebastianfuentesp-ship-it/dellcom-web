@@ -275,6 +275,7 @@ export default function AdminDashboardPage() {
   const [formProductImages, setFormProductImages] = useState<string[]>([""]);
   const [uploadingProductIdx, setUploadingProductIdx] = useState<number | null>(null);
   const [formProductActive, setFormProductActive] = useState(true);
+  const [draggingProductImgIdx, setDraggingProductImgIdx] = useState<number | null>(null);
 
   // Form states for User CRUD (Admin)
   const [formUserNombre, setFormUserNombre] = useState("");
@@ -488,6 +489,35 @@ export default function AdminDashboardPage() {
   const addProductImage = () => setFormProductImages(prev => [...prev, ""]);
   const removeProductImage = (idx: number) => setFormProductImages(prev => prev.filter((_, i) => i !== idx));
   const updateProductImage = (idx: number, url: string) => setFormProductImages(prev => prev.map((u, i) => i === idx ? url : u));
+
+  // Drag & Drop handler for product images
+  const handleProductDrop = async (file: File, idx: number) => {
+    const MAX_SIZE = 4.5 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      alert(`El archivo "${file.name}" supera el límite de 4.5MB (Pesa ${(file.size / (1024 * 1024)).toFixed(2)}MB).`);
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      alert("Solo se permiten archivos de imagen (JPG, PNG, WEBP, etc.).");
+      return;
+    }
+    setUploadingProductIdx(idx);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", "productos");
+    try {
+      const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      setFormProductImages(prev => prev.map((u, i) => i === idx ? data.url : u));
+      alert("Imagen cargada con éxito.");
+    } catch (err) {
+      console.error(err);
+      alert("Error al subir la imagen.");
+    } finally {
+      setUploadingProductIdx(null);
+    }
+  };
 
   const toggleMensajeLeido = async (id: number, currentRead: boolean) => {
     try {
@@ -3597,8 +3627,33 @@ export default function AdminDashboardPage() {
                 </div>
                 <div className="space-y-3">
                   {formProductImages.map((imgUrl, idx) => (
-                    <div key={idx} className="border border-slate-200 dark:border-slate-600 rounded-xl p-3 bg-slate-50/50 dark:bg-slate-700/50 space-y-1.5">
-                      <div className="flex gap-2 items-center">
+                    <div
+                      key={idx}
+                      className={`border-2 border-dashed rounded-xl p-3 space-y-1.5 transition-all duration-200 ${
+                        draggingProductImgIdx === idx
+                          ? "border-red-500 bg-red-50/30 dark:bg-red-500/10 scale-[1.01]"
+                          : imgUrl.trim()
+                            ? "border-slate-200 dark:border-slate-600 bg-slate-50/50 dark:bg-slate-700/50 border-solid"
+                            : "border-slate-300 dark:border-slate-500 bg-slate-50/30 dark:bg-slate-700/30"
+                      }`}
+                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setDraggingProductImgIdx(idx); }}
+                      onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setDraggingProductImgIdx(idx); }}
+                      onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); if (draggingProductImgIdx === idx) setDraggingProductImgIdx(null); }}
+                      onDrop={(e) => {
+                        e.preventDefault(); e.stopPropagation();
+                        setDraggingProductImgIdx(null);
+                        const file = e.dataTransfer.files?.[0];
+                        if (file) handleProductDrop(file, idx);
+                      }}
+                    >
+                      {/* Drop zone hint when empty and dragging */}
+                      {draggingProductImgIdx === idx && (
+                        <div className="flex items-center justify-center gap-2 py-2 text-red-500 dark:text-red-400">
+                          <span className="material-symbols-outlined text-lg animate-bounce">cloud_upload</span>
+                          <span className="text-[11px] font-bold">Suelta la imagen aquí</span>
+                        </div>
+                      )}
+                      <div className={`flex gap-2 items-center ${draggingProductImgIdx === idx ? "opacity-50" : ""}`}>
                         {/* Thumbnail preview beside input */}
                         <div className="img-thumb-wrap shrink-0 w-12 h-12 rounded-lg overflow-hidden bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 flex items-center justify-center">
                           {imgUrl.trim() ? (
@@ -3616,7 +3671,7 @@ export default function AdminDashboardPage() {
                           type="text"
                           value={imgUrl}
                           onChange={(e) => updateProductImage(idx, e.target.value)}
-                          placeholder="URL de imagen o sube un archivo →"
+                          placeholder="Arrastra una imagen aquí o pega URL →"
                           className="flex-1 bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 focus:border-red-600 focus:ring-1 focus:ring-red-600 focus:outline-none rounded-xl px-3 py-2.5 text-xs transition-all font-mono dark:text-slate-100 dark:placeholder:text-slate-400"
                         />
                         <label
