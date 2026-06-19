@@ -172,7 +172,7 @@ export default function ContactoPage() {
                       type="tel"
                       placeholder="Ej. 987654321"
                       value={telefono}
-                      onChange={(e) => setTelefono(e.target.value.replace(/\D/g, "").slice(0, 15))}
+                      onChange={(e) => setTelefono(e.target.value.replace(/\D/g, "").slice(0, 9))}
                       required
                       className="w-full py-3.5 bg-transparent border-none text-xs font-semibold focus:outline-none text-on-surface placeholder:text-slate-300"
                     />
@@ -222,9 +222,13 @@ export default function ContactoPage() {
                   >
                     <option value="Soporte Técnico">Soporte Técnico</option>
                     <option value="Cotización de Servicio">Cotización de Servicio</option>
-                    <option value="Reparación de Hardware">Reparación de Hardware</option>
-                    <option value="Licencias y Software">Licencias y Software</option>
-
+                    <option value="Reparación de Laptops e Impresoras">Reparación de Laptops e Impresoras</option>
+                    <option value="Microelectrónica y Placas">Microelectrónica y Placas</option>
+                    <option value="Soporte Remoto (AnyDesk)">Soporte Remoto (AnyDesk)</option>
+                    <option value="Venta de Repuestos de Laptops">Venta de Repuestos de Laptops</option>
+                    <option value="Licencias de Software">Licencias de Software</option>
+                    <option value="Correos Corporativos">Correos Corporativos</option>
+                    <option value="Otro">Otro</option>
                   </select>
                 </div>
                 {errors.asunto && (

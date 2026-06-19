@@ -28,8 +28,7 @@ const ContactSchema = z.object({
   correo: z.string().email("El correo electrónico no es válido"),
   telefono: z
     .string()
-    .min(7, "El teléfono debe tener al menos 7 dígitos")
-    .max(15, "El teléfono no debe superar los 15 dígitos")
+    .length(9, "El teléfono debe tener exactamente 9 dígitos")
     .regex(/^[0-9]+$/, "El teléfono debe contener solo números")
     .transform(stripHtml),
   asunto: z.string().min(3, "El asunto debe tener al menos 3 caracteres").transform(stripHtml),
