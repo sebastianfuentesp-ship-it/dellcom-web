@@ -308,6 +308,7 @@ export default function AdminDashboardPage() {
 
   // Mensaje de contacto seleccionado para ver el texto completo en un modal
   const [selectedMensaje, setSelectedMensaje] = useState<MensajeContacto | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   // Permisos por rol: admin tiene acceso total; tecnico y vendedor según su área de trabajo
   const userRole = (session?.user as any)?.role as "admin" | "tecnico" | "vendedor" | undefined;
@@ -2298,7 +2299,6 @@ export default function AdminDashboardPage() {
                                 <div key={i} className="text-center">
                                   <span className="text-[9px] text-slate-400 font-bold block leading-none">{day.label.replace('.', '')}</span>
                                   <span className="text-[9px] text-slate-500 font-black block mt-1 leading-none">{day.date}</span>
-                                  <span className="text-[10px] font-black text-on-surface block mt-1 leading-none bg-slate-100 px-1 py-0.5 rounded">{day.count}</span>
                                 </div>
                               ))}
                             </div>
@@ -2889,11 +2889,11 @@ export default function AdminDashboardPage() {
                                     src={(() => { const firstImg = prod.imagen_url!.split("||")[0]; return firstImg.startsWith("http") || firstImg.startsWith("/") ? firstImg : `/${firstImg}`; })()} 
                                     alt={prod.nombre} 
                                     className="w-10 h-10 object-contain rounded-lg border border-slate-200 bg-slate-50 cursor-zoom-in hover:opacity-80 transition-opacity"
-                                    title="Click para ver en tamaño completo"
+                                    title="Click para previsualizar"
                                     onClick={() => {
                                       const firstImg = prod.imagen_url!.split("||")[0];
                                       const finalUrl = firstImg.startsWith("http") || firstImg.startsWith("/") ? firstImg : `/${firstImg}`;
-                                      window.open(finalUrl, '_blank');
+                                      setPreviewImage(finalUrl);
                                     }}
                                     onError={(e) => {
                                       const target = e.currentTarget as HTMLImageElement;
@@ -3280,8 +3280,8 @@ export default function AdminDashboardPage() {
                                   src={job.imagen_url.split("||")[0]} 
                                   alt={job.titulo} 
                                   className="w-full h-full object-cover cursor-zoom-in hover:opacity-85 transition-opacity" 
-                                  title="Click para ver en tamaño completo"
-                                  onClick={() => window.open(job.imagen_url.split("||")[0], '_blank')}
+                                  title="Click para previsualizar"
+                                  onClick={() => setPreviewImage(job.imagen_url.split("||")[0])}
                                 />
                               </div>
                             </td>
@@ -3749,8 +3749,8 @@ export default function AdminDashboardPage() {
                               src={imgUrl}
                               alt={`Vista previa ${idx + 1}`}
                               className="w-full h-full object-cover cursor-zoom-in hover:opacity-80 transition-opacity"
-                              title="Click para ver en tamaño completo"
-                              onClick={() => window.open(imgUrl, '_blank')}
+                              title="Click para previsualizar"
+                              onClick={() => setPreviewImage(imgUrl)}
                               onError={(e) => { (e.target as HTMLImageElement).src = ""; (e.target as HTMLImageElement).style.display = "none"; }}
                             />
                           ) : (
@@ -4174,8 +4174,8 @@ export default function AdminDashboardPage() {
                         src={formPortfolioImgUrl} 
                         alt="portada" 
                         className="w-12 h-12 object-cover rounded-xl border border-slate-200 shrink-0 cursor-zoom-in hover:opacity-80 transition-opacity" 
-                        title="Click para ver en tamaño completo"
-                        onClick={() => window.open(formPortfolioImgUrl, '_blank')}
+                        title="Click para previsualizar"
+                        onClick={() => setPreviewImage(formPortfolioImgUrl)}
                       />
                     )}
                     <input
@@ -4259,8 +4259,8 @@ export default function AdminDashboardPage() {
                               src={url} 
                               alt="" 
                               className="w-full h-full object-cover cursor-zoom-in hover:opacity-80 transition-opacity" 
-                              title="Click para ver en tamaño completo"
-                              onClick={() => window.open(url, '_blank')}
+                              title="Click para previsualizar"
+                              onClick={() => setPreviewImage(url)}
                             />
                           )}
                         </div>
@@ -4416,6 +4416,31 @@ export default function AdminDashboardPage() {
                 Cerrar
               </button>
             </footer>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Genérico de Previsualización de Imagen */}
+      {previewImage && (
+        <div 
+          className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-[4px] flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setPreviewImage(null)}
+        >
+          <div 
+            className="relative max-w-4xl max-h-[90vh] bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-2xl p-2 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setPreviewImage(null)}
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-slate-900/60 hover:bg-slate-950 text-white flex items-center justify-center shadow-lg transition-all active:scale-95 cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-xl">close</span>
+            </button>
+            <img 
+              src={previewImage} 
+              alt="Visualización de imagen" 
+              className="max-w-full max-h-[85vh] object-contain rounded-2xl"
+            />
           </div>
         </div>
       )}
