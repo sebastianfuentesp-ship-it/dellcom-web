@@ -2219,13 +2219,14 @@ export default function AdminDashboardPage() {
                   <div className="h-44 w-full mt-4 flex items-end relative">
                     {(() => {
                       const now = new Date();
-                      const days: { label: string; count: number }[] = [];
+                      const days: { label: string; date: string; count: number }[] = [];
                       for (let i = 6; i >= 0; i--) {
                         const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
                         const label = d.toLocaleDateString("es-ES", { weekday: "short" });
+                        const date = d.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit" });
                         const dateStr = d.toDateString();
                         const count = mensajes.filter(m => new Date(m.fecha).toDateString() === dateStr).length;
-                        days.push({ label, count });
+                        days.push({ label, date, count });
                       }
                       
                       const maxCount = Math.max(...days.map(d => d.count), 4);
@@ -2251,45 +2252,56 @@ export default function AdminDashboardPage() {
                       const fillD = `${pathD} L ${points[points.length - 1].x} ${chartHeight} L ${points[0].x} ${chartHeight} Z`;
                       
                       return (
-                        <div className="w-full h-full flex flex-col justify-between">
-                          <div className="flex-1 w-full relative">
-                            {/* Gridlines */}
-                            <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-40">
-                              <div className="border-b border-dashed border-slate-200 w-full h-0"></div>
-                              <div className="border-b border-dashed border-slate-200 w-full h-0"></div>
-                              <div className="border-b border-dashed border-slate-200 w-full h-0"></div>
+                        <div className="w-full h-full flex flex-row items-stretch">
+                          {/* Eje Y (Cantidades) */}
+                          <div className="flex flex-col justify-between text-right pr-3 text-[9px] font-black text-slate-400 select-none pb-7 pt-3.5 h-full min-w-[20px]">
+                            <span>{maxCount}</span>
+                            <span>{Math.round(maxCount / 2)}</span>
+                            <span>0</span>
+                          </div>
+
+                          {/* Gráfico y Eje X */}
+                          <div className="flex-1 flex flex-col justify-between h-full">
+                            <div className="flex-1 w-full relative">
+                              {/* Gridlines */}
+                              <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-40 pb-3.5 pt-3.5">
+                                <div className="border-b border-dashed border-slate-200 w-full h-0"></div>
+                                <div className="border-b border-dashed border-slate-200 w-full h-0"></div>
+                                <div className="border-b border-dashed border-slate-200 w-full h-0"></div>
+                              </div>
+                              
+                              <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-full overflow-visible" preserveAspectRatio="none">
+                                <defs>
+                                  <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stopColor="#dc2626" stopOpacity="0.25" />
+                                    <stop offset="100%" stopColor="#dc2626" stopOpacity="0.0" />
+                                  </linearGradient>
+                                </defs>
+                                {/* Filled area */}
+                                <path d={fillD} fill="url(#chartGradient)" />
+                                {/* Smooth curve line */}
+                                <path d={pathD} fill="none" stroke="#dc2626" strokeWidth="3.5" strokeLinecap="round" />
+                                {/* Dots at points */}
+                                {points.map((pt, i) => (
+                                  <g key={i} className="group/dot cursor-pointer">
+                                    <circle cx={pt.x} cy={pt.y} r="5" fill="#dc2626" className="transition-all duration-200 group-hover/dot:r-7" />
+                                    <circle cx={pt.x} cy={pt.y} r="9" fill="none" stroke="#dc2626" strokeWidth="1.5" className="opacity-0 group-hover/dot:opacity-100 transition-opacity" />
+                                    <title>{`${days[i].count} mensajes`}</title>
+                                  </g>
+                                ))}
+                              </svg>
                             </div>
                             
-                            <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-full overflow-visible" preserveAspectRatio="none">
-                              <defs>
-                                <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                                  <stop offset="0%" stopColor="#dc2626" stopOpacity="0.25" />
-                                  <stop offset="100%" stopColor="#dc2626" stopOpacity="0.0" />
-                                </linearGradient>
-                              </defs>
-                              {/* Filled area */}
-                              <path d={fillD} fill="url(#chartGradient)" />
-                              {/* Smooth curve line */}
-                              <path d={pathD} fill="none" stroke="#dc2626" strokeWidth="3.5" strokeLinecap="round" />
-                              {/* Dots at points */}
-                              {points.map((pt, i) => (
-                                <g key={i} className="group/dot cursor-pointer">
-                                  <circle cx={pt.x} cy={pt.y} r="5" fill="#dc2626" className="transition-all duration-200 group-hover/dot:r-7" />
-                                  <circle cx={pt.x} cy={pt.y} r="9" fill="none" stroke="#dc2626" strokeWidth="1.5" className="opacity-0 group-hover/dot:opacity-100 transition-opacity" />
-                                  <title>{`${days[i].count} mensajes`}</title>
-                                </g>
+                            {/* Labels (Eje X) */}
+                            <div className="flex justify-between mt-2 px-1">
+                              {days.map((day, i) => (
+                                <div key={i} className="text-center">
+                                  <span className="text-[9px] text-slate-400 font-bold block leading-none">{day.label.replace('.', '')}</span>
+                                  <span className="text-[9px] text-slate-500 font-black block mt-1 leading-none">{day.date}</span>
+                                  <span className="text-[10px] font-black text-on-surface block mt-1 leading-none bg-slate-100 px-1 py-0.5 rounded">{day.count}</span>
+                                </div>
                               ))}
-                            </svg>
-                          </div>
-                          
-                          {/* Labels */}
-                          <div className="flex justify-between mt-2 px-1">
-                            {days.map((day, i) => (
-                              <div key={i} className="text-center">
-                                <span className="text-[10px] text-slate-500 font-bold block">{day.label}</span>
-                                <span className="text-[11px] font-black text-on-surface block mt-0.5">{day.count}</span>
-                              </div>
-                            ))}
+                            </div>
                           </div>
                         </div>
                       );
@@ -2876,7 +2888,13 @@ export default function AdminDashboardPage() {
                                   <img 
                                     src={(() => { const firstImg = prod.imagen_url!.split("||")[0]; return firstImg.startsWith("http") || firstImg.startsWith("/") ? firstImg : `/${firstImg}`; })()} 
                                     alt={prod.nombre} 
-                                    className="w-10 h-10 object-contain rounded-lg border border-slate-200 bg-slate-50"
+                                    className="w-10 h-10 object-contain rounded-lg border border-slate-200 bg-slate-50 cursor-zoom-in hover:opacity-80 transition-opacity"
+                                    title="Click para ver en tamaño completo"
+                                    onClick={() => {
+                                      const firstImg = prod.imagen_url!.split("||")[0];
+                                      const finalUrl = firstImg.startsWith("http") || firstImg.startsWith("/") ? firstImg : `/${firstImg}`;
+                                      window.open(finalUrl, '_blank');
+                                    }}
                                     onError={(e) => {
                                       const target = e.currentTarget as HTMLImageElement;
                                       target.onerror = null;
@@ -3258,7 +3276,13 @@ export default function AdminDashboardPage() {
                           <tr key={job.id} className="transition-colors hover:bg-slate-50/50">
                             <td className="px-6 py-3">
                               <div className="w-12 h-12 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 flex items-center justify-center">
-                                <img src={job.imagen_url.split("||")[0]} alt={job.titulo} className="w-full h-full object-cover" />
+                                <img 
+                                  src={job.imagen_url.split("||")[0]} 
+                                  alt={job.titulo} 
+                                  className="w-full h-full object-cover cursor-zoom-in hover:opacity-85 transition-opacity" 
+                                  title="Click para ver en tamaño completo"
+                                  onClick={() => window.open(job.imagen_url.split("||")[0], '_blank')}
+                                />
                               </div>
                             </td>
                             <td className="px-6 py-4 text-xs font-semibold text-on-surface">
@@ -3719,13 +3743,14 @@ export default function AdminDashboardPage() {
                         </div>
                       )}
                       <div className={`flex gap-2 items-center ${draggingProductImgIdx === idx ? "opacity-50" : ""}`}>
-                        {/* Thumbnail preview beside input */}
                         <div className="img-thumb-wrap shrink-0 w-12 h-12 rounded-lg overflow-hidden bg-white dark:bg-slate-600 border border-slate-200 dark:border-slate-500 flex items-center justify-center">
                           {imgUrl.trim() ? (
                             <img
                               src={imgUrl}
                               alt={`Vista previa ${idx + 1}`}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover cursor-zoom-in hover:opacity-80 transition-opacity"
+                              title="Click para ver en tamaño completo"
+                              onClick={() => window.open(imgUrl, '_blank')}
                               onError={(e) => { (e.target as HTMLImageElement).src = ""; (e.target as HTMLImageElement).style.display = "none"; }}
                             />
                           ) : (
@@ -4145,7 +4170,13 @@ export default function AdminDashboardPage() {
                   )}
                   <div className={`flex gap-3 items-center ${draggingPortfolioMain ? "opacity-50" : ""}`}>
                     {formPortfolioImgUrl && (
-                      <img src={formPortfolioImgUrl} alt="portada" className="w-12 h-12 object-cover rounded-xl border border-slate-200 shrink-0" />
+                      <img 
+                        src={formPortfolioImgUrl} 
+                        alt="portada" 
+                        className="w-12 h-12 object-cover rounded-xl border border-slate-200 shrink-0 cursor-zoom-in hover:opacity-80 transition-opacity" 
+                        title="Click para ver en tamaño completo"
+                        onClick={() => window.open(formPortfolioImgUrl, '_blank')}
+                      />
                     )}
                     <input
                       type="text"
@@ -4223,7 +4254,15 @@ export default function AdminDashboardPage() {
                       )}
                       <div className={`flex gap-2 items-center ${draggingPortfolioExtraIdx === idx ? "opacity-50" : ""}`}>
                         <div className="w-10 h-10 flex-shrink-0 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-500 bg-slate-100 dark:bg-slate-600">
-                          {url && <img src={url} alt="" className="w-full h-full object-cover" />}
+                          {url && (
+                            <img 
+                              src={url} 
+                              alt="" 
+                              className="w-full h-full object-cover cursor-zoom-in hover:opacity-80 transition-opacity" 
+                              title="Click para ver en tamaño completo"
+                              onClick={() => window.open(url, '_blank')}
+                            />
+                          )}
                         </div>
                         <input
                           type="text"
