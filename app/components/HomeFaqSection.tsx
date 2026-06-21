@@ -4,7 +4,7 @@
  */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface FaqItem {
   question: string;
@@ -14,6 +14,28 @@ interface FaqItem {
 
 export default function HomeFaqSection() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [isRevealed, setIsRevealed] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsRevealed(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   const faqs: FaqItem[] = [
     {
@@ -48,10 +70,10 @@ export default function HomeFaqSection() {
   };
 
   return (
-    <section className="py-24 px-margin-mobile md:px-margin-desktop bg-slate-50 border-t border-b border-slate-100/80">
+    <section ref={sectionRef} className="py-24 px-margin-mobile md:px-margin-desktop bg-slate-50 border-t border-b border-slate-100/80">
       <div className="max-w-container-max mx-auto space-y-12">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-4 scroll-reveal">
+        <div className={`text-center max-w-2xl mx-auto space-y-4 scroll-reveal ${isRevealed ? "reveal-active" : ""}`}>
           <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
             <span className="material-symbols-outlined text-[16px]">help</span>
             Resolviendo Dudas
@@ -65,18 +87,17 @@ export default function HomeFaqSection() {
         </div>
 
         {/* FAQ Accordion List */}
-        <div className="max-w-3xl mx-auto space-y-4">
+        <div className={`max-w-3xl mx-auto space-y-4 scroll-reveal ${isRevealed ? "reveal-active" : ""}`}>
           {faqs.map((faq, index) => {
             const isOpen = activeIndex === index;
             return (
               <div
                 key={index}
-                className={`scroll-reveal bg-white border rounded-[1.5rem] transition-all duration-300 ${
+                className={`bg-white border rounded-[1.5rem] transition-all duration-300 ${
                   isOpen 
                     ? "border-primary/30 shadow-md ring-1 ring-primary/5" 
                     : "border-slate-200/80 hover:border-slate-300 shadow-sm"
                 }`}
-                style={{ transitionDelay: `${index * 50}ms` }}
               >
                 {/* Accordion Header */}
                 <button
