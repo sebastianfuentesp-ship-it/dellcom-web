@@ -103,7 +103,7 @@ export default function HomeFaqSection() {
                 <button
                   type="button"
                   onClick={() => toggleFaq(index)}
-                  className="w-full flex items-center justify-between p-6 text-left cursor-pointer select-none bg-transparent border-none focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 rounded-t-[1.5rem]"
+                  className="w-full flex items-center justify-between p-6 text-left cursor-pointer select-none bg-transparent border-none focus:outline-none"
                 >
                   <div className="flex items-center gap-4 pr-4">
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors duration-300 ${
@@ -125,7 +125,7 @@ export default function HomeFaqSection() {
                 {/* Accordion Content */}
                 <div
                   className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    isOpen ? "max-h-[300px] border-t border-primary/20" : "max-h-0"
+                    isOpen ? "max-h-[300px] border-t border-primary/15" : "max-h-0"
                   }`}
                 >
                   <div className="p-6 text-xs md:text-sm text-on-surface-variant font-medium leading-relaxed bg-slate-50/50">
