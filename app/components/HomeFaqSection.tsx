@@ -125,7 +125,7 @@ export default function HomeFaqSection() {
                 {/* Accordion Content */}
                 <div
                   className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    isOpen ? "max-h-[300px] border-t border-primary/15" : "max-h-0"
+                    isOpen ? "max-h-[300px] border-t border-primary/40" : "max-h-0"
                   }`}
                 >
                   <div className="p-6 text-xs md:text-sm text-on-surface-variant font-medium leading-relaxed bg-slate-50/50">
