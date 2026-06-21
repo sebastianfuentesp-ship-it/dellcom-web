@@ -84,18 +84,10 @@ export default withAuth(
       // Devuelve false para rutas protegidas sin token → middleware redirige.
       authorized: ({ token, req }) => {
         const path = req.nextUrl.pathname;
-        const method = req.method;
 
-        // Rutas API GET publicas que no requieren autenticacion
-        const isPublicGetApi =
-          (path.startsWith("/api/productos") ||
-            path.startsWith("/api/servicios") ||
-            path.startsWith("/api/trabajos") ||
-            path.startsWith("/api/categorias") ||
-            path.startsWith("/api/archivos")) &&
-          method === "GET";
-
-        if (isPublicGetApi) {
+        // Si es una ruta de la API, dejamos que la función middleware principal maneje la respuesta.
+        // Esto permite devolver un JSON con error 401 en lugar de redirigir a la página de login (HTML).
+        if (path.startsWith("/api/")) {
           return true;
         }
 
