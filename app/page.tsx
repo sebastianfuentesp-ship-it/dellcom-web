@@ -483,9 +483,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* FAQ Section */}
-        <HomeFaqSection />
-
         {/* Ubicación / Google Maps Section */}
         <section className="py-24 px-margin-mobile md:px-margin-desktop bg-white border-t border-slate-100">
           <div className="max-w-container-max mx-auto space-y-12">
@@ -593,6 +590,9 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        {/* FAQ Section */}
+        <HomeFaqSection />
       </main>
 
       {/* Reusable Clean Footer */}
