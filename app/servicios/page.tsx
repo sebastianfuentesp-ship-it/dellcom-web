@@ -283,7 +283,7 @@ export default async function ServiciosPage() {
                     {/* CTA Button */}
                     <div className="pt-4 flex flex-wrap gap-4">
                       <a 
-                        href={`https://wa.me/51925981741?text=Hola%20Dellcom,%20me%20interesa%20el%20servicio%20de%20${encodeURIComponent(service.nombre)}`}
+                        href={`https://wa.me/51925981741?text=${encodeURIComponent(`👋 Hola Dellcom, me interesa el servicio de *${service.nombre}* 🔧 ¿Podrían brindarme más información y disponibilidad?`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 bg-primary hover:bg-primary/95 text-white px-6 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all active:scale-95 shadow-md shadow-primary/15"

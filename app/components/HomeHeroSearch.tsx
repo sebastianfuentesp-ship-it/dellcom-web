@@ -18,42 +18,42 @@ const AVERIAS_FRECUENTES: DiagnosticoItem[] = [
   {
     problema: "Laptop enciende pero pantalla queda negra",
     categoria: "Reparación de Hardware",
-    mensajeWhatsApp: "Hola DELLCOM, mi laptop enciende pero la pantalla queda negra. Solicito un diagnóstico técnico."
+    mensajeWhatsApp: "👋 Hola DELLCOM, mi laptop enciende pero la pantalla queda negra. 💻 Solicito un diagnóstico técnico. ¿Están disponibles?"
   },
   {
     problema: "Placa madre de computadora o laptop dañada (Microelectrónica)",
     categoria: "Microelectrónica y Placas",
-    mensajeWhatsApp: "Hola DELLCOM, necesito reparar una placa madre a nivel de componentes microelectrónicos."
+    mensajeWhatsApp: "👋 Hola DELLCOM, necesito reparar una placa madre a nivel de componentes microelectrónicos. 🔬 ¿Cuándo pueden atenderme?"
   },
   {
     problema: "Impresora industrial Zebra imprime borroso o no calibra",
     categoria: "Reparación de Impresoras",
-    mensajeWhatsApp: "Hola DELLCOM, mi impresora térmica Zebra tiene fallos de calibración/impresión. Deseo cotizar soporte técnico."
+    mensajeWhatsApp: "👋 Hola DELLCOM, mi impresora térmica Zebra tiene fallos de calibración/impresión. 🖨️ Deseo cotizar soporte técnico."
   },
   {
     problema: "Epson de tickets TM-T20 no imprime recibos",
     categoria: "Soporte POS",
-    mensajeWhatsApp: "Hola DELLCOM, mi ticketera Epson TM-T20 no imprime los recibos de venta. Solicito asistencia."
+    mensajeWhatsApp: "👋 Hola DELLCOM, mi ticketera Epson TM-T20 no imprime los recibos de venta. 🧾 Solicito asistencia técnica."
   },
   {
     problema: "Cableado estructurado desordenado en gabinete rack",
     categoria: "Infraestructura de Red",
-    mensajeWhatsApp: "Hola DELLCOM, deseo cotizar el ordenamiento de cables y armado de rack en mi empresa."
+    mensajeWhatsApp: "👋 Hola DELLCOM, deseo cotizar el ordenamiento de cables y armado de rack en mi empresa. 🔌 ¿Pueden venir a evaluar?"
   },
   {
     problema: "Configurar correos corporativos Google Workspace / Microsoft 365",
     categoria: "Soporte Corporativo",
-    mensajeWhatsApp: "Hola DELLCOM, deseo soporte para configurar los correos corporativos de mi empresa."
+    mensajeWhatsApp: "👋 Hola DELLCOM, deseo soporte para configurar los correos corporativos de mi empresa. 📧 ¿Cuándo pueden asistirme?"
   },
   {
     problema: "Licencia de Windows u Office desactivada",
     categoria: "Licenciamiento",
-    mensajeWhatsApp: "Hola DELLCOM, deseo adquirir una licencia original certificada de Windows/Office."
+    mensajeWhatsApp: "👋 Hola DELLCOM, deseo adquirir una licencia original certificada de Windows/Office. 🔑 ¿Cuál es el precio y qué incluye?"
   },
   {
     problema: "Recuperación de datos de disco duro formateado o quemado",
     categoria: "Ciberseguridad",
-    mensajeWhatsApp: "Hola DELLCOM, necesito recuperar información de un disco duro dañado."
+    mensajeWhatsApp: "👋 Hola DELLCOM, necesito recuperar información de un disco duro dañado. 💾 ¿Pueden evaluar el caso?"
   }
 ];
 

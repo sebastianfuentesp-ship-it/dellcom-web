@@ -89,9 +89,9 @@ export default function ProductosPage() {
   const cartTotal = cart.reduce((t, i) => t + i.precio * i.cantidad, 0);
 
   const getWhatsAppUrl = () => {
-    let msg = "Hola DELLCOM SAC, deseo solicitar una cotización para los siguientes productos:\n\n";
-    cart.forEach((i) => { msg += `• *${i.cantidad}x* ${i.nombre}\n  Categoría: ${i.categoriaNombre}\n  Precio aprox: S/ ${i.precio.toFixed(2)} c/u | Subtotal: S/ ${(i.precio * i.cantidad).toFixed(2)}\n\n`; });
-    msg += `*Total Estimado: S/ ${cartTotal.toFixed(2)}*\n\nAgradezco su pronta respuesta para confirmar la disponibilidad y coordinar la entrega/instalación.`;
+    let msg = "👋 Hola *DELLCOM SAC*, solicito cotización para los siguientes productos:\n\n";
+    cart.forEach((i) => { msg += `📦 *${i.cantidad}x* ${i.nombre}\n   🏷️ ${i.categoriaNombre}\n   💰 S/ ${i.precio.toFixed(2)} c/u | Subtotal: S/ ${(i.precio * i.cantidad).toFixed(2)}\n\n`; });
+    msg += `💵 *Total Estimado: S/ ${cartTotal.toFixed(2)}*\n\n⚡ Agradezco su pronta respuesta para confirmar disponibilidad y coordinar la entrega/instalación. ¡Gracias!`;
     return `https://wa.me/51925981741?text=${encodeURIComponent(msg)}`;
   };
 

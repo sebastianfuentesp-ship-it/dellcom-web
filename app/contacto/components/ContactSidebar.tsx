@@ -8,14 +8,14 @@ const BRANCH_DATA = {
     label: "Los Olivos",
     address: "Av. Santa Elvira, Mza. E, Lote 59, Urb. San Elías, Los Olivos, Lima.",
     schedule: "Lunes a Sábado: 9:00 AM - 7:00 PM (Soporte presencial y remoto)",
-    whatsapp: "https://wa.me/51925981741?text=Hola%20DELLCOM%20Los%20Olivos,%20deseo%20asistencia%20t%C3%A9cnica%20inmediata.",
+    whatsapp: `https://wa.me/51925981741?text=${encodeURIComponent("👋 Hola DELLCOM Los Olivos, deseo asistencia técnica inmediata. 🔧 ¿Están disponibles?")}`,
     mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3903.1118432328766!2d-77.0756549242084!3d-11.95772378735626!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105d04c4b69dcfb%3A0xd3b34bdf88ea4eb6!2sAv.%20Santa%20Elvira%2C%20Los%20Olivos%2015306!5e0!3m2!1ses!2spe!4v1717210000000!5m2!1ses!2spe",
   },
   santa_anita: {
     label: "Santa Anita",
     address: "Av. Los Nogales 510 - Santa Anita, Lima.",
     schedule: "Lunes a Viernes: 9:00 AM - 8:00 PM | Sábado: 9:00 AM - 6:00 PM",
-    whatsapp: "https://wa.me/51925981741?text=Hola%20DELLCOM%20Santa%20Anita,%20deseo%20asistencia%20t%C3%A9cnica%20inmediata.",
+    whatsapp: `https://wa.me/51925981741?text=${encodeURIComponent("👋 Hola DELLCOM Santa Anita, deseo asistencia técnica inmediata. 🔧 ¿Están disponibles?")}`,
     mapSrc: "https://maps.google.com/maps?q=Av.+Los+Nogales+510%2C+Santa+Anita%2C+Lima&t=&z=16&ie=UTF8&iwloc=&output=embed",
   },
 };

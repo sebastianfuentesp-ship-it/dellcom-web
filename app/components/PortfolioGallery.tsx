@@ -117,7 +117,7 @@ export default function PortfolioGallery({ trabajos = [] }: PortfolioGalleryProp
   };
 
   const getWhatsAppLink = (trabajo: Trabajo) => {
-    const message = `Hola DELLCOM, vi su trabajo de "${trabajo.titulo}" en su portafolio y me gustaría cotizar un servicio similar.`;
+    const message = `👋 Hola DELLCOM, vi su trabajo *"${trabajo.titulo}"* en el portafolio 🏆 y me gustaría cotizar un servicio similar.\n\n🔧 ¿Podrían brindarme más información y disponibilidad?`;
     return `https://wa.me/51925981741?text=${encodeURIComponent(message)}`;
   };
 

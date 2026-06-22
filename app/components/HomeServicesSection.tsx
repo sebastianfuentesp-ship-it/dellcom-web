@@ -96,7 +96,7 @@ export default async function HomeServicesSection() {
                     <p className="text-sm text-on-surface-variant mb-6 leading-relaxed max-w-2xl">{service.descripcion}</p>
                   </div>
                   <a
-                    href={`https://wa.me/51925981741?text=Hola%20Dellcom,%20me%20interesa%20el%20servicio%20de%20${encodeURIComponent(service.nombre)}`}
+                    href={`https://wa.me/51925981741?text=${encodeURIComponent(`👋 Hola Dellcom, me interesa el servicio de *${service.nombre}* 🔧 ¿Podrían brindarme más información y disponibilidad?`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-primary text-xs font-bold uppercase tracking-wider group-hover:gap-4 transition-all pt-2"

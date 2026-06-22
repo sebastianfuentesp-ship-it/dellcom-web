@@ -288,7 +288,7 @@ export default function AdminLoginPage() {
         <div className="text-center w-full text-xs text-slate-400 font-semibold">
           ¿Problemas para acceder?{" "}
           <a
-            href="https://wa.me/51987654321"
+            href="https://wa.me/51925981741"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary font-bold hover:underline"

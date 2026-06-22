@@ -88,7 +88,7 @@ export default function ProductLightbox({ product, lightboxImgIdx, setLightboxIm
                 Añadir Lista
               </button>
               <a
-                href={`https://wa.me/51925981741?text=${encodeURIComponent(`Hola DELLCOM SAC, deseo solicitar información y cotización inmediata para el producto: *${product.nombre}* (Precio aprox: S/ ${Number(product.precio).toFixed(2)})`)}`}
+                href={`https://wa.me/51925981741?text=${encodeURIComponent(`👋 Hola DELLCOM SAC, deseo cotización inmediata para:\n\n💻 *${product.nombre}*\n💰 Precio aprox: S/ ${Number(product.precio).toFixed(2)}\n\n¿Tienen disponibilidad? ¡Gracias! ✅`)}`}
                 target="_blank" rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/95 text-white font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md shadow-primary/10 active:scale-95 cursor-pointer text-center no-underline border-none"
               >

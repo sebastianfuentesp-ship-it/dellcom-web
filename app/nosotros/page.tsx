@@ -298,7 +298,7 @@ export default function NosotrosPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
-                href="https://wa.me/51925981741?text=Hola%20Dellcom%20SAC,%20deseo%20agendar%20una%20consultor%C3%ADa%20IT%20para%20mi%20empresa."
+                href={`https://wa.me/51925981741?text=${encodeURIComponent("👋 Hola Dellcom SAC, deseo agendar una consultoría IT para mi empresa. 💼 ¿Cuándo podríamos hablar?")}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-primary text-white font-bold rounded-full shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all uppercase text-xs tracking-wider"
