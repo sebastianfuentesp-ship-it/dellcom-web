@@ -1,4 +1,6 @@
 import { Session } from "next-auth";
+import { useState } from "react";
+import { signOut } from "next-auth/react";
 
 interface Props {
   session: Session | null;
@@ -96,6 +98,7 @@ export default function AdminHeader({
   completedSteps, setCompletedSteps,
   isAdmin, userRole,
 }: Props) {
+  const [profileOpen, setProfileOpen] = useState(false);
   const g = GUIDES[activeTab];
 
   const tabCompleted = g ? (completedSteps[activeTab] || new Array(g.steps.length).fill(false)) : [];
@@ -131,20 +134,18 @@ export default function AdminHeader({
         >
           <span className="material-symbols-outlined text-[22px]">menu</span>
         </button>
-        {activeTab !== "overview" && (
-          <div className="relative w-full">
-            <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
-              <span className="material-symbols-outlined text-[20px]">search</span>
-            </span>
-            <input
-              className="w-full bg-slate-100 border-none rounded-xl pl-10 pr-4 py-2 text-xs focus:bg-white focus:scale-[1.01] focus:shadow-md focus:ring-1 focus:ring-red-600/30 focus:outline-none transition-all placeholder:text-slate-500 duration-200"
-              placeholder={SEARCH_PLACEHOLDERS[activeTab] || "Buscar..."}
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-        )}
+        <div className="relative w-full">
+          <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
+            <span className="material-symbols-outlined text-[20px]">search</span>
+          </span>
+          <input
+            className="w-full bg-slate-100 border-none rounded-xl pl-10 pr-4 py-2 text-xs focus:bg-white focus:scale-[1.01] focus:shadow-md focus:ring-1 focus:ring-red-600/30 focus:outline-none transition-all placeholder:text-slate-500 duration-200"
+            placeholder={SEARCH_PLACEHOLDERS[activeTab] || "Buscar..."}
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
       </div>
 
       <div className="flex items-center gap-2">
@@ -309,16 +310,69 @@ export default function AdminHeader({
         </button>
 
         {/* User info */}
-        <div className="flex items-center gap-3 group/user cursor-pointer">
-          <div className="text-right hidden sm:block">
-            <p className="text-xs font-bold text-on-surface group-hover/user:text-primary transition-colors duration-200">{session?.user?.name || "Usuario Dellcom"}</p>
-            <p className="text-[9px] text-red-500 font-bold uppercase tracking-wider">{(session?.user as any)?.role || "Técnico"}</p>
-          </div>
-          <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center shadow-inner shrink-0 group-hover/user:scale-105 group-hover/user:ring-2 group-hover/user:ring-red-600/35 transition-all duration-200">
-            <span className="material-symbols-outlined text-white text-[16px]">
-              {isAdmin ? "admin_panel_settings" : userRole === "tecnico" ? "engineering" : "storefront"}
-            </span>
-          </div>
+        <div className="relative">
+          <button
+            onClick={() => setProfileOpen(!profileOpen)}
+            className="flex items-center gap-3 group/user cursor-pointer border-none bg-transparent focus:outline-none"
+            title="Ver información de perfil"
+          >
+            <div className="text-right hidden sm:block">
+              <p className="text-xs font-bold text-on-surface group-hover/user:text-primary transition-colors duration-200">{session?.user?.name || "Usuario Dellcom"}</p>
+              <p className="text-[9px] text-red-500 font-bold uppercase tracking-wider">{(session?.user as any)?.role || "Técnico"}</p>
+            </div>
+            <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center shadow-inner shrink-0 group-hover/user:scale-105 group-hover/user:ring-2 group-hover/user:ring-red-600/35 transition-all duration-200">
+              <span className="material-symbols-outlined text-white text-[16px]">
+                {isAdmin ? "admin_panel_settings" : userRole === "tecnico" ? "engineering" : "storefront"}
+              </span>
+            </div>
+          </button>
+
+          {profileOpen && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setProfileOpen(false)} />
+              <div className="absolute right-0 top-12 z-50 w-64 bg-white border border-slate-200 rounded-2xl p-5 shadow-xl animate-fade-in text-left text-on-background guide-popup-card">
+                <div className="flex items-center gap-3 border-b border-slate-100 pb-3 mb-3">
+                  <div className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white shrink-0">
+                    <span className="material-symbols-outlined text-lg">
+                      {isAdmin ? "admin_panel_settings" : userRole === "tecnico" ? "engineering" : "storefront"}
+                    </span>
+                  </div>
+                  <div className="min-w-0">
+                    <h4 className="text-xs font-bold text-slate-800 font-headline truncate">{session?.user?.name || "Usuario Dellcom"}</h4>
+                    <p className="text-[10px] text-slate-400 truncate">{session?.user?.email || "correo@dellcom.com"}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-2 text-xs">
+                  <div className="flex justify-between items-center text-slate-500 py-1">
+                    <span>Rol asignado:</span>
+                    <span className="font-bold text-red-500 uppercase text-[9px] tracking-wider bg-red-50 px-2 py-0.5 rounded border border-red-200">
+                      {(session?.user as any)?.role || "Técnico"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-slate-500 py-1">
+                    <span>ID de Usuario:</span>
+                    <span className="font-mono text-[9px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">
+                      {(session?.user as any)?.id ? String((session?.user as any)?.id).substring(0, 8) + "..." : "Local"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="border-t border-slate-100 mt-4 pt-3 flex flex-col gap-1">
+                  <button
+                    onClick={() => {
+                      setProfileOpen(false);
+                      signOut({ callbackUrl: "/admin/login" });
+                    }}
+                    className="w-full flex items-center gap-2 text-left text-xs font-semibold text-slate-600 hover:text-primary hover:bg-red-50/50 p-2 rounded-lg transition-colors cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-sm">logout</span>
+                    Cerrar Sesión
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </header>
