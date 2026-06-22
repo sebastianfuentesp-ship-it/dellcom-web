@@ -48,6 +48,11 @@ export default function AdminDashboardPage() {
   const toggleGroup = (key: string) =>
     setOpenGroups((prev) => ({ ...prev, [key]: !prev[key] }));
 
+  // --- Reset search query when changing tabs ---
+  useEffect(() => {
+    setSearchQuery("");
+  }, [activeTab]);
+
   // --- Guide ---
   const [guideVisible, setGuideVisible] = useState(false);
   const [guideMode, setGuideMode] = useState<"checklist" | "stepper">("checklist");

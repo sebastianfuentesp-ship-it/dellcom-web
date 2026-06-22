@@ -131,18 +131,20 @@ export default function AdminHeader({
         >
           <span className="material-symbols-outlined text-[22px]">menu</span>
         </button>
-        <div className="relative w-full">
-          <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
-            <span className="material-symbols-outlined text-[20px]">search</span>
-          </span>
-          <input
-            className="w-full bg-slate-100 border-none rounded-xl pl-10 pr-4 py-2 text-xs focus:bg-white focus:scale-[1.01] focus:shadow-md focus:ring-1 focus:ring-red-600/30 focus:outline-none transition-all placeholder:text-slate-500 duration-200"
-            placeholder={SEARCH_PLACEHOLDERS[activeTab] || "Buscar..."}
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
+        {activeTab !== "overview" && (
+          <div className="relative w-full">
+            <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
+              <span className="material-symbols-outlined text-[20px]">search</span>
+            </span>
+            <input
+              className="w-full bg-slate-100 border-none rounded-xl pl-10 pr-4 py-2 text-xs focus:bg-white focus:scale-[1.01] focus:shadow-md focus:ring-1 focus:ring-red-600/30 focus:outline-none transition-all placeholder:text-slate-500 duration-200"
+              placeholder={SEARCH_PLACEHOLDERS[activeTab] || "Buscar..."}
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        )}
       </div>
 
       <div className="flex items-center gap-2">
