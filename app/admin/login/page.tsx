@@ -5,8 +5,8 @@
  */
 "use client";
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import NextLink from "next/link";
 
@@ -50,12 +50,30 @@ function DellcomLogo({ className = "w-16 h-16" }: { className?: string }) {
 }
 
 export default function AdminLoginPage() {
+  const { data: session, status } = useSession();
   const [usuario, setUsuario] = useState("");
   const [contrasena, setContrasena] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/admin/dashboard");
+    }
+  }, [status, router]);
+
+  if (status === "loading" || status === "authenticated") {
+    return (
+      <div className="w-full min-h-screen bg-[#0a0a0c] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 rounded-full border-4 border-t-primary border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest animate-pulse">Verificando sesión...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
