@@ -26,7 +26,7 @@ export default function MessagesTab({ filteredMensajes, canDelete, formatDate, o
           { label: "Total Mensajes", value: filteredMensajes.length, icon: "mail", bg: "bg-slate-100 text-slate-500" },
           { label: "Leídos", value: filteredMensajes.filter(m => m.leido).length, icon: "mark_email_read", bg: "bg-emerald-50 text-emerald-600" },
         ].map((item, i) => (
-          <div key={i} className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4">
+          <div key={i} className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
             <div className={`p-3 rounded-xl ${item.bg}`}>
               <span className="material-symbols-outlined text-2xl">{item.icon}</span>
             </div>

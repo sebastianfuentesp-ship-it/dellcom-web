@@ -32,7 +32,7 @@ export default function UsersTab({ filteredUsuarios, onOpenCreate, onEdit, onTog
           { label: "Técnicos", value: filteredUsuarios.filter(u => u.rol === "tecnico").length, icon: "engineering", bg: "bg-blue-50 text-blue-600" },
           { label: "Vendedores", value: filteredUsuarios.filter(u => u.rol === "vendedor").length, icon: "storefront", bg: "bg-amber-50 text-amber-600" },
         ].map((item, i) => (
-          <div key={i} className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4">
+          <div key={i} className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
             <div className={`p-3 rounded-xl ${item.bg}`}>
               <span className="material-symbols-outlined text-2xl">{item.icon}</span>
             </div>

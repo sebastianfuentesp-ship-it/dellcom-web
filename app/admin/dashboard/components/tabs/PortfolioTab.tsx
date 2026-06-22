@@ -38,7 +38,7 @@ export default function PortfolioTab({ filteredTrabajos, canEditTecnico, canDele
           { label: "Con Servicio Asociado", value: filteredTrabajos.filter(t => t.id_servicio).length, icon: "link", bg: "bg-emerald-50 text-emerald-600" },
           { label: "Servicios Disponibles", value: serviciosCount, icon: "build", bg: "bg-slate-100 text-slate-500" },
         ].map((item, i) => (
-          <div key={i} className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4">
+          <div key={i} className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
             <div className={`p-3 rounded-xl ${item.bg}`}>
               <span className="material-symbols-outlined text-2xl">{item.icon}</span>
             </div>

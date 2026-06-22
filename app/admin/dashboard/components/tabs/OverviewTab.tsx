@@ -74,7 +74,7 @@ export default function OverviewTab({
           { label: "Controladores & Drivers", value: archivos.length, suffix: " archivos", icon: "folder_zip", bg: "bg-red-50 text-red-600" },
           { label: "Alertas de Vencimiento", value: licencias.filter(l => getLicenseUrgency(l.fecha_fin) !== "ok").length, suffix: " críticas", icon: "error", bg: "bg-red-100 text-red-700" },
         ].map((item, i) => (
-          <div key={i} className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4">
+          <div key={i} className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
             <div className={`p-3 rounded-xl ${item.bg}`}>
               <span className="material-symbols-outlined text-2xl">{item.icon}</span>
             </div>

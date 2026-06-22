@@ -36,7 +36,7 @@ export default function CategoriesTab({ filteredCategorias, canEditCatalogo, can
           { label: "Total Categorías", value: filteredCategorias.length, icon: "category", bg: "bg-red-50 text-red-600" },
           { label: "Productos en Catálogo", value: productosCount, icon: "inventory_2", bg: "bg-slate-100 text-slate-500" },
         ].map((item, i) => (
-          <div key={i} className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4">
+          <div key={i} className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
             <div className={`p-3 rounded-xl ${item.bg}`}>
               <span className="material-symbols-outlined text-2xl">{item.icon}</span>
             </div>
