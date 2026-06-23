@@ -46,13 +46,13 @@ export default function FilesTab({ filteredArchivos, canEditTecnico, canDelete, 
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         {[
-          { icon: "laptop_mac", label: "Programas (.exe)", count: fileCountByType("programa"), suffix: " archivos" },
-          { icon: "memory", label: "Controladores", count: fileCountByType("driver"), suffix: " drivers" },
-          { icon: "description", label: "Planillas Excel", count: fileCountByType("excel"), suffix: " documentos" },
-          { icon: "link", label: "Enlaces Útiles", count: fileCountByType("link"), suffix: " links" },
+          { icon: "laptop_mac", label: "Programas (.exe)", count: fileCountByType("programa"), suffix: " archivos", color: "bg-purple-50 text-purple-600" },
+          { icon: "memory", label: "Controladores", count: fileCountByType("driver"), suffix: " drivers", color: "bg-blue-50 text-blue-600" },
+          { icon: "description", label: "Planillas Excel", count: fileCountByType("excel"), suffix: " documentos", color: "bg-emerald-50 text-emerald-600" },
+          { icon: "link", label: "Enlaces Útiles", count: fileCountByType("link"), suffix: " links", color: "bg-amber-50 text-amber-600" },
         ].map((item) => (
           <div key={item.icon} className="group bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
-            <div className="bg-red-50 text-red-600 p-3 rounded-xl transition-transform duration-300 group-hover:scale-105">
+            <div className={`${item.color} p-3 rounded-xl transition-transform duration-300 group-hover:scale-105`}>
               <span className="material-symbols-outlined text-2xl transition-transform duration-300 group-hover:scale-110">{item.icon}</span>
             </div>
             <div>
