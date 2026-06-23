@@ -65,7 +65,7 @@ export default function CotizadorExpress() {
   const { min, max } = calcPriceRange();
 
   const handleWhatsappSend = () => {
-    const message = `Hola DELLCOM, acabo de cotizar en su web:\n- Equipo: ${selectedDevice.name}\n- Tipo de Falla: ${selectedFailure.name}\n- Prioridad: ${selectedUrgency.name}\n- Presupuesto Estimado: S/. ${min} - S/. ${max}\nSolicito agendar soporte técnico.`;
+    const message = `👋 Hola DELLCOM, acabo de cotizar en su web 🧾:\n\n🖥️ Equipo: ${selectedDevice.name}\n🔧 Tipo de Falla: ${selectedFailure.name}\n⚡ Prioridad: ${selectedUrgency.name}\n💰 Presupuesto Estimado: S/. ${min} - S/. ${max}\n\n📅 Solicito agendar soporte técnico. ¡Gracias!`;
     const whatsappUrl = `https://wa.me/51925981741?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
   };

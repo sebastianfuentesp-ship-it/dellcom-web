@@ -708,7 +708,7 @@ export default function AdminDashboardPage() {
   const totalUrgentLicenses = expiredLicensesCount + warningLicensesCount;
 
   return (
-    <div className={`bg-slate-50 min-h-screen text-on-surface font-headline overflow-hidden flex transition-colors duration-300 ${darkMode ? "dark-theme" : ""}`}>
+    <div className={`bg-slate-50 h-screen text-on-surface font-headline overflow-hidden flex transition-colors duration-300 ${darkMode ? "dark-theme" : ""}`}>
       <DarkModeStyles />
 
       <AdminSidebar
@@ -726,7 +726,7 @@ export default function AdminDashboardPage() {
         canEditTecnico={canEditTecnico}
       />
 
-      <div className="flex-1 flex flex-col min-h-screen overflow-hidden lg:ml-64">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden lg:ml-64">
         <AdminHeader
           session={session}
           activeTab={activeTab}

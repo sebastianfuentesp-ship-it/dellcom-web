@@ -204,10 +204,10 @@ export default function SmartAssistant() {
   };
 
   const getWhatsAppUrl = () => {
-    const defaultText = "Hola DELLCOM SAC, deseo comunicarme con un asesor para asistencia técnica.";
+    const defaultText = "👋 Hola DELLCOM SAC, deseo comunicarme con un asesor para asistencia técnica 🛠️. ¡Quedo atento! ✅";
     const lastUserMessage = [...messages].reverse().find((m) => m.sender === "user");
     if (lastUserMessage) {
-      const customText = `Hola DELLCOM SAC, deseo comunicarme con un técnico. Mi consulta fue:\n\n"${lastUserMessage.text}"`;
+      const customText = `👋 Hola DELLCOM SAC, deseo comunicarme con un técnico 🛠️. Mi consulta fue:\n\n"${lastUserMessage.text}"\n\n¡Agradezco su pronta respuesta! ✅`;
       return `https://wa.me/51925981741?text=${encodeURIComponent(customText)}`;
     }
     return `https://wa.me/51925981741?text=${encodeURIComponent(defaultText)}`;
