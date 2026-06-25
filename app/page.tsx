@@ -1,3 +1,4 @@
+// DELLCOM SAC - Portal Principal
 import { prisma } from "@/lib/prisma";
 import StatusHeader from "./components/StatusHeader";
 import CleanFooter from "./components/CleanFooter";
