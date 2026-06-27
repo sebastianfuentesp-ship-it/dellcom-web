@@ -4,7 +4,13 @@ import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import NextLink from "next/link";
 
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/;
+const rules = [
+  { label: "Mínimo 8 caracteres", test: (p: string) => p.length >= 8 },
+  { label: "Al menos una mayúscula", test: (p: string) => /[A-Z]/.test(p) },
+  { label: "Al menos una minúscula", test: (p: string) => /[a-z]/.test(p) },
+  { label: "Al menos un número", test: (p: string) => /\d/.test(p) },
+  { label: "Al menos un símbolo (@, #, !, etc.)", test: (p: string) => /[^a-zA-Z\d]/.test(p) },
+];
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -18,26 +24,20 @@ function ResetPasswordForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Evaluaciones en tiempo real
-  const hasMinLength = newPassword.length >= 8;
-  const hasUpperCase = /[A-Z]/.test(newPassword);
-  const hasLowerCase = /[a-z]/.test(newPassword);
-  const hasNumber = /\d/.test(newPassword);
-  const hasSpecialChar = /[^a-zA-Z\d]/.test(newPassword);
-
-  const isPasswordValid = hasMinLength && hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar;
+  const allRulesMet = rules.every((r) => r.test(newPassword));
+  const passwordsMatch = newPassword === confirmPassword && confirmPassword.length > 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
 
-    if (!isPasswordValid) {
-      setErrorMsg("La contraseña no cumple con todos los requisitos de seguridad.");
+    if (!allRulesMet) {
+      setErrorMsg("La contraseña no cumple todos los requisitos.");
       setStatus("error");
       return;
     }
 
-    if (newPassword !== confirmPassword) {
+    if (!passwordsMatch) {
       setErrorMsg("Las contraseñas no coinciden.");
       setStatus("error");
       return;
@@ -61,7 +61,7 @@ function ResetPasswordForm() {
       }
 
       setStatus("done");
-      setTimeout(() => router.push("/admin/login"), 3000);
+      setTimeout(() => router.push("/admin/login"), 2000);
     } catch {
       setErrorMsg("No se pudo conectar. Intenta de nuevo.");
       setStatus("error");
@@ -108,7 +108,7 @@ function ResetPasswordForm() {
             disabled={status === "loading" || status === "done"}
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="Introduce la contraseña"
+            placeholder="Tu nueva contraseña"
             className="w-full bg-transparent border-none focus:outline-none focus:ring-0 p-0 text-slate-800 text-sm font-semibold placeholder:text-slate-400/80"
           />
           <button
@@ -123,53 +123,23 @@ function ResetPasswordForm() {
         </div>
       </div>
 
-      {/* Requisitos de seguridad (Feedback Visual Interactivo) */}
-      {newPassword && (
-        <div className="bg-slate-50/50 border border-slate-100 rounded-xl p-3.5 space-y-2">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Requisitos de seguridad:</p>
-          <ul className="space-y-1.5 text-xs font-semibold text-slate-500 list-none p-0 m-0">
-            <li className="flex items-center gap-2">
-              <span className={`material-symbols-outlined text-base ${hasMinLength ? "text-green-500" : "text-slate-300"}`}>
-                {hasMinLength ? "check_circle" : "radio_button_unchecked"}
-              </span>
-              <span className={hasMinLength ? "text-green-600 line-through opacity-70" : ""}>Mínimo 8 caracteres</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <span className={`material-symbols-outlined text-base ${hasUpperCase ? "text-green-500" : "text-slate-300"}`}>
-                {hasUpperCase ? "check_circle" : "radio_button_unchecked"}
-              </span>
-              <span className={hasUpperCase ? "text-green-600 line-through opacity-70" : ""}>Al menos una letra mayúscula</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <span className={`material-symbols-outlined text-base ${hasLowerCase ? "text-green-500" : "text-slate-300"}`}>
-                {hasLowerCase ? "check_circle" : "radio_button_unchecked"}
-              </span>
-              <span className={hasLowerCase ? "text-green-600 line-through opacity-70" : ""}>Al menos una letra minúscula</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <span className={`material-symbols-outlined text-base ${hasNumber ? "text-green-500" : "text-slate-300"}`}>
-                {hasNumber ? "check_circle" : "radio_button_unchecked"}
-              </span>
-              <span className={hasNumber ? "text-green-600 line-through opacity-70" : ""}>Al menos un número</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <span className={`material-symbols-outlined text-base ${hasSpecialChar ? "text-green-500" : "text-slate-300"}`}>
-                {hasSpecialChar ? "check_circle" : "radio_button_unchecked"}
-              </span>
-              <span className={hasSpecialChar ? "text-green-600 line-through opacity-70" : ""}>Al menos un símbolo (ej. @, $, !, %, *)</span>
-            </li>
-            {confirmPassword && (
-              <li className="flex items-center gap-2 border-t border-slate-100 pt-1.5 mt-1.5">
-                <span className={`material-symbols-outlined text-base ${newPassword === confirmPassword ? "text-green-500" : "text-red-400"}`}>
-                  {newPassword === confirmPassword ? "check_circle" : "error"}
+      {/* Password Rules */}
+      {newPassword.length > 0 && (
+        <ul className="space-y-1.5 px-1 list-none p-0 m-0">
+          {rules.map((rule) => {
+            const ok = rule.test(newPassword);
+            return (
+              <li key={rule.label} className="flex items-center gap-2">
+                <span className={`material-symbols-outlined text-base leading-none ${ok ? "text-green-500" : "text-slate-300"}`}>
+                  {ok ? "check_circle" : "radio_button_unchecked"}
                 </span>
-                <span className={newPassword === confirmPassword ? "text-green-600 font-bold" : "text-red-500 font-bold"}>
-                  {newPassword === confirmPassword ? "Las contraseñas coinciden" : "Las contraseñas no coinciden"}
+                <span className={`text-xs font-semibold ${ok ? "text-green-600" : "text-slate-400"}`}>
+                  {rule.label}
                 </span>
               </li>
-            )}
-          </ul>
-        </div>
+            );
+          })}
+        </ul>
       )}
 
       {/* Confirm Password */}
@@ -177,7 +147,13 @@ function ResetPasswordForm() {
         <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
           Confirmar contraseña
         </label>
-        <div className="relative flex items-center bg-slate-50 border border-slate-100 rounded-xl focus-within:border-primary/40 focus-within:ring-1 focus-within:ring-primary/40 transition-all px-4 py-3">
+        <div className={`relative flex items-center bg-slate-50 border rounded-xl focus-within:ring-1 transition-all px-4 py-3 ${
+          confirmPassword.length > 0
+            ? passwordsMatch
+              ? "border-green-300 focus-within:border-green-400 focus-within:ring-green-300"
+              : "border-red-200 focus-within:border-red-400 focus-within:ring-red-200"
+            : "border-slate-100 focus-within:border-primary/40 focus-within:ring-primary/40"
+        }`}>
           <span className="material-symbols-outlined text-slate-400 mr-3 text-lg leading-none">lock_clock</span>
           <input
             type={showConfirm ? "text" : "password"}
@@ -211,19 +187,15 @@ function ResetPasswordForm() {
       ) : (
         <button
           type="submit"
-          disabled={status === "loading" || !isPasswordValid || newPassword !== confirmPassword}
-          className={`w-full font-bold py-3.5 px-6 rounded-full text-sm transition-all shadow-md flex items-center justify-center gap-2 border-none ${
-            status === "loading" || !isPasswordValid || newPassword !== confirmPassword
-              ? "bg-slate-300 text-slate-500 cursor-not-allowed shadow-none"
-              : "bg-primary hover:bg-primary/90 text-white active:scale-[0.98] shadow-primary/10 cursor-pointer"
-          }`}
+          disabled={status === "loading" || !allRulesMet || !passwordsMatch}
+          className="w-full bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 px-6 rounded-full text-sm transition-all active:scale-[0.98] shadow-md shadow-primary/10 flex items-center justify-center gap-2 border-none cursor-pointer"
         >
           {status === "loading" ? (
             <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
           ) : (
             <>
-              <span className="material-symbols-outlined text-lg leading-none">key</span>
-              Guardar nueva contraseña
+              <span className="material-symbols-outlined text-lg leading-none">save</span>
+              Guardar contraseña
             </>
           )}
         </button>
@@ -240,14 +212,14 @@ export default function ResetPasswordPage() {
 
           {/* Header */}
           <div className="text-center space-y-2">
-            <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto">
-              <span className="material-symbols-outlined text-primary text-2xl">key</span>
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto">
+              <span className="material-symbols-outlined text-amber-500 text-2xl">key</span>
             </div>
             <h1 className="font-headline text-2xl font-extrabold text-slate-800 tracking-tight">
-              Nueva contraseña
+              Establece tu contraseña
             </h1>
             <p className="text-sm text-slate-400 font-semibold leading-relaxed">
-              Elige una contraseña segura para tu cuenta de DELLCOM.
+              Elige una contraseña personal segura para continuar.
             </p>
           </div>
 
