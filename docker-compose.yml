@@ -13,9 +13,9 @@ services:
       - mysql_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 5
 
   web:
     build:
@@ -27,13 +27,17 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: "mysql://root:rootpassword@db:3306/dellcom_db"
-      NEXTAUTH_URL: "http://localhost:3000"
+      # Deja que DATABASE_URL se lea del archivo .env por defecto (Aiven o local)
+      # Si deseas forzar la base de datos local de docker-compose, descomenta la siguiente línea:
+      # DATABASE_URL: "mysql://root:rootpassword@db:3306/dellcom_db?ssl-mode=PREFERRED"
+      NEXTAUTH_URL: "${NEXTAUTH_URL:-http://localhost:3000}"
     depends_on:
       db:
         condition: service_healthy
-    command: sh -c "npx prisma db push && npm start"
+        required: false # No apagar la web si usamos base de datos en la nube (Aiven)
+    command: sh -c "npx prisma migrate deploy && npm start"
 
 volumes:
   mysql_data:
+
 
