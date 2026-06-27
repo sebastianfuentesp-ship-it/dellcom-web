@@ -80,10 +80,13 @@ export default function AdminLoginPage() {
     setError(null);
     setLoading(true);
 
+    const cleanUsuario = usuario.trim();
+    const cleanContrasena = contrasena.trim();
+
     try {
       const res = await signIn("credentials", {
-        usuario,
-        contrasena,
+        usuario: cleanUsuario,
+        contrasena: cleanContrasena,
         redirect: false,
       });
 
