@@ -158,6 +158,16 @@ function ResetPasswordForm() {
               </span>
               <span className={hasSpecialChar ? "text-green-600 line-through opacity-70" : ""}>Al menos un símbolo (ej. @, $, !, %, *)</span>
             </li>
+            {confirmPassword && (
+              <li className="flex items-center gap-2 border-t border-slate-100 pt-1.5 mt-1.5">
+                <span className={`material-symbols-outlined text-base ${newPassword === confirmPassword ? "text-green-500" : "text-red-400"}`}>
+                  {newPassword === confirmPassword ? "check_circle" : "error"}
+                </span>
+                <span className={newPassword === confirmPassword ? "text-green-600 font-bold" : "text-red-500 font-bold"}>
+                  {newPassword === confirmPassword ? "Las contraseñas coinciden" : "Las contraseñas no coinciden"}
+                </span>
+              </li>
+            )}
           </ul>
         </div>
       )}
@@ -201,8 +211,12 @@ function ResetPasswordForm() {
       ) : (
         <button
           type="submit"
-          disabled={status === "loading"}
-          className="w-full bg-primary hover:bg-primary/90 disabled:opacity-60 text-white font-bold py-3.5 px-6 rounded-full text-sm transition-all active:scale-[0.98] shadow-md shadow-primary/10 flex items-center justify-center gap-2 cursor-pointer border-none"
+          disabled={status === "loading" || !isPasswordValid || newPassword !== confirmPassword}
+          className={`w-full font-bold py-3.5 px-6 rounded-full text-sm transition-all shadow-md flex items-center justify-center gap-2 border-none ${
+            status === "loading" || !isPasswordValid || newPassword !== confirmPassword
+              ? "bg-slate-300 text-slate-500 cursor-not-allowed shadow-none"
+              : "bg-primary hover:bg-primary/90 text-white active:scale-[0.98] shadow-primary/10 cursor-pointer"
+          }`}
         >
           {status === "loading" ? (
             <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
