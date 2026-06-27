@@ -4,6 +4,8 @@ import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import NextLink from "next/link";
 
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/;
+
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -16,21 +18,32 @@ function ResetPasswordForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
+  // Evaluaciones en tiempo real
+  const hasMinLength = newPassword.length >= 8;
+  const hasUpperCase = /[A-Z]/.test(newPassword);
+  const hasLowerCase = /[a-z]/.test(newPassword);
+  const hasNumber = /\d/.test(newPassword);
+  const hasSpecialChar = /[^a-zA-Z\d]/.test(newPassword);
+
+  const isPasswordValid = hasMinLength && hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMsg("");
+
+    if (!isPasswordValid) {
+      setErrorMsg("La contraseña no cumple con todos los requisitos de seguridad.");
+      setStatus("error");
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       setErrorMsg("Las contraseñas no coinciden.");
       setStatus("error");
       return;
     }
-    if (newPassword.length < 8) {
-      setErrorMsg("La contraseña debe tener al menos 8 caracteres.");
-      setStatus("error");
-      return;
-    }
 
     setStatus("loading");
-    setErrorMsg("");
 
     try {
       const res = await fetch("/api/password/reset", {
@@ -92,11 +105,10 @@ function ResetPasswordForm() {
           <input
             type={showNew ? "text" : "password"}
             required
-            minLength={8}
             disabled={status === "loading" || status === "done"}
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="Mínimo 8 caracteres"
+            placeholder="Introduce la contraseña"
             className="w-full bg-transparent border-none focus:outline-none focus:ring-0 p-0 text-slate-800 text-sm font-semibold placeholder:text-slate-400/80"
           />
           <button
@@ -111,6 +123,45 @@ function ResetPasswordForm() {
         </div>
       </div>
 
+      {/* Requisitos de seguridad (Feedback Visual Interactivo) */}
+      {newPassword && (
+        <div className="bg-slate-50/50 border border-slate-100 rounded-xl p-3.5 space-y-2">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Requisitos de seguridad:</p>
+          <ul className="space-y-1.5 text-xs font-semibold text-slate-500 list-none p-0 m-0">
+            <li className="flex items-center gap-2">
+              <span className={`material-symbols-outlined text-base ${hasMinLength ? "text-green-500" : "text-slate-300"}`}>
+                {hasMinLength ? "check_circle" : "radio_button_unchecked"}
+              </span>
+              <span className={hasMinLength ? "text-green-600 line-through opacity-70" : ""}>Mínimo 8 caracteres</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className={`material-symbols-outlined text-base ${hasUpperCase ? "text-green-500" : "text-slate-300"}`}>
+                {hasUpperCase ? "check_circle" : "radio_button_unchecked"}
+              </span>
+              <span className={hasUpperCase ? "text-green-600 line-through opacity-70" : ""}>Al menos una letra mayúscula</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className={`material-symbols-outlined text-base ${hasLowerCase ? "text-green-500" : "text-slate-300"}`}>
+                {hasLowerCase ? "check_circle" : "radio_button_unchecked"}
+              </span>
+              <span className={hasLowerCase ? "text-green-600 line-through opacity-70" : ""}>Al menos una letra minúscula</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className={`material-symbols-outlined text-base ${hasNumber ? "text-green-500" : "text-slate-300"}`}>
+                {hasNumber ? "check_circle" : "radio_button_unchecked"}
+              </span>
+              <span className={hasNumber ? "text-green-600 line-through opacity-70" : ""}>Al menos un número</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className={`material-symbols-outlined text-base ${hasSpecialChar ? "text-green-500" : "text-slate-300"}`}>
+                {hasSpecialChar ? "check_circle" : "radio_button_unchecked"}
+              </span>
+              <span className={hasSpecialChar ? "text-green-600 line-through opacity-70" : ""}>Al menos un símbolo (ej. @, $, !, %, *)</span>
+            </li>
+          </ul>
+        </div>
+      )}
+
       {/* Confirm Password */}
       <div className="flex flex-col">
         <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
@@ -121,7 +172,6 @@ function ResetPasswordForm() {
           <input
             type={showConfirm ? "text" : "password"}
             required
-            minLength={8}
             disabled={status === "loading" || status === "done"}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
