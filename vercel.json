@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/check-licencias",
       "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/keep-alive",
+      "schedule": "*/30 * * * *"
     }
   ]
 }
